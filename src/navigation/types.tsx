@@ -16,6 +16,12 @@ declare global {
   }
 }
 
+export type RootTabParamList = {
+  Home: undefined;
+  Calendar: undefined;
+  Lists: undefined;
+};
+
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
   AddTask: undefined;
@@ -24,11 +30,6 @@ export type RootStackParamList = {
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =
   NativeStackScreenProps<RootStackParamList, Screen>;
-
-export type RootTabParamList = {
-  Home: undefined;
-  Calendar: undefined;
-};
 
 export type RootTabScreenProps<Screen extends keyof RootTabParamList> =
   CompositeScreenProps<

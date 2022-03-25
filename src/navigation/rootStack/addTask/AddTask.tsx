@@ -1,32 +1,33 @@
+import StatusBar from "@/components/StatusBar";
+import useKeyboardStatus from "@/hooks/useKeyboardStatus";
 import { Feather } from "@expo/vector-icons";
-import { Box, Icon, Text } from "native-base";
-import React from "react";
 import {
-  Keyboard,
+  Box,
+  Icon,
   KeyboardAvoidingView,
-  Platform,
   ScrollView,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
-import useKeyboardStatus from "../hooks/useKeyboadStatus";
-import Footer from "./AddTask/Footer";
-import Label from "./AddTask/Label";
-import ListChip from "./AddTask/ListChips";
+  Text,
+  useColorModeValue,
+} from "native-base";
+import React from "react";
+import { TextInput, TouchableOpacity } from "react-native";
+import Footer from "./Footer";
+import Label from "./Label";
+import ListChip from "./ListChips";
 
 export default function AddTaskScreen() {
   const keyboardVisible = useKeyboardStatus();
-
   return (
-    <KeyboardAvoidingView style={{ flex: 1 }}>
+    <KeyboardAvoidingView bg="surface" flex={1}>
       <ScrollView
-        contentContainerStyle={{
+        _contentContainerStyle={{
+          bg: "surface",
+          pb: "90px",
           flexGrow: 1,
-          backgroundColor: "white",
-          paddingBottom: 90,
         }}
       >
-        <Box px="5" pt="2">
+        <Box bg="surface" px="5" pt="2">
+          <StatusBar />
           <Label l="Task Title" mb={2} />
           <TextInput
             style={{
@@ -41,13 +42,13 @@ export default function AddTaskScreen() {
           />
           <Label l="List" mt="5" />
           <Box flexDirection="row" flexWrap="wrap">
-            <ListChip name="Work" theme="givry" />
+            <ListChip name="Work" theme={"givry"} />
             <ListChip name="College" theme="purple" />
             <ListChip name="School" theme="lightBlue" isActive />
-            <ListChip name="Other Task" theme="green" />
+            <ListChip name="Other Task" theme="mint" />
           </Box>
           <MoreButtons />
-          <Label l="Description" mt="5" />
+          <Label mb={2} l="Description" mt="5" />
           <TextInput
             style={{
               borderWidth: 1,
@@ -86,24 +87,25 @@ export default function AddTaskScreen() {
 }
 
 const MoreButtons = () => {
+  const colorIntensity = useColorModeValue("200", "400");
   return (
     <Box mt="5" justifyContent="space-around" flexDirection="row">
       <Button
         label="2:00PM"
         color="black"
-        bg={"blue.100"}
+        bg={`blue.${colorIntensity}`}
         icon={<Feather name="watch" />}
       />
       <Button
         label="1 day"
         color="black"
-        bg="red.100"
+        bg={`red.${colorIntensity}`}
         icon={<Feather name="repeat" />}
       />
       <Button
         label="3 notes"
         color="black"
-        bg="green.200"
+        bg={`green.${colorIntensity}`}
         icon={<Feather name="paperclip" />}
       />
     </Box>

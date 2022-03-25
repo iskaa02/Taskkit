@@ -1,33 +1,27 @@
-/**
- * Learn more about deep linking with React Navigation
- * https://reactnavigation.org/docs/deep-linking
- * https://reactnavigation.org/docs/configuring-links
- */
-
 import { LinkingOptions } from "@react-navigation/native";
 import * as Linking from "expo-linking";
 
-import { RootStackParamList } from "../types";
+import { RootStackParamList } from "./types";
 
 const linking: LinkingOptions<RootStackParamList> = {
-  prefixes: [Linking.makeUrl("/")],
+  prefixes: [Linking.createURL("/")],
   config: {
     screens: {
       Root: {
         screens: {
           Home: {
             screens: {
-              HomeScreen: "one",
+              Home: "/",
             },
           },
           Calendar: {
             screens: {
-              CalendarScreen: "two",
+              Calendar: "/calendar",
             },
           },
         },
       },
-      AddTask: "AddTask",
+      AddTask: "add-task",
       NotFound: "*",
     },
   },

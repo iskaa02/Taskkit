@@ -1,5 +1,5 @@
-import { Text, ITextProps } from "native-base";
-import { listThemesEnum, listThemes } from "../../components/TaskCard";
+import { Text, ITextProps, useColorModeValue } from "native-base";
+import { listThemesEnum } from "@/theme/listThemes";
 
 const ListChip = ({
   name,
@@ -11,7 +11,12 @@ const ListChip = ({
   theme: listThemesEnum;
   isActive?: Boolean;
 }) => {
-  const t = listThemes[theme];
+  const bg = isActive
+    ? `${theme}.main`
+    : useColorModeValue("gray.200", "gray.600");
+  const color = isActive
+    ? `${theme}.secondary`
+    : useColorModeValue("gray.600", "gray.100");
   return (
     <Text
       style={{ marginEnd: 10 }}
@@ -21,12 +26,9 @@ const ListChip = ({
       textAlign="center"
       py="1"
       fontSize={16}
-      color={t.textColor}
-      opacity={isActive ? 1 : 0.4}
-      borderColor={isActive ? t.textColor : `${t.mainColor}:alpha.80`}
-      borderWidth={2}
+      color={color}
       borderRadius={10}
-      bg={`${t.mainColor}:alpha.80`}
+      bg={bg}
       {...p}
     >
       {name}

@@ -7,6 +7,7 @@ const Footer = ({ keyboardVisible }: { keyboardVisible: boolean }) => {
       w="100%"
       h="64px"
       px="20px"
+      pb="5"
       position="absolute"
       bottom="0"
       justifyContent="center"
