@@ -17,6 +17,7 @@ const Footer = ({ keyboardVisible }: { keyboardVisible: boolean }) => {
         <Box
           borderRadius="xl"
           justifyContent="center"
+          shadow="3"
           alignItems="center"
           opacity={!keyboardVisible ? 1 : 0}
           w="100%"

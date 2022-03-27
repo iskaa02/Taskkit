@@ -103,7 +103,7 @@ const AgendaCard = ({ theme }: AgendaCardProps) => {
     return "em.2";
   }, [theme]);
   return (
-    <LeftAccentCard theme={theme}>
+    <LeftAccentCard onPress={() => {}} theme={theme}>
       <Box justifyContent="center" alignItems="flex-start" flexDir={"row"}>
         <Box w="73%">
           <Text color={mainColor} fontSize={20} bold>

@@ -1,6 +1,8 @@
 import StatusBar from "@/components/StatusBar";
+import dayjs from "dayjs";
 import useKeyboardStatus from "@/hooks/useKeyboardStatus";
 import { Feather } from "@expo/vector-icons";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import {
   Box,
   Icon,
@@ -88,10 +90,17 @@ export default function AddTaskScreen() {
 
 const MoreButtons = () => {
   const colorIntensity = useColorModeValue("200", "400");
+  const { showDatepicker, date } = DatePicker();
   return (
-    <Box mt="5" justifyContent="space-around" flexDirection="row">
+    <Box
+      mt="5"
+      justifyContent="space-around"
+      alignItems="flex-start"
+      flexDirection="row"
+    >
       <Button
-        label="2:00PM"
+        onPress={() => showDatepicker()}
+        label={dayjs(date).format("MMM D\nhh:mm A")}
         color="black"
         bg={`blue.${colorIntensity}`}
         icon={<Feather name="watch" />}
@@ -116,11 +125,13 @@ type ButtonProps = {
   label?: string;
   bg: string;
   color: string;
+  onPress: () => void;
 };
-const Button = ({ icon, bg, color, label }: ButtonProps) => {
+const Button = ({ icon, bg, color, label, onPress }: ButtonProps) => {
   return (
-    <Box justifyContent="center" alignItems="center">
+    <Box w="70px" justifyContent="center" alignItems="center">
       <TouchableOpacity
+        onPress={onPress}
         activeOpacity={0.4}
         style={{ borderRadius: 100, width: 60, height: 60 }}
       >
@@ -135,7 +146,29 @@ const Button = ({ icon, bg, color, label }: ButtonProps) => {
           <Icon as={icon} color={color} size={28} />
         </Box>
       </TouchableOpacity>
-      <Text>{label}</Text>
+      <Text mt="1" textAlign="center">
+        {label}
+      </Text>
     </Box>
   );
+};
+
+// Android support only for now
+const DatePicker = () => {
+  const [date, setDate] = React.useState(new Date(Date.now()));
+  const showMode = (currentMode: "time" | "date", shouldOpenTime?: boolean) => {
+    DateTimePickerAndroid.open({
+      value: date,
+      onChange: (e, date) => {
+        date && setDate(date);
+        if (e.type == "set" && shouldOpenTime) showMode("time");
+      },
+      mode: currentMode,
+      is24Hour: false,
+    });
+  };
+  const showDatepicker = () => {
+    showMode("date", true);
+  };
+  return { showDatepicker, date };
 };

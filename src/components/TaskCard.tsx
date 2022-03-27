@@ -1,13 +1,12 @@
 import useAccent from "@/hooks/useAccent";
 import { listThemeType } from "@/theme/listThemes";
-import { Feather } from "@expo/vector-icons";
-import { MotiView } from "moti";
-import { Icon, Pressable, Text, useTheme } from "native-base";
+import { Text, useTheme } from "native-base";
 import * as React from "react";
 import Animated, {
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
+import CheckBox from "./CheckBox";
 type TaskCardProps = {
   l: string;
   theme: listThemeType;
@@ -32,38 +31,20 @@ export default function TaskCard({ l, theme }: TaskCardProps) {
           paddingHorizontal: 12,
           paddingVertical: 15,
           backgroundColor: surface,
+          elevation: 1,
+          shadowColor: "#000",
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.18,
+          shadowRadius: 1.0,
         },
         s,
       ]}
     >
-      <Pressable
-        w="20px"
-        h="20px"
-        borderRadius={10}
-        borderWidth={isCompleted ? 0 : 2}
-        style={{ marginEnd: 18 }}
-        borderColor={accent}
-        justifyContent="center"
-        alignItems="center"
-        onPress={() => setIsCompleted(i => !i)}
-      >
-        <MotiView
-          style={{
-            backgroundColor: accent,
-            width: "105%",
-            height: "105%",
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 10,
-          }}
-          animate={{
-            scale: isCompleted ? 1 : 0.3,
-            opacity: isCompleted ? 1 : 0,
-          }}
-        >
-          <Icon as={<Feather name="check" />} color="em.10" size="14px" />
-        </MotiView>
-      </Pressable>
+      <CheckBox value={isCompleted} setValue={setIsCompleted} color={accent} />
+
       <Text
         fontSize={23}
         color={accent}

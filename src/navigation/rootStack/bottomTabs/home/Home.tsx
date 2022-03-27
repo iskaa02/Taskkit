@@ -31,7 +31,7 @@ type FabProps = {
   onPress: () => void;
 };
 const Fab = ({ onPress }: FabProps) => {
-  const em1 = useTheme().colors.em[1];
+  const surface = useTheme().colors.surface;
   return (
     <Box w="100%" px="20px" pb="20px" position="absolute" bottom="0">
       <TouchableOpacity
@@ -42,12 +42,13 @@ const Fab = ({ onPress }: FabProps) => {
           alignSelf: "flex-end",
           justifyContent: "center",
           alignItems: "center",
-          backgroundColor: em1,
+          backgroundColor: surface,
           width: 60,
           height: 60,
+          elevation: 1,
         }}
       >
-        <Icon as={<Feather name="plus" />} color="em.10" />
+        <Icon as={<Feather name="plus" />} color="em.1" />
       </TouchableOpacity>
     </Box>
   );
