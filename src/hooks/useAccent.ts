@@ -1,7 +1,7 @@
-import { listThemeType } from "@/theme/listThemes";
+import Theme from "@/db/models/Theme";
 import { useColorModeValue } from "native-base";
 
-export default function useAccent(theme: listThemeType) {
+export default function useAccent(theme: Theme) {
   if (!theme.secondary) {
     return theme.main;
   }

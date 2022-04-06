@@ -1,8 +1,16 @@
 import StatusBar from "@/components/StatusBar";
 import useAccent from "@/hooks/useAccent";
 import { Feather } from "@expo/vector-icons";
-import { Box, Icon, Text, useColorModeValue, VStack } from "native-base";
+import {
+  Box,
+  Icon,
+  Text,
+  useColorModeValue,
+  useTheme,
+  VStack,
+} from "native-base";
 import * as React from "react";
+import { ScrollView } from "react-native";
 import { ListStackScreenProps } from "./Stack";
 export default function TaskScreen({
   route,
@@ -11,7 +19,7 @@ export default function TaskScreen({
   const tintColor = useColorModeValue("#fff", "#000");
   const theme = route.params.theme;
   const accent = useAccent(theme);
-
+  const surface = useTheme().colors.surface;
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerStyle: {
@@ -21,32 +29,36 @@ export default function TaskScreen({
     });
   }, [route.params]);
   return (
-    <Box bg="surface" flex={1}>
-      <StatusBar _dark={"dark-content"} _light={"light-content"} />
-      <Box bg={accent} px="20px" pb="20px">
-        <Text bold color={"em.10"} fontSize={32}>
-          {route.params.label}
-        </Text>
+    <ScrollView
+      style={{ backgroundColor: surface }}
+      contentContainerStyle={{ flex: 1 }}
+    >
+      <Box bg="surface" flex={1}>
+        <StatusBar _dark={"dark-content"} _light={"light-content"} />
+        <Box bg={accent} px="20px" pb="20px">
+          <Text bold color={"em.10"} fontSize={32}>
+            {route.params.label}
+          </Text>
 
-        <Text mt={4} color={"em.10"} fontSize={16}>
-          LLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsumorem Ipsum
-          LLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsumorem Ipsum
-        </Text>
-      </Box>
+          <Text mt={4} color={"em.10"} fontSize={16}>
+            LLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsumorem Ipsum
+            LLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsumorem Ipsum
+          </Text>
+        </Box>
 
-      <Box px="20px">
-        <VStack space={4} mt={4}>
-          <ExtraInfo iconName="grid" label="Personal" />
-          <ExtraInfo iconName="clock" label="9:00 AM" />
-          <ExtraInfo iconName="calendar" label="Friday, 4th March" />
-          <ExtraInfo iconName="paperclip" label="3 Notes" />
-          <ExtraInfo iconName="repeat" label="Every week" />
-        </VStack>
-        <Text mt={7} bold color="em.1" fontSize={22}>
-          SubTasks
-        </Text>
+        <Box px="20px">
+          <VStack space={4} mt={4}>
+            <ExtraInfo iconName="clock" label="9:00 AM" />
+            <ExtraInfo iconName="calendar" label="Friday, 4th March" />
+            <ExtraInfo iconName="paperclip" label="3 Notes" />
+            <ExtraInfo iconName="repeat" label="Every week" />
+          </VStack>
+          <Text mt={7} bold color="em.1" fontSize={22}>
+            SubTasks
+          </Text>
+        </Box>
       </Box>
-    </Box>
+    </ScrollView>
   );
 }
 type ExtraInfoProps = {
@@ -55,7 +67,7 @@ type ExtraInfoProps = {
 };
 const ExtraInfo = ({ iconName, label }: ExtraInfoProps) => {
   return (
-    <Box flexDir="row" alignItems="center">
+    <Box py="1" flexDir="row" alignItems="center">
       <Icon
         style={{ marginEnd: 20 }}
         as={<Feather />}

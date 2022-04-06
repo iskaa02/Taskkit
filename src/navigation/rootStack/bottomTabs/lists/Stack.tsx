@@ -1,5 +1,9 @@
-import { listThemesEnum, listThemeType } from "@/theme/listThemes";
-import { NavigatorScreenParams } from "@react-navigation/native";
+import { RootStackParamList } from "@/navigation/types";
+import { listThemeType } from "@/theme/listThemes";
+import {
+  CompositeScreenProps,
+  NavigatorScreenParams,
+} from "@react-navigation/native";
 import {
   createNativeStackNavigator,
   NativeStackScreenProps,
@@ -8,10 +12,10 @@ import TaskListView from "./ListScreen";
 import ListTab from "./ListTab";
 import TaskScreen from "./TaskScreen";
 
-type ListTabStack = {
+export type ListTabStack = {
   Root: undefined;
   List: {
-    theme: listThemesEnum;
+    listID: string;
   };
   Task: {
     theme: listThemeType;
@@ -21,7 +25,11 @@ type ListTabStack = {
 export type ListScreenParamsList = NavigatorScreenParams<ListTabStack>;
 
 export type ListStackScreenProps<Screen extends keyof ListTabStack> =
-  NativeStackScreenProps<ListTabStack, Screen>;
+  CompositeScreenProps<
+    NativeStackScreenProps<ListTabStack, Screen>,
+    NativeStackScreenProps<RootStackParamList>
+  >;
+
 const Stack = createNativeStackNavigator<ListTabStack>();
 export default function Lists() {
   return (

@@ -1,9 +1,9 @@
 import StatusBar from "@/components/StatusBar";
 import { RootTabScreenProps } from "@/navigation/types";
-import { Feather } from "@expo/vector-icons";
-import { Box, Icon, Text, useTheme } from "native-base";
+import { Box, Text } from "native-base";
 import React from "react";
-import { ScrollView, TouchableOpacity } from "react-native";
+import { ScrollView } from "react-native";
+import { Fab } from "../../../../components/Fab";
 function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
   return (
     <Box flex={1}>
@@ -26,30 +26,3 @@ function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
 // const enhance = withObservables(["task"], ({ task }: { task: Task }) => task);
 // export default enhance(HomeScreen);
 export default HomeScreen;
-
-type FabProps = {
-  onPress: () => void;
-};
-const Fab = ({ onPress }: FabProps) => {
-  const surface = useTheme().colors.surface;
-  return (
-    <Box w="100%" px="20px" pb="20px" position="absolute" bottom="0">
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={onPress}
-        style={{
-          borderRadius: 30,
-          alignSelf: "flex-end",
-          justifyContent: "center",
-          alignItems: "center",
-          backgroundColor: surface,
-          width: 60,
-          height: 60,
-          elevation: 1,
-        }}
-      >
-        <Icon as={<Feather name="plus" />} color="em.1" />
-      </TouchableOpacity>
-    </Box>
-  );
-};

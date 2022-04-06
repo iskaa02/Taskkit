@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
 import BottomTabNavigator from "./rootStack/bottomTabs/BottomTabs";
-import AddTaskScreen from "./rootStack/addTask/AddTask";
+import AddTaskScreen from "./rootStack/addTask/AddTaskScreen";
 import NotFoundScreen from "./rootStack/NotFoundScreen";
 import { RootStackParamList } from "./types";
 

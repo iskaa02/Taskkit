@@ -1,4 +1,5 @@
 import theme, { DARK_MODE } from "@/theme/theme";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { NativeBaseProvider } from "native-base";
 import React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
@@ -22,7 +23,9 @@ export default function Providers({ children }: ProviderProps) {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <NativeBaseProvider theme={t}>{children}</NativeBaseProvider>
+        <NativeBaseProvider theme={t}>
+          <BottomSheetModalProvider>{children}</BottomSheetModalProvider>
+        </NativeBaseProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

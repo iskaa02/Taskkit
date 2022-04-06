@@ -1,25 +1,23 @@
-import { listThemesEnum } from "@/theme/listThemes";
+import Theme from "@/db/models/Theme";
 import Color from "color";
 import { Box, useTheme } from "native-base";
 import * as React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 type ListCardProps = {
-  theme: listThemesEnum;
+  theme: Theme;
   children: React.ReactNode;
   onPress: () => void;
 };
 export function LeftAccentCard({ theme, children, onPress }: ListCardProps) {
-  // @ts-ignore
-  const t = useTheme().colors[theme];
   const surface = useTheme().colors.surface;
-  const bg = Color(t.main).mix(Color(surface), 0.2).hex();
+  const bg = Color(theme.main).mix(Color(surface), 0.2).hex();
 
-  const accentBg = !!t.secondary ? t.secondary : t.main;
+  const accentBg = !!theme.secondary ? theme.secondary : theme.main;
   return (
     <TouchableOpacity
       style={{
         elevation: 1,
-        backgroundColor: !!t.secondary ? bg : surface,
+        backgroundColor: !!theme.secondary ? bg : surface,
         paddingHorizontal: 10,
         paddingVertical: 4,
         borderRadius: 10,

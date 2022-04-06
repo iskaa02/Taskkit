@@ -1,7 +1,13 @@
 import React from "react";
 import { Box, Text } from "native-base";
+import { TouchableOpacity } from "react-native";
 
-const Footer = ({ keyboardVisible }: { keyboardVisible: boolean }) => {
+type FooterProps = {
+  keyboardVisible?: boolean;
+  label: string;
+  onPress?: () => void;
+};
+const Footer = ({ keyboardVisible, label, onPress }: FooterProps) => {
   return (
     <Box
       w="100%"
@@ -14,20 +20,23 @@ const Footer = ({ keyboardVisible }: { keyboardVisible: boolean }) => {
       alignItems="center"
     >
       {keyboardVisible ? null : (
-        <Box
-          borderRadius="xl"
-          justifyContent="center"
-          shadow="3"
-          alignItems="center"
-          opacity={!keyboardVisible ? 1 : 0}
-          w="100%"
-          bg="gray.900"
-          h="64px"
+        <TouchableOpacity
+          onPress={onPress}
+          style={{
+            elevation: 3,
+            borderRadius: 15,
+            justifyContent: "center",
+            alignItems: "center",
+            opacity: !keyboardVisible ? 1 : 0,
+            width: "100%",
+            height: 64,
+            backgroundColor: "#232323",
+          }}
         >
           <Text color="white" textAlign="center" fontSize={18}>
-            Create New task
+            {label}
           </Text>
-        </Box>
+        </TouchableOpacity>
       )}
     </Box>
   );

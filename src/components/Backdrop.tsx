@@ -1,18 +1,27 @@
-import React, { useMemo } from "react";
 import { BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
+import React, { useMemo } from "react";
 import Animated, {
   Extrapolate,
   interpolate,
   useAnimatedStyle,
 } from "react-native-reanimated";
 
-const CustomBackdrop = ({ animatedIndex, style }: BottomSheetBackdropProps) => {
+type BackdropProps = BottomSheetBackdropProps & {
+  pointerEvents?: "none" | "auto";
+  initialOpacity?: number;
+};
+const Backdrop = ({
+  animatedIndex,
+  style,
+  pointerEvents,
+  initialOpacity = 0,
+}: BackdropProps) => {
   // animated variables
   const containerAnimatedStyle = useAnimatedStyle(() => ({
     opacity: interpolate(
       animatedIndex.value,
-      [0, 1],
-      [0, 1],
+      [-1, 0, 1],
+      [0, initialOpacity, 1],
       Extrapolate.CLAMP
     ),
   }));
@@ -28,7 +37,7 @@ const CustomBackdrop = ({ animatedIndex, style }: BottomSheetBackdropProps) => {
     ],
     [style, containerAnimatedStyle]
   );
-  return <Animated.View pointerEvents={"none"} style={containerStyle} />;
+  return <Animated.View pointerEvents={pointerEvents} style={containerStyle} />;
 };
 
-export default CustomBackdrop;
+export default Backdrop;

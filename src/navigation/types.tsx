@@ -24,7 +24,7 @@ export type RootTabParamList = {
 
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
-  AddTask: undefined;
+  AddTask: { defaultList: string } | undefined;
   NotFound: undefined;
 };
 
