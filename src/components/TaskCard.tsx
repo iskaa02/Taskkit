@@ -1,57 +1,76 @@
+import Task from "@/db/models/Task";
+import { withDB } from "@/db/models/utils";
 import useAccent from "@/hooks/useAccent";
 import { listThemeType } from "@/theme/listThemes";
 import { Text, useTheme } from "native-base";
 import * as React from "react";
+import { Pressable } from "react-native";
 import Animated, {
   useAnimatedStyle,
   withSpring,
 } from "react-native-reanimated";
 import CheckBox from "./CheckBox";
 type TaskCardProps = {
-  l: string;
+  task: Task;
   theme: listThemeType;
+  onPress: () => void;
 };
-export default function TaskCard({ l, theme }: TaskCardProps) {
-  const [isCompleted, setIsCompleted] = React.useState(false);
+function RawTaskCard({ task, theme, onPress }: TaskCardProps) {
   const surface = useTheme().colors.surface;
   const s = useAnimatedStyle(
     () => ({
-      opacity: isCompleted ? withSpring(0.8) : withSpring(1),
+      opacity: task.isCompleted ? withSpring(0.8) : withSpring(1),
     }),
-    [isCompleted]
+    [task.isCompleted]
   );
   const accent = useAccent(theme);
   return (
-    <Animated.View
-      style={[
-        {
-          flexDirection: "row",
-          alignItems: "center",
-          borderRadius: 10,
-          paddingHorizontal: 12,
-          paddingVertical: 15,
-          backgroundColor: surface,
-          elevation: 1,
-          shadowColor: "#000",
-          shadowOffset: {
-            width: 0,
-            height: 1,
+    <Pressable onPress={onPress}>
+      <Animated.View
+        style={[
+          {
+            flexDirection: "row",
+            alignItems: "center",
+            borderRadius: 10,
+            paddingHorizontal: 12,
+            paddingVertical: 15,
+            backgroundColor: surface,
+            elevation: 1,
+            shadowColor: "#000",
+            shadowOffset: {
+              width: 0,
+              height: 1,
+            },
+            shadowOpacity: 0.18,
+            shadowRadius: 1.0,
           },
-          shadowOpacity: 0.18,
-          shadowRadius: 1.0,
-        },
-        s,
-      ]}
-    >
-      <CheckBox value={isCompleted} setValue={setIsCompleted} color={accent} />
-
-      <Text
-        fontSize={23}
-        color={accent}
-        textDecorationLine={isCompleted ? "line-through" : undefined}
+          s,
+        ]}
       >
-        {l}
-      </Text>
-    </Animated.View>
+        <CheckBox
+          value={task.isCompleted}
+          toggle={() => {
+            task.toggleTask();
+          }}
+          color={accent}
+        />
+
+        <Text
+          fontSize={23}
+          color={accent}
+          textDecorationLine={task.isCompleted ? "line-through" : undefined}
+        >
+          {task.name}
+        </Text>
+      </Animated.View>
+    </Pressable>
   );
 }
+
+export default withDB<TaskCardProps, { task: Task }>(
+  RawTaskCard,
+  ["task"],
+  ({ task }) => ({
+    task,
+  })
+);

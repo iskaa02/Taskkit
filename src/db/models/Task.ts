@@ -32,27 +32,25 @@ export default class Task extends Model {
     { type: "belongs_to", key: "list_id" },
   ]);
 
-  @text(Column.name)
-  name!: string;
-  @field(Column.taskID)
-  taskID!: string;
-  @field(Column.isCompleted)
-  isCompleted!: boolean;
-  @field(Column.description)
-  description!: string;
-  @field(Column.subtasks)
-  subTasks!: subtask[];
+  @text(Column.name) name!: string;
+  @field(Column.isCompleted) isCompleted!: boolean;
+  @field(Column.description) description!: string;
+  @field(Column.subtasks) subTasks!: subtask[];
   @date(Column.reminder) reminder!: Date;
 
-  @immutableRelation(Tables.List, Column.listID)
-  list!: Relation<List>;
+  @immutableRelation(Tables.List, Column.listID) list!: Relation<List>;
 
-  @children(Tables.Task)
-  tasks!: Collection<Task>;
+  @children(Tables.Task) tasks!: Collection<Task>;
 
   @writer async addSubTask(name: string) {
     await this.update(r => {
       r.subTasks.push({ name, isCompleted: false, id: uid() });
+    });
+  }
+
+  @writer async toggleTask() {
+    await this.update(r => {
+      r.isCompleted = !r.isCompleted;
     });
   }
   @writer async toggleSubTask(subTaskID: string) {
@@ -79,4 +77,9 @@ export default class Task extends Model {
       r.reminder.setDate(newDate.valueOf());
     });
   }
+  theme = this.database
+    .get<List>(Tables.List)
+    //@ts-ignore
+    .find(this.list.id)
+    .then(l => l.theme);
 }

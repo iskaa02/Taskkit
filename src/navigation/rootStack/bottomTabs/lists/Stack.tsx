@@ -19,7 +19,7 @@ export type ListTabStack = {
   };
   Task: {
     theme: listThemeType;
-    label: string;
+    taskID: string;
   };
 };
 export type ListScreenParamsList = NavigatorScreenParams<ListTabStack>;

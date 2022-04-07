@@ -1,6 +1,12 @@
 import StatusBar from "@/components/StatusBar";
+import { database } from "@/db/db";
+import { Tables } from "@/db/models/schema";
+import Task from "@/db/models/Task";
+import { withDB } from "@/db/models/utils";
 import useAccent from "@/hooks/useAccent";
 import { Feather } from "@expo/vector-icons";
+import Database from "@nozbe/watermelondb/Database";
+import dayjs from "dayjs";
 import {
   Box,
   Icon,
@@ -12,13 +18,17 @@ import {
 import * as React from "react";
 import { ScrollView } from "react-native";
 import { ListStackScreenProps } from "./Stack";
-export default function TaskScreen({
-  route,
-  navigation,
-}: ListStackScreenProps<"Task">) {
+export default function TaskScreen(p: ListStackScreenProps<"Task">) {
+  return <Screen database={database} taskID={p.route.params.taskID} {...p} />;
+}
+type TaskScreenProps = ListStackScreenProps<"Task"> & {
+  task: Task;
+  database: Database;
+  taskID: string;
+};
+const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
   const tintColor = useColorModeValue("#fff", "#000");
-  const theme = route.params.theme;
-  const accent = useAccent(theme);
+  const accent = useAccent(route.params.theme);
   const surface = useTheme().colors.surface;
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -37,20 +47,24 @@ export default function TaskScreen({
         <StatusBar _dark={"dark-content"} _light={"light-content"} />
         <Box bg={accent} px="20px" pb="20px">
           <Text bold color={"em.10"} fontSize={32}>
-            {route.params.label}
+            {task.name}
           </Text>
 
           <Text mt={4} color={"em.10"} fontSize={16}>
-            LLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsumorem Ipsum
-            LLorem IpsumLorem IpsumLorem IpsumLorem IpsumLorem Ipsumorem Ipsum
+            {task.description}
           </Text>
         </Box>
 
         <Box px="20px">
           <VStack space={4} mt={4}>
-            <ExtraInfo iconName="clock" label="9:00 AM" />
-            <ExtraInfo iconName="calendar" label="Friday, 4th March" />
-            <ExtraInfo iconName="paperclip" label="3 Notes" />
+            <ExtraInfo
+              iconName="clock"
+              label={dayjs(task.reminder).format("")}
+            />
+            <ExtraInfo
+              iconName="calendar"
+              label={dayjs(task.reminder).format("")}
+            />
             <ExtraInfo iconName="repeat" label="Every week" />
           </VStack>
           <Text mt={7} bold color="em.1" fontSize={22}>
@@ -60,12 +74,13 @@ export default function TaskScreen({
       </Box>
     </ScrollView>
   );
-}
+};
 type ExtraInfoProps = {
   iconName: string;
   label: string;
 };
 const ExtraInfo = ({ iconName, label }: ExtraInfoProps) => {
+  if (label == "") return null;
   return (
     <Box py="1" flexDir="row" alignItems="center">
       <Icon
@@ -81,3 +96,13 @@ const ExtraInfo = ({ iconName, label }: ExtraInfoProps) => {
     </Box>
   );
 };
+
+const Screen = withDB<TaskScreenProps, { task: Task }>(
+  RawScreen,
+  ["database", "taskID"],
+  ({ database, taskID }) => {
+    return {
+      task: database.get<Task>(Tables.Task).find(taskID),
+    };
+  }
+);

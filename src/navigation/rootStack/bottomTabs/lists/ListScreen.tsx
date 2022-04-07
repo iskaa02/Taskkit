@@ -4,34 +4,27 @@ import TaskCard from "@/components/TaskCard";
 import { database } from "@/db/db";
 import List from "@/db/models/List";
 import { Tables } from "@/db/models/schema";
-import Theme from "@/db/models/Theme";
+import Task from "@/db/models/Task";
+import { withDB } from "@/db/models/utils";
 import useAccent from "@/hooks/useAccent";
 import { Feather } from "@expo/vector-icons";
+import { Q } from "@nozbe/watermelondb";
 import Database from "@nozbe/watermelondb/Database";
-import withObservables from "@nozbe/with-observables";
 import { Box, Icon, Text, useColorModeValue, useTheme } from "native-base";
 import * as React from "react";
-import { Pressable, ScrollView } from "react-native";
+import { ScrollView } from "react-native";
 import { ListStackScreenProps } from "./Stack";
-export default function TaskListScreen(navProps: ListStackScreenProps<"List">) {
-  return (
-    <Screen
-      database={database}
-      listID={navProps.route.params.listID}
-      {...navProps}
-    />
-  );
-}
+
 type ListScreenProps = ListStackScreenProps<"List"> & {
   list: List;
-  theme: Theme;
   listID: string;
   database: Database;
+  tasks: Task[];
 };
-const RawScreen = ({ list, navigation, theme }: ListScreenProps) => {
+const RawScreen = ({ list, navigation, tasks }: ListScreenProps) => {
   const tintColor = useColorModeValue("#fff", "#000");
   const surface = useTheme().colors.surface;
-  const accent = useAccent(theme);
+  const accent = useAccent(list.theme);
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerStyle: {
@@ -40,7 +33,6 @@ const RawScreen = ({ list, navigation, theme }: ListScreenProps) => {
       headerTintColor: tintColor,
     });
   }, []);
-
   return (
     <>
       <ScrollView
@@ -63,20 +55,24 @@ const RawScreen = ({ list, navigation, theme }: ListScreenProps) => {
             <Text bold color="em.2" fontSize={26}>
               Tasks
             </Text>
-            <Pressable
-              onPress={() =>
-                navigation.push("Task", { theme: theme, label: "hello world" })
-              }
-            >
-              <TaskCard l="hello world" theme={theme} />
-            </Pressable>
+            {tasks.map(i => {
+              return (
+                <TaskCard
+                  theme={list.theme}
+                  task={i}
+                  onPress={() =>
+                    navigation.push("Task", { theme: list.theme, taskID: i.id })
+                  }
+                />
+              );
+            })}
           </Box>
         </Box>
       </ScrollView>
       <Fab
         style={{ backgroundColor: accent }}
         onPress={() => {
-          navigation.push("AddTask", { defaultList: "School" });
+          navigation.push("AddTask", { defaultList: list.id });
         }}
       >
         <Icon as={<Feather name="plus" />} color={tintColor} />
@@ -85,14 +81,15 @@ const RawScreen = ({ list, navigation, theme }: ListScreenProps) => {
   );
 };
 
-const Screen = withObservables<ListScreenProps, {}>(
-  ["listID"],
-  async ({ listID, database }) => {
-    const list = await database.get<List>(Tables.List).find(listID);
-    list.theme;
-    return {
-      list,
-      theme: list.theme,
-    };
-  }
-)(RawScreen);
+const Screen = withDB<ListScreenProps, { tasks: Task[]; list: List }>(
+  RawScreen,
+  ["listID", "database"],
+  ({ listID, database }) => ({
+    list: database.get<List>(Tables.List).findAndObserve(listID),
+    tasks: database.get<Task>(Tables.Task).query(Q.where("list_id", listID)),
+  })
+);
+
+export default function TaskListScreen(p: ListStackScreenProps<"List">) {
+  return <Screen database={database} listID={p.route.params.listID} {...p} />;
+}

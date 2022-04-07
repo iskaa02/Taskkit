@@ -1,4 +1,5 @@
 import StatusBar from "@/components/StatusBar";
+import { database } from "@/db/db";
 import useKeyboardStatus from "@/hooks/useKeyboardStatus";
 import { RootStackScreenProps } from "@/navigation/types";
 import { Box, KeyboardAvoidingView, ScrollView, Text } from "native-base";
@@ -6,13 +7,14 @@ import React from "react";
 import { TextInput } from "react-native";
 import Footer from "./Footer";
 import Label from "./Label";
-import ListChip from "./ListChips";
+import ListChips from "./ListChips";
 import { MoreButtons } from "./MoreButtons";
 
 export default function AddTaskScreen({
   route,
 }: RootStackScreenProps<"AddTask">) {
   const keyboardVisible = useKeyboardStatus();
+  const [activeListID, setActiveListID] = React.useState("");
   return (
     <KeyboardAvoidingView bg="surface" flex={1}>
       <ScrollView
@@ -37,12 +39,10 @@ export default function AddTaskScreen({
             }}
           />
           <Label l="List" mt="5" />
-          <Box flexDirection="row" flexWrap="wrap">
-            <ListChip name="Work" theme={"givry"} />
-            <ListChip name="College" theme="purple" />
-            <ListChip name="School" theme="lightBlue" isActive />
-            <ListChip name="Other Task" theme="mint" />
-          </Box>
+          <ListChips
+            initialListID={route.params?.defaultList}
+            {...{ database, activeListID, setActiveListID }}
+          />
           <MoreButtons />
           <Label mb={2} l="Description" mt="5" />
           <TextInput

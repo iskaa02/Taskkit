@@ -5,10 +5,10 @@ import * as React from "react";
 
 type CheckBoxProps = {
   value: boolean;
-  setValue: React.Dispatch<React.SetStateAction<boolean>>;
+  toggle: () => void;
   color: string;
 };
-const CheckBox = ({ value, setValue, color }: CheckBoxProps) => {
+const CheckBox = ({ value, toggle, color }: CheckBoxProps) => {
   return (
     <Pressable
       hitSlop={20}
@@ -20,7 +20,7 @@ const CheckBox = ({ value, setValue, color }: CheckBoxProps) => {
       borderColor={color}
       justifyContent="center"
       alignItems="center"
-      onPress={() => setValue(i => !i)}
+      onPress={toggle}
     >
       <MotiView
         style={{

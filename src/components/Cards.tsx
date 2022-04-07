@@ -1,16 +1,17 @@
-import Theme from "@/db/models/Theme";
+import { listThemeType } from "@/theme/listThemes";
 import Color from "color";
 import { Box, useTheme } from "native-base";
 import * as React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 type ListCardProps = {
-  theme: Theme;
+  theme: listThemeType;
   children: React.ReactNode;
   onPress: () => void;
 };
 export function LeftAccentCard({ theme, children, onPress }: ListCardProps) {
   const surface = useTheme().colors.surface;
   const bg = Color(theme.main).mix(Color(surface), 0.2).hex();
+  console.log(theme);
 
   const accentBg = !!theme.secondary ? theme.secondary : theme.main;
   return (

@@ -3,21 +3,18 @@ import { Fab } from "@/components/Fab";
 import StatusBar from "@/components/StatusBar";
 import { database } from "@/db/db";
 import List from "@/db/models/List";
-import Theme from "@/db/models/Theme";
-import { RootStackParamList } from "@/navigation/types";
+import { Tables } from "@/db/models/schema";
+import { withDB } from "@/db/models/utils";
 import { Feather } from "@expo/vector-icons";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import Database from "@nozbe/watermelondb/Database";
-import withObservables from "@nozbe/with-observables";
-import { CompositeNavigationProp } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { Icon, ScrollView, Text } from "native-base";
 import * as React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AddListSheet } from "./AddListSheet";
-import { ListStackScreenProps, ListTabStack } from "./Stack";
+import { ListStackScreenProps } from "./Stack";
 
-export default function TaskListGroup({}: ListStackScreenProps<"Root">) {
+export default function TaskListGroup(p: ListStackScreenProps<"Root">) {
   const addListRef = React.useRef<BottomSheetModalMethods>(null);
 
   return (
@@ -27,7 +24,7 @@ export default function TaskListGroup({}: ListStackScreenProps<"Root">) {
         <Text fontSize={32} mx="10px" my="3" bold color="em.1">
           Lists
         </Text>
-        <Lists database={database} />
+        <ListView {...p} database={database} />
       </ScrollView>
       <Fab
         style={{
@@ -54,15 +51,10 @@ export default function TaskListGroup({}: ListStackScreenProps<"Root">) {
     </SafeAreaView>
   );
 }
-type listProps = {
+type listCardProps = ListStackScreenProps<"Root"> & {
   list: List;
-  theme: Theme;
-  navigation: CompositeNavigationProp<
-    NativeStackNavigationProp<ListTabStack, "Root">,
-    NativeStackNavigationProp<RootStackParamList, "Root">
-  >;
 };
-const RawListCard = ({ list, navigation, theme }: listProps) => {
+const RawListCard = ({ list, navigation }: listCardProps) => {
   return (
     <LeftAccentCard
       onPress={() => {
@@ -70,7 +62,7 @@ const RawListCard = ({ list, navigation, theme }: listProps) => {
           listID: list.id,
         });
       }}
-      theme={theme}
+      theme={list.theme}
     >
       <Text fontSize={20} bold>
         {list.name}
@@ -79,27 +71,32 @@ const RawListCard = ({ list, navigation, theme }: listProps) => {
     </LeftAccentCard>
   );
 };
-const ListCard = withObservables<listProps, {}>(["list"], ({ list }) => ({
-  list: list,
-  theme: list.theme,
-}))(RawListCard);
 
-const enhance = withObservables<{ database: Database }, ListsProps>(
-  ["database"],
-  ({ database }) => ({
-    // @ts-ignore
-    lists: database.collections.get<List>("List").query(),
+const ListCard = withDB<listCardProps, { list: List }>(
+  RawListCard,
+  ["list"],
+  ({ list }) => ({
+    list: list,
   })
 );
-type ListsProps = {
+type ListViewProps = ListStackScreenProps<"Root"> & {
   lists: List[];
+  database: Database;
 };
-const Lists = enhance(({ lists }: ListsProps) => {
+const RawListView = ({ lists, ...p }: ListViewProps) => {
   return (
     <>
       {lists.map(i => {
-        return <ListCard key={i.id} list={i} />;
+        return <ListCard key={i.id} {...p} list={i} />;
       })}
     </>
   );
-});
+};
+
+const ListView = withDB<ListViewProps, { lists: List[] }>(
+  RawListView,
+  ["database"],
+  ({ database }) => ({
+    lists: database.get<List>(Tables.List).query(),
+  })
+);
