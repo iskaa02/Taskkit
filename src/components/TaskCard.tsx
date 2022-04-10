@@ -1,10 +1,10 @@
 import Task from "@/db/models/Task";
-import { withDB } from "@/db/models/utils";
+import { withDB } from "@/db/models/withDB";
 import useAccent from "@/hooks/useAccent";
 import { listThemeType } from "@/theme/listThemes";
 import { Text, useTheme } from "native-base";
 import * as React from "react";
-import { Pressable } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 import Animated, {
   useAnimatedStyle,
   withSpring,
@@ -27,29 +27,11 @@ function RawTaskCard({ task, theme, onPress }: TaskCardProps) {
   return (
     <Pressable onPress={onPress}>
       <Animated.View
-        style={[
-          {
-            flexDirection: "row",
-            alignItems: "center",
-            borderRadius: 10,
-            paddingHorizontal: 12,
-            paddingVertical: 15,
-            backgroundColor: surface,
-            elevation: 1,
-            shadowColor: "#000",
-            shadowOffset: {
-              width: 0,
-              height: 1,
-            },
-            shadowOpacity: 0.18,
-            shadowRadius: 1.0,
-          },
-          s,
-        ]}
+        style={[styles.container, { backgroundColor: surface }, s]}
       >
         <CheckBox
           value={task.isCompleted}
-          toggle={() => {
+          onToggle={() => {
             task.toggleTask();
           }}
           color={accent}
@@ -66,7 +48,6 @@ function RawTaskCard({ task, theme, onPress }: TaskCardProps) {
     </Pressable>
   );
 }
-
 export default withDB<TaskCardProps, { task: Task }>(
   RawTaskCard,
   ["task"],
@@ -74,3 +55,22 @@ export default withDB<TaskCardProps, { task: Task }>(
     task,
   })
 );
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 15,
+    elevation: 1,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.18,
+    shadowRadius: 1.0,
+    marginBottom: 10,
+  },
+});

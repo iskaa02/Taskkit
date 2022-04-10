@@ -11,7 +11,6 @@ type ListCardProps = {
 export function LeftAccentCard({ theme, children, onPress }: ListCardProps) {
   const surface = useTheme().colors.surface;
   const bg = Color(theme.main).mix(Color(surface), 0.2).hex();
-  console.log(theme);
 
   const accentBg = !!theme.secondary ? theme.secondary : theme.main;
   return (

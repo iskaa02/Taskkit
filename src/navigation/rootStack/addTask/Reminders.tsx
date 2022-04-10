@@ -5,11 +5,18 @@ import React from "react";
 import { TouchableOpacity } from "react-native";
 import { DatePicker } from "./DatePicker";
 
-export const MoreButtons = () => {
+type RemindersProps = {
+  value: Date;
+  setValue: React.Dispatch<React.SetStateAction<Date>>;
+  active: boolean;
+};
+export const Reminders = ({ active, value, setValue }: RemindersProps) => {
   const colorIntensity = useColorModeValue("200", "400");
-  const { showDatePicker, date } = DatePicker();
+  const { showDatePicker, date } = DatePicker(value, setValue);
   return (
     <Box
+      opacity={active ? 1 : 0.5}
+      pointerEvents={active ? "auto" : "none"}
       mt="5"
       justifyContent="space-around"
       alignItems="flex-start"

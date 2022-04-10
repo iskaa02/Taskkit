@@ -4,7 +4,7 @@ import StatusBar from "@/components/StatusBar";
 import { database } from "@/db/db";
 import List from "@/db/models/List";
 import { Tables } from "@/db/models/schema";
-import { withDB } from "@/db/models/utils";
+import { withDB } from "@/db/models/withDB";
 import { Feather } from "@expo/vector-icons";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import Database from "@nozbe/watermelondb/Database";

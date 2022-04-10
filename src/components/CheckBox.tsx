@@ -5,16 +5,24 @@ import * as React from "react";
 
 type CheckBoxProps = {
   value: boolean;
-  toggle: () => void;
+  onToggle?: () => void;
   color: string;
+  iconColor?: string;
+  size?: number;
 };
-const CheckBox = ({ value, toggle, color }: CheckBoxProps) => {
+const CheckBox = ({
+  value,
+  onToggle: toggle,
+  color,
+  size = 20,
+  iconColor = "em.10",
+}: CheckBoxProps) => {
   return (
     <Pressable
       hitSlop={20}
-      w="20px"
-      h="20px"
-      borderRadius={10}
+      w={`${size}px`}
+      h={`${size}px`}
+      borderRadius={size / 2}
       borderWidth={value ? 0 : 2}
       style={{ marginEnd: 18 }}
       borderColor={color}
@@ -29,14 +37,18 @@ const CheckBox = ({ value, toggle, color }: CheckBoxProps) => {
           height: "105%",
           justifyContent: "center",
           alignItems: "center",
-          borderRadius: 10,
+          borderRadius: size / 2,
         }}
         animate={{
           scale: value ? 1 : 0.3,
           opacity: value ? 1 : 0,
         }}
       >
-        <Icon as={<Feather name="check" />} color="em.10" size="14px" />
+        <Icon
+          as={<Feather name="check" />}
+          color={iconColor}
+          size={0.7 * size}
+        />
       </MotiView>
     </Pressable>
   );

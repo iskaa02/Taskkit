@@ -3,7 +3,7 @@ import { listThemes } from "./listThemes";
 
 const config = {
   useSystemColorMode: false,
-  initialColorMode: "dark",
+  initialColorMode: "light",
 };
 export const DARK_MODE = {
   background: "#131313",
@@ -37,6 +37,11 @@ const theme = extendTheme({
   components: {
     Text: {
       fontSize: 16,
+    },
+    Input: {
+      _focus: {
+        borderColor: "blue.500",
+      },
     },
   },
   config,

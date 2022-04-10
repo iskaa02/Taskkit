@@ -1,8 +1,8 @@
-import { Collection, Model, Relation, TableName } from "@nozbe/watermelondb";
+import { Model, Relation, TableName } from "@nozbe/watermelondb";
 import {
-  children,
   field,
   immutableRelation,
+  json,
   text,
   writer,
 } from "@nozbe/watermelondb/decorators";
@@ -13,6 +13,7 @@ import { Columns, Tables } from "./schema";
 import { uid } from "./utils";
 
 const Column = Columns.task;
+export type subtaskObject = { [x: string]: subtask };
 export type subtask = {
   name: string;
   id: string;
@@ -21,47 +22,65 @@ export type subtask = {
 export type addTaskType = {
   name: string;
   description: string;
-  reminder: Date | null;
-  subtasks: subtask[];
+  reminder?: Date;
+  subtasks: string[];
 };
 
+const sanitize = (subtasks: any): subtaskObject => {
+  if (typeof subtasks !== "object") return {};
+  return subtasks;
+};
 export default class Task extends Model {
   public static table: TableName<Task> = Tables.Task;
   public static associations = associations([
     Tables.List,
-    { type: "belongs_to", key: "list_id" },
+    { type: "belongs_to", key: Column.listID },
   ]);
 
   @text(Column.name) name!: string;
   @field(Column.isCompleted) isCompleted!: boolean;
-  @field(Column.description) description!: string;
-  @field(Column.subtasks) subTasks!: subtask[];
-  @date(Column.reminder) reminder!: Date;
+  @text(Column.description) description!: string;
+  @json(Column.subtasks, sanitize) subtasks!: subtaskObject;
+  @date(Column.reminder) reminder!: Date | null;
 
   @immutableRelation(Tables.List, Column.listID) list!: Relation<List>;
 
-  @children(Tables.Task) tasks!: Collection<Task>;
-
   @writer async addSubTask(name: string) {
     await this.update(r => {
-      r.subTasks.push({ name, isCompleted: false, id: uid() });
+      let newSubtasks = r.subtasks;
+      const id = uid(8);
+      newSubtasks[id] = { name, id, isCompleted: false };
+      r.subtasks = newSubtasks;
     });
   }
-
+  @writer async changeSubtaskName(id: string, name: string) {
+    await this.update(r => {
+      const newSubtasks = r.subtasks;
+      if (name) {
+        newSubtasks[id].name = name;
+      } else {
+        delete newSubtasks[id];
+      }
+      r.subtasks = newSubtasks;
+    });
+  }
   @writer async toggleTask() {
     await this.update(r => {
       r.isCompleted = !r.isCompleted;
     });
   }
-  @writer async toggleSubTask(subTaskID: string) {
+  @writer async toggleSubtask(id: string) {
     await this.update(r => {
-      const i = r.subTasks.findIndex(s => s.id == subTaskID);
-      r.subTasks[i].isCompleted = !r.subTasks[i].isCompleted;
+      const newSubtasks = r.subtasks;
+      newSubtasks[id].isCompleted = !newSubtasks[id].isCompleted;
+      r.subtasks = newSubtasks;
     });
   }
-  @writer async deleteSubTask(subTaskID: string) {
+  @writer async deleteSubtask(subTaskID: string) {
     await this.update(r => {
-      r.subTasks = r.subTasks.filter(s => s.id == subTaskID);
+      const newSubtasks = r.subtasks;
+      delete newSubtasks[subTaskID];
+      r.subtasks = newSubtasks;
     });
   }
   @writer async changeName(newName: string) {
@@ -70,16 +89,12 @@ export default class Task extends Model {
     });
   }
   @writer async deleteTask() {
-    await this.destroyPermanently();
+    await this.markAsDeleted();
   }
   @writer async changeDate(newDate: Date) {
-    this.update(r => {
+    await this.update(r => {
+      r.reminder = new Date();
       r.reminder.setDate(newDate.valueOf());
     });
   }
-  theme = this.database
-    .get<List>(Tables.List)
-    //@ts-ignore
-    .find(this.list.id)
-    .then(l => l.theme);
 }

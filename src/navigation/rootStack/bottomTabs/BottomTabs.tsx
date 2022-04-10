@@ -16,6 +16,7 @@ export default function BottomTabNavigator() {
         tabBarShowLabel: false,
         headerShown: false,
         headerShadowVisible: false,
+        tabBarHideOnKeyboard: true,
       }}
     >
       <BottomTab.Screen

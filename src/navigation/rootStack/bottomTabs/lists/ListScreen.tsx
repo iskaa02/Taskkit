@@ -5,12 +5,12 @@ import { database } from "@/db/db";
 import List from "@/db/models/List";
 import { Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
-import { withDB } from "@/db/models/utils";
+import { withDB } from "@/db/models/withDB";
 import useAccent from "@/hooks/useAccent";
 import { Feather } from "@expo/vector-icons";
 import { Q } from "@nozbe/watermelondb";
 import Database from "@nozbe/watermelondb/Database";
-import { Box, Icon, Text, useColorModeValue, useTheme } from "native-base";
+import { Box, Icon, Text, useColorModeValue } from "native-base";
 import * as React from "react";
 import { ScrollView } from "react-native";
 import { ListStackScreenProps } from "./Stack";
@@ -23,7 +23,6 @@ type ListScreenProps = ListStackScreenProps<"List"> & {
 };
 const RawScreen = ({ list, navigation, tasks }: ListScreenProps) => {
   const tintColor = useColorModeValue("#fff", "#000");
-  const surface = useTheme().colors.surface;
   const accent = useAccent(list.theme);
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -36,8 +35,8 @@ const RawScreen = ({ list, navigation, tasks }: ListScreenProps) => {
   return (
     <>
       <ScrollView
-        style={{ backgroundColor: surface }}
-        contentContainerStyle={{ flex: 1 }}
+        style={{ backgroundColor: accent }}
+        contentContainerStyle={{ flexGrow: 1 }}
       >
         <Box bg="background" flex={1}>
           <StatusBar _dark={"dark-content"} _light={"light-content"} />
@@ -58,6 +57,7 @@ const RawScreen = ({ list, navigation, tasks }: ListScreenProps) => {
             {tasks.map(i => {
               return (
                 <TaskCard
+                  key={i.id}
                   theme={list.theme}
                   task={i}
                   onPress={() =>

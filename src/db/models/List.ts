@@ -5,35 +5,55 @@ import {
   Model,
   TableName,
 } from "@nozbe/watermelondb";
-import { children, json, writer } from "@nozbe/watermelondb/decorators";
-import field from "@nozbe/watermelondb/decorators/field";
+import { children, json, text, writer } from "@nozbe/watermelondb/decorators";
 import { Columns, Tables } from "./schema";
-import Task, { addTaskType } from "./Task";
-import { uid } from "./utils";
+import Task, { addTaskType, subtaskObject } from "./Task";
+import { scheduleNotification, uid } from "./utils";
 
 const Column = Columns.list;
 export default class List extends Model {
   public static table: TableName<List> = Tables.List;
   public static associations = associations([
     Tables.Task,
-    { type: "has_many", foreignKey: "list_id" },
+    { type: "has_many", foreignKey: Columns.task.listID },
   ]);
-  @field(Column.name) name!: string;
+  @text(Column.name) name!: string;
   @children(Tables.Task) tasks!: Collection<Task>;
   @json(Column.theme, json => json) theme!: listThemeType;
 
   @writer async addTask(t: addTaskType) {
-    return await this.collections.get<Task>(Tables.Task).create(task => {
-      if (t.reminder) task.reminder.setDate(t.reminder.valueOf());
+    await this.database.get<Task>(Tables.Task).create(task => {
+      const id = uid();
+      if (t.reminder) {
+        task.reminder = new Date(t.reminder);
+        scheduleNotification({
+          name: t.name,
+          id,
+          date: t.reminder,
+          description: t.description,
+        });
+      } else {
+        task.reminder = null;
+      }
+      task.list.set(this);
       task.description = t.description;
       task.name = t.name;
       task.isCompleted = false;
-      task.id = uid();
-      task.list.set(this);
+      const subtasks: subtaskObject = {};
+      t.subtasks.map(i => {
+        const id = uid(8);
+        subtasks[id] = {
+          isCompleted: false,
+          name: i,
+          id: id,
+        };
+        task.subtasks = subtasks;
+      });
+      task.id = id;
     });
   }
-  @writer async changeTheme(newTheme: listThemeType | listThemesEnum) {
-    this.update(r => {
+  @writer changeTheme(newTheme: listThemeType | listThemesEnum) {
+    return this.update(r => {
       if (typeof newTheme === "string") {
         r.theme = listThemes[newTheme];
         return;
@@ -41,8 +61,8 @@ export default class List extends Model {
       r.theme = newTheme;
     });
   }
-  @writer async changeName(newName: string) {
-    await this.update(r => {
+  @writer changeName(newName: string) {
+    return this.update(r => {
       r.name = newName;
     });
   }

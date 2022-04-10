@@ -7,8 +7,8 @@ import {
 import List from "./List";
 import Task from "./Task";
 export const Tables = {
-  Task: tableName<Task>("Task"),
-  List: tableName<List>("List"),
+  Task: tableName<Task>("task"),
+  List: tableName<List>("list"),
 };
 export const Columns = {
   task: {
@@ -40,6 +40,7 @@ export default appSchema({
       columns: [
         { name: Columns.task.name, type: "string" },
         { name: Columns.task.description, type: "string" },
+        { name: Columns.task.subtasks, type: "string" },
         { name: Columns.task.reminder, type: "number", isOptional: true },
         { name: Columns.task.listID, type: "string" },
         { name: Columns.task.isCompleted, type: "boolean" },

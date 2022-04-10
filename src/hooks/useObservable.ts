@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Observable } from "rxjs";
 
-export function useObservable<T>(observable: Observable<T>): T {
-  const [value, setValue] = useState<T>();
+export function useObservable<T>(observable: Observable<T>): T | null {
+  const [value, setValue] = useState<T | null>(null);
 
   useEffect(() => {
     const subscription = observable.subscribe(newValue => {

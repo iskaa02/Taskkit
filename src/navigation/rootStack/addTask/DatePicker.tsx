@@ -2,8 +2,10 @@ import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import React from "react";
 
 // Android support only for now
-export const DatePicker = () => {
-  const [date, setDate] = React.useState(new Date(Date.now()));
+export const DatePicker = (
+  date: Date,
+  setDate: React.Dispatch<React.SetStateAction<Date>>
+) => {
   const showMode = (currentMode: "time" | "date", shouldOpenTime?: boolean) => {
     DateTimePickerAndroid.open({
       value: date,
