@@ -1,24 +1,42 @@
-import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
+import {
+  DateTimePickerAndroid,
+  DateTimePickerEvent,
+} from "@react-native-community/datetimepicker";
+import dayjs from "dayjs";
 import React from "react";
 
 // Android support only for now
 export const DatePicker = (
-  date: Date,
-  setDate: React.Dispatch<React.SetStateAction<Date>>
+  value: Date,
+  setValue: React.Dispatch<React.SetStateAction<Date>>
 ) => {
-  const showMode = (currentMode: "time" | "date", shouldOpenTime?: boolean) => {
-    DateTimePickerAndroid.open({
-      value: date,
-      onChange: (e, date) => {
-        date && setDate(date);
-        if (e.type == "set" && shouldOpenTime) showMode("time");
-      },
-      mode: currentMode,
-      is24Hour: false,
+  const showDatePicker = () => {
+    showPicker(value, "date", date => {
+      if (date.type === "set") {
+        const d = dayjs(date.nativeEvent.timestamp).toDate();
+
+        showPicker(d, "time", time => {
+          const t = dayjs(time.nativeEvent.timestamp).toDate();
+          if (time.type === "set") {
+            setValue(t);
+          } else {
+            setValue(d);
+          }
+        });
+      }
     });
   };
-  const showDatePicker = () => {
-    showMode("date", true);
-  };
-  return { showDatePicker, date };
+  return showDatePicker;
+};
+const showPicker = (
+  value: Date,
+  mode: "time" | "date",
+  onChange?: (i: DateTimePickerEvent, date: Date | undefined) => void
+) => {
+  DateTimePickerAndroid.open({
+    value,
+    mode,
+    onChange: onChange,
+    is24Hour: false,
+  });
 };

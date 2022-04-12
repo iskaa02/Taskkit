@@ -8,11 +8,14 @@ import Task from "@/db/models/Task";
 import { withDB } from "@/db/models/withDB";
 import useAccent from "@/hooks/useAccent";
 import { Feather } from "@expo/vector-icons";
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { Q } from "@nozbe/watermelondb";
 import Database from "@nozbe/watermelondb/Database";
 import { Box, Icon, Text, useColorModeValue } from "native-base";
 import * as React from "react";
 import { ScrollView } from "react-native";
+import EditHeaderButton from "./EditHeaderButton";
+import { EditListSheet } from "./EditListSheet";
 import { ListStackScreenProps } from "./Stack";
 
 type ListScreenProps = ListStackScreenProps<"List"> & {
@@ -21,17 +24,28 @@ type ListScreenProps = ListStackScreenProps<"List"> & {
   database: Database;
   tasks: Task[];
 };
-const RawScreen = ({ list, navigation, tasks }: ListScreenProps) => {
+const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
   const tintColor = useColorModeValue("#fff", "#000");
   const accent = useAccent(list.theme);
+  const sheetRef = React.useRef<BottomSheetModalMethods>(null);
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerStyle: {
         backgroundColor: accent,
       },
       headerTintColor: tintColor,
+      headerRight: () => (
+        <EditHeaderButton
+          onEditPress={() => {
+            sheetRef.current?.present();
+          }}
+          onDeletePress={() => {}}
+          name={list.name}
+          tintColor={tintColor}
+        />
+      ),
     });
-  }, []);
+  }, [list.theme]);
   return (
     <>
       <ScrollView
@@ -77,12 +91,13 @@ const RawScreen = ({ list, navigation, tasks }: ListScreenProps) => {
       >
         <Icon as={<Feather name="plus" />} color={tintColor} />
       </Fab>
+      <EditListSheet ref={sheetRef} list={list} />
     </>
   );
 };
 
 const Screen = withDB<ListScreenProps, { tasks: Task[]; list: List }>(
-  RawScreen,
+  RawListScreen,
   ["listID", "database"],
   ({ listID, database }) => ({
     list: database.get<List>(Tables.List).findAndObserve(listID),

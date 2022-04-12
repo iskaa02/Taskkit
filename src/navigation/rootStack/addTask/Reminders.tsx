@@ -12,7 +12,7 @@ type RemindersProps = {
 };
 export const Reminders = ({ active, value, setValue }: RemindersProps) => {
   const colorIntensity = useColorModeValue("200", "400");
-  const { showDatePicker, date } = DatePicker(value, setValue);
+  const showDatePicker = DatePicker(value, setValue);
   return (
     <Box
       opacity={active ? 1 : 0.5}
@@ -24,7 +24,7 @@ export const Reminders = ({ active, value, setValue }: RemindersProps) => {
     >
       <Button
         onPress={() => showDatePicker()}
-        label={dayjs(date).format("MMM D\nhh:mm A")}
+        label={dayjs(value).format("MMM D\nhh:mm A")}
         color="black"
         bg={`blue.${colorIntensity}`}
         icon={<Feather name="watch" />}

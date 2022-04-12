@@ -1,27 +1,41 @@
 // import {
 //   StatusBar,
 // } from "expo-status-bar";
-import CustomBackdrop from "@/components/Backdrop";
-import { LeftAccentCard } from "@/components/Cards";
 import StatusBar from "@/components/StatusBar";
+import { database } from "@/db/db";
+import { Columns, Tables } from "@/db/models/schema";
+import Task from "@/db/models/Task";
+import { withDB } from "@/db/models/withDB";
 import { RootTabScreenProps } from "@/navigation/types";
-import { listThemesEnum } from "@/theme/listThemes";
-import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { Box, Text, useTheme } from "native-base";
-import React, { useCallback, useMemo } from "react";
+import { Q } from "@nozbe/watermelondb";
+import Database from "@nozbe/watermelondb/Database";
+import dayjs from "dayjs";
+import { Box } from "native-base";
+import React from "react";
 import { Calendar } from "react-native-calendars";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { AgendaSheet } from "./AgendaSheet";
+import useDateMarks from "./markDate";
 
-export default function CalendarScreen({}: RootTabScreenProps<"Calendar">) {
+type ScreenProps = {
+  tasks: Task[];
+  database: Database;
+};
+function RawScreen({ tasks, database }: ScreenProps) {
+  const [selectedDate, setSelectedDate] = React.useState<string>();
   const [BSindex, setBSindex] = React.useState(0);
+  const { onChange, markedDates } = useDateMarks(
+    selectedDate,
+    i => {
+      setSelectedDate(dayjs(i).toString());
+    },
+    tasks
+  );
   return (
     <SafeAreaView style={{ backgroundColor: "#323232", flex: 1 }}>
-      <StatusBar
-        barStyle={BSindex == 0 ? "light-content" : "dark-content"}
-        _dark="light-content"
-      />
+      <StatusBar barStyle="light-content" />
 
-      <Box bg="#323232" py="8" px="2">
+      <Box bg="#323232" h="60%" pt="4" px="2">
         <Calendar
           theme={{
             backgroundColor: "#323232",
@@ -31,85 +45,35 @@ export default function CalendarScreen({}: RootTabScreenProps<"Calendar">) {
             textDisabledColor: "rgba(255,255,255,0.3)",
             dayTextColor: "white",
             selectedDayTextColor: "black",
+            selectedDayBackgroundColor: "#F1F1F1",
           }}
+          markedDates={markedDates}
+          onDayPress={onChange}
           markingType={"multi-dot"}
         />
       </Box>
-      <Agenda {...{ BSindex, setBSindex }} />
+      <AgendaSheet
+        {...{ BSindex, setBSindex }}
+        selectedDate={selectedDate}
+        database={database}
+      />
     </SafeAreaView>
   );
 }
-type AgendaProps = {
-  BSindex: number;
-  setBSindex: React.Dispatch<React.SetStateAction<number>>;
-};
+const Screen = withDB<ScreenProps, { tasks: Task[] }>(
+  RawScreen,
+  ["database"],
+  ({ database }) => ({
+    tasks: database
+      .get<Task>(Tables.Task)
+      .query(
+        Q.where(Columns.task.isCompleted, Q.eq(false)),
+        Q.where(Columns.task.reminder, Q.notEq(null)),
+        Q.sortBy(Columns.task.reminder, Q.asc)
+      ),
+  })
+);
 
-const Agenda = ({ BSindex, setBSindex }: AgendaProps) => {
-  const snapPoints = useMemo(() => ["40%", "100%"], []);
-  const onChange = useCallback((i: number) => {
-    setBSindex(i);
-  }, []);
-  const colors = useTheme().colors;
-  return (
-    <BottomSheet
-      animateOnMount={false}
-      backdropComponent={CustomBackdrop}
-      onChange={onChange}
-      index={BSindex}
-      handleIndicatorStyle={{
-        width: 45,
-        marginTop: 8,
-        backgroundColor: colors.em[2],
-      }}
-      backgroundStyle={{ backgroundColor: colors.background }}
-      snapPoints={snapPoints}
-    >
-      <BottomSheetScrollView
-        contentContainerStyle={{ paddingBottom: 40, paddingHorizontal: 10 }}
-      >
-        <Separator label="Today" />
-        <AgendaCard theme="purple" />
-        <AgendaCard theme="ocean" />
-        <Separator label="Mar 13th" />
-        <AgendaCard theme="lightBlue" />
-        <AgendaCard theme="mint" />
-        <AgendaCard theme="givry" />
-      </BottomSheetScrollView>
-    </BottomSheet>
-  );
-};
-
-type SeparatorProps = {
-  label: string;
-};
-const Separator = ({ label }: SeparatorProps) => {
-  return (
-    <Box mt="5" px="10px">
-      <Text fontSize={28} bold>
-        {label}
-      </Text>
-    </Box>
-  );
-};
-
-type AgendaCardProps = {
-  theme: listThemesEnum;
-};
-const AgendaCard = ({ theme }: AgendaCardProps) => {
-  return (
-    <LeftAccentCard onPress={() => {}} theme={theme}>
-      <Box justifyContent="center" alignItems="flex-start" flexDir={"row"}>
-        <Box w="73%">
-          <Text fontSize={20} bold>
-            Finish math homework
-          </Text>
-          <Text fontSize={16}>College</Text>
-        </Box>
-        <Box style={{ marginStart: "auto" }}>
-          <Text fontSize={16}>9:00 AM</Text>
-          <Text fontSize={14}>Thu</Text>
-        </Box>
-      </Box>
-    </LeftAccentCard>
-  );
-};
+export default function CalendarScreen({}: RootTabScreenProps<"Calendar">) {
+  return <Screen database={database} />;
+}

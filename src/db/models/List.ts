@@ -1,4 +1,4 @@
-import { listThemes, listThemesEnum, listThemeType } from "@/theme/listThemes";
+import { listThemeType } from "@/theme/listThemes";
 import {
   associations,
   Collection,
@@ -52,18 +52,14 @@ export default class List extends Model {
       task.id = id;
     });
   }
-  @writer changeTheme(newTheme: listThemeType | listThemesEnum) {
-    return this.update(r => {
-      if (typeof newTheme === "string") {
-        r.theme = listThemes[newTheme];
-        return;
-      }
-      r.theme = newTheme;
-    });
-  }
-  @writer changeName(newName: string) {
-    return this.update(r => {
-      r.name = newName;
+  @writer async editList({ name, theme }: editListType) {
+    this.update(r => {
+      if (name) r.name = name;
+      if (theme) r.theme = theme;
     });
   }
 }
+type editListType = {
+  name?: string;
+  theme?: listThemeType;
+};

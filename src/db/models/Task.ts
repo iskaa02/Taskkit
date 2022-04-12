@@ -83,18 +83,22 @@ export default class Task extends Model {
       r.subtasks = newSubtasks;
     });
   }
-  @writer async changeName(newName: string) {
-    await this.update(r => {
-      r.name = newName;
-    });
-  }
-  @writer async deleteTask() {
-    await this.markAsDeleted();
-  }
-  @writer async changeDate(newDate: Date) {
-    await this.update(r => {
-      r.reminder = new Date();
-      r.reminder.setDate(newDate.valueOf());
+  @writer async editTask({ name, description, reminder }: editTaskType) {
+    this.update(r => {
+      if (name) r.name = name;
+      if (description) r.description = description;
+      if (!(typeof reminder === "undefined")) {
+        if (reminder) {
+          r.reminder = new Date(reminder);
+        } else {
+          r.reminder = null;
+        }
+      }
     });
   }
 }
+type editTaskType = {
+  name?: string;
+  description?: string;
+  reminder?: Date | null;
+};

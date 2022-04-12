@@ -1,4 +1,5 @@
 import { DARK_MODE, LIGHT_MODE } from "@/theme/theme";
+import { OverflowMenuProvider } from "react-navigation-header-buttons";
 import { NavigationContainer, Theme } from "@react-navigation/native";
 import { setBackgroundColorAsync } from "expo-navigation-bar";
 import { useColorModeValue } from "native-base";
@@ -37,7 +38,9 @@ export default function Navigation() {
       theme={isDarkMode ? DarkTheme : LightTheme}
       linking={LinkingConfiguration}
     >
-      <RootNavigator />
+      <OverflowMenuProvider>
+        <RootNavigator />
+      </OverflowMenuProvider>
     </NavigationContainer>
   );
 }

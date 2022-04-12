@@ -1,4 +1,5 @@
 import CheckBox from "@/components/CheckBox";
+import Footer from "@/components/Footer";
 import StatusBar from "@/components/StatusBar";
 import { AddSubtask, SubtaskCard } from "@/components/Subtasks";
 import { database } from "@/db/db";
@@ -8,21 +9,21 @@ import { withDB } from "@/db/models/withDB";
 import useAccent from "@/hooks/useAccent";
 import useKeyboardStatus from "@/hooks/useKeyboardStatus";
 import { Feather } from "@expo/vector-icons";
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import Database from "@nozbe/watermelondb/Database";
 import dayjs from "dayjs";
 import {
   Box,
   Icon,
+  KeyboardAvoidingView,
+  ScrollView,
   Text,
   useColorModeValue,
-  useTheme,
-  ScrollView,
-  KeyboardAvoidingView,
 } from "native-base";
 import * as React from "react";
-import Footer from "@/components/Footer";
+import EditHeaderButton from "./EditHeaderButton";
+import { EditTaskSheet } from "./EditTaskSheet";
 import { ListStackScreenProps } from "./Stack";
-import { acc } from "react-native-reanimated";
 
 export default function TaskScreen(p: ListStackScreenProps<"Task">) {
   return <Screen database={database} taskID={p.route.params.taskID} {...p} />;
@@ -36,13 +37,23 @@ type TaskScreenProps = ListStackScreenProps<"Task"> & {
 const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
   const tintColor = useColorModeValue("#fff", "#000");
   const accent = useAccent(route.params.theme);
-  const surface = useTheme().colors.surface;
+  const sheetRef = React.useRef<BottomSheetModalMethods>(null);
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerStyle: {
         backgroundColor: accent,
       },
       headerTintColor: tintColor,
+      headerRight: () => (
+        <EditHeaderButton
+          onEditPress={() => {
+            sheetRef.current?.present();
+          }}
+          onDeletePress={() => {}}
+          name={task.name}
+          tintColor={tintColor}
+        />
+      ),
     });
   }, [route.params]);
   console.log(task.reminder);
@@ -50,6 +61,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
   const topCheckboxColor = useColorModeValue("#fff", "#000");
   return (
     <KeyboardAvoidingView bg="surface" flex={1}>
+      <EditTaskSheet ref={sheetRef} task={task} />
       <StatusBar _dark={"dark-content"} _light={"light-content"} />
       <ScrollView
         _contentContainerStyle={{

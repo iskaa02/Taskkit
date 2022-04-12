@@ -93,7 +93,7 @@ type ThemeButtonProps = {
   active: boolean;
   onPress: () => void;
 };
-const ThemeButton = ({
+export const ThemeButton = ({
   theme: { main, secondary },
   active,
   onPress,
@@ -109,9 +109,11 @@ const ThemeButton = ({
         marginEnd: 5,
         marginBottom: 5,
       }}
+      borderWidth={1}
+      borderColor={active ? "em.4" : "transparent"}
       justifyContent="center"
       borderRadius={14}
-      bg={active ? "em.4" : undefined}
+      bg={active ? "em.4:alpha.50" : undefined}
       alignItems="center"
     >
       <Box left={2} w="30px" h="30px" bg={main} rounded="full" />
@@ -121,7 +123,7 @@ const ThemeButton = ({
           opacity={0.9}
           w="30px"
           h="30px"
-          bg={secondary ?? "em.2"}
+          bg={secondary ?? "background"}
           rounded="full"
         />
       }
