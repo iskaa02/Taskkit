@@ -45,7 +45,7 @@ const Footer = ({
             style,
           ]}
         >
-          <Text color="white" textAlign="center" fontSize={18} {...textStyle}>
+          <Text color="white" textAlign="center" fontSize="lg" {...textStyle}>
             {label}
           </Text>
         </TouchableOpacity>

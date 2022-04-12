@@ -21,7 +21,7 @@ export default function TaskListGroup(p: ListStackScreenProps<"Root">) {
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar />
       <ScrollView px="10px">
-        <Text fontSize={32} mx="10px" my="3" bold color="em.1">
+        <Text fontSize="2xl" mx="10px" my="3" bold color="em.1">
           Lists
         </Text>
         <ListView {...p} database={database} />
@@ -43,7 +43,7 @@ export default function TaskListGroup(p: ListStackScreenProps<"Root">) {
           as={<Feather name="plus" />}
           color="em.1"
         />
-        <Text color="em.1" fontSize={16} bold>
+        <Text color="em.1" fontSize="md" bold>
           Add List
         </Text>
       </Fab>
@@ -64,10 +64,10 @@ const RawListCard = ({ list, navigation }: listCardProps) => {
       }}
       theme={list.theme}
     >
-      <Text fontSize={20} bold>
+      <Text fontSize="xl" bold>
         {list.name}
       </Text>
-      <Text fontSize={16}>5 Task left</Text>
+      <Text fontSize="md">5 Task left</Text>
     </LeftAccentCard>
   );
 };

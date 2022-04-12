@@ -55,17 +55,17 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
         <Box bg="background" flex={1}>
           <StatusBar _dark={"dark-content"} _light={"light-content"} />
           <Box bg={accent} px="20px" pb="20px">
-            <Text bold color="em.10" fontSize={32}>
+            <Text bold color="em.10" fontSize="2xl">
               {list.name}
             </Text>
 
-            <Text mt={4} color={"em.10"} fontSize={16}>
+            <Text mt={4} color={"em.10"} fontSize="md">
               5 Tasks left 3 completed
             </Text>
           </Box>
 
           <Box mt={4} px="20px">
-            <Text bold color="em.2" fontSize={26}>
+            <Text bold color="em.2" fontSize="2xl">
               Tasks
             </Text>
             {tasks.map(i => {

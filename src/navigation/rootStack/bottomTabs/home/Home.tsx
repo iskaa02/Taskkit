@@ -10,11 +10,11 @@ function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
       <ScrollView>
         <StatusBar animated />
         <Box shadow={2} pb={2} px={5} bg="surface">
-          <Text fontSize={18}>Hello</Text>
-          <Text fontSize={32} fontWeight="bold">
+          <Text fontSize="lg">Hello</Text>
+          <Text fontSize="3xl" fontWeight="bold">
             ISKAA
           </Text>
-          <Text fontSize={20} fontWeight="semibold">
+          <Text fontSize="xl" fontWeight="semibold">
             5 Tasks for today
           </Text>
         </Box>

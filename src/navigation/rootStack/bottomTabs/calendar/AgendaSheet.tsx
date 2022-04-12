@@ -113,7 +113,7 @@ const DateSeparator = ({ date, previous, l }: SeparatorProps) => {
     : d.format("MMMM D");
   return (
     <Box my="2" px="10px">
-      <Text fontSize={28} bold>
+      <Text fontSize="xl" bold>
         {label}
       </Text>
     </Box>
@@ -137,14 +137,14 @@ const RawAgendaCard = ({ list, task, navigation }: AgendaCardProps) => {
     >
       <Box alignItems="flex-start" flexDir="row">
         <Box w="73%">
-          <Text fontSize={20} bold>
+          <Text fontSize="xl" bold>
             {task.name}
           </Text>
-          <Text fontSize={16}>{list.name}</Text>
+          <Text fontSize="md">{list.name}</Text>
         </Box>
         <Box style={{ marginStart: "auto" }}>
-          <Text fontSize={16}>{dayjs(task.reminder).format("h:mmA")}</Text>
-          <Text fontSize={14}>{dayjs(task.reminder).format("ddd")}</Text>
+          <Text fontSize="md">{dayjs(task.reminder).format("h:mmA")}</Text>
+          <Text fontSize="sm">{dayjs(task.reminder).format("ddd")}</Text>
         </Box>
       </Box>
     </LeftAccentCard>

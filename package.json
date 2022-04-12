@@ -18,7 +18,7 @@
     "@morrowdigital/watermelondb-expo-plugin": "^1.0.0",
     "@motify/interactions": "^0.17.1",
     "@nozbe/watermelondb": "^0.24.0",
-    "@react-native-community/datetimepicker": "^6.1.0",
+    "@react-native-community/datetimepicker": "^6.1.2",
     "@react-navigation/bottom-tabs": "^6.0.5",
     "@react-navigation/material-top-tabs": "^6.1.1",
     "@react-navigation/native": "^6.0.2",
@@ -53,6 +53,7 @@
     "react-native-svg": "12.1.1",
     "react-native-tab-view": "^3.1.1",
     "react-native-web": "0.17.1",
+    "react-navigation-header-buttons": "^9.0.1",
     "recompose": "^0.30.0",
     "rxjs": "7.4.0"
   },

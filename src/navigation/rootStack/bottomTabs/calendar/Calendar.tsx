@@ -44,8 +44,7 @@ function RawScreen({ tasks, database }: ScreenProps) {
             monthTextColor: "white",
             textDisabledColor: "rgba(255,255,255,0.3)",
             dayTextColor: "white",
-            selectedDayTextColor: "black",
-            selectedDayBackgroundColor: "#F1F1F1",
+            selectedDayBackgroundColor: "white",
           }}
           markedDates={markedDates}
           onDayPress={onChange}

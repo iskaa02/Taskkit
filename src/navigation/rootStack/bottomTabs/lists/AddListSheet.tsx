@@ -32,11 +32,11 @@ export const AddListSheet = React.forwardRef<BottomSheetModalMethods>(
         <BottomSheetScrollView
           style={{ paddingHorizontal: 20, paddingVertical: 10 }}
         >
-          <Text fontSize={24} bold mb="5" color="em.1">
+          <Text fontSize="2xl" bold mb="5" color="em.1">
             Create New List
           </Text>
 
-          <Text mb="2" fontSize={16} bold>
+          <Text mb="2" fontSize="md" bold>
             List Name
           </Text>
           <Input
@@ -49,10 +49,10 @@ export const AddListSheet = React.forwardRef<BottomSheetModalMethods>(
             borderRadius={5}
             px="5px"
             py="5px"
-            fontSize={18}
+            fontSize="lg"
           />
 
-          <Text mt="5" mb="2" fontSize={16} bold>
+          <Text mt="5" mb="2" fontSize="md" bold>
             Theme
           </Text>
           <Box flexDirection="row" flexWrap="wrap">

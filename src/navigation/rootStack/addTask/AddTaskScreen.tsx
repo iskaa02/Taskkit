@@ -41,7 +41,7 @@ export default function AddTaskScreen({
         <Box bg="surface" px="5" pt="2">
           <StatusBar />
           <Label l="Task Title" mb={2} />
-          <Input value={name} onChangeText={i => setName(i)} fontSize={18} />
+          <Input value={name} onChangeText={i => setName(i)} fontSize="lg" />
           <Label l="List" mt="5" />
           <ListChips
             initialListID={route.params?.defaultList}
@@ -67,7 +67,7 @@ export default function AddTaskScreen({
           <Input
             value={description}
             onChangeText={i => setDescription(i)}
-            fontSize={18}
+            fontSize="lg"
             numberOfLines={4}
             textAlignVertical="top"
             multiline={true}

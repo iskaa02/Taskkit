@@ -2,7 +2,7 @@ import { ITextProps, Text } from "native-base";
 
 const Label = ({ l: title, ...p }: ITextProps & { l: string }) => {
   return (
-    <Text fontSize={16} bold {...p}>
+    <Text fontSize="md" bold {...p}>
       {title}
     </Text>
   );

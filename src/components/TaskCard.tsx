@@ -38,7 +38,7 @@ function RawTaskCard({ task, theme, onPress }: TaskCardProps) {
         />
 
         <Text
-          fontSize={23}
+          fontSize="xl"
           color={accent}
           textDecorationLine={task.isCompleted ? "line-through" : undefined}
         >

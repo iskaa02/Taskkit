@@ -89,7 +89,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
             <Text
               bold
               color={"em.10"}
-              fontSize={32}
+              fontSize="3xl"
               strikeThrough={task.isCompleted}
             >
               {task.name}
@@ -97,7 +97,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
           </Box>
         </Box>
         {task.description ? (
-          <Text py={3} bg={accent} px="20px" color={"em.10"} fontSize={16}>
+          <Text py={3} bg={accent} px="20px" color={"em.10"} fontSize="md">
             {task.description}
           </Text>
         ) : null}
@@ -161,7 +161,7 @@ const ExtraInfo = ({ iconName, label }: ExtraInfoProps) => {
         color="em.2"
         size="22px"
       />
-      <Text fontSize={16} color="em.2">
+      <Text fontSize="md" color="em.2">
         {label}
       </Text>
     </Box>
@@ -171,7 +171,7 @@ const ExtraInfo = ({ iconName, label }: ExtraInfoProps) => {
 const SubtaskSection = ({ task, accent }: { task: Task; accent: string }) => {
   return (
     <>
-      <Text mt={4} bold color="em.1" fontSize={22}>
+      <Text mt={4} bold color="em.1" fontSize="2xl">
         SubTasks
       </Text>
       <Box mt={3}>

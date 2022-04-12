@@ -21,7 +21,7 @@ export const SubtaskCard = React.forwardRef<TextInput, SubtaskCardProps>(
         <CheckBox value={!!isCompleted} onToggle={onToggle} color={color} />
         <Input
           ref={ref}
-          fontSize={18}
+          fontSize="lg"
           variant="unstyled"
           multiline
           blurOnSubmit
@@ -80,7 +80,7 @@ export const AddSubtask = ({ onAdd, color }: AddSubtaskProps) => {
         }}
         style={{ marginStart: 10 }}
       >
-        <Text _dark={{ color: "blue.400" }} color="blue.500" fontSize={16}>
+        <Text _dark={{ color: "blue.400" }} color="blue.500" fontSize="md">
           Add Sub Task
         </Text>
       </Pressable>
