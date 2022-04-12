@@ -9,7 +9,6 @@ import { withDB } from "@/db/models/withDB";
 import { RootTabScreenProps } from "@/navigation/types";
 import { Q } from "@nozbe/watermelondb";
 import Database from "@nozbe/watermelondb/Database";
-import dayjs from "dayjs";
 import { Box } from "native-base";
 import React from "react";
 import { Calendar } from "react-native-calendars";
@@ -26,9 +25,7 @@ function RawScreen({ tasks, database }: ScreenProps) {
   const [BSindex, setBSindex] = React.useState(0);
   const { onChange, markedDates } = useDateMarks(
     selectedDate,
-    i => {
-      setSelectedDate(dayjs(i).toString());
-    },
+    i => setSelectedDate(i),
     tasks
   );
   return (
@@ -44,7 +41,8 @@ function RawScreen({ tasks, database }: ScreenProps) {
             monthTextColor: "white",
             textDisabledColor: "rgba(255,255,255,0.3)",
             dayTextColor: "white",
-            selectedDayBackgroundColor: "white",
+            selectedDayBackgroundColor: "#eaeaea",
+            selectedDayTextColor: "black",
           }}
           markedDates={markedDates}
           onDayPress={onChange}

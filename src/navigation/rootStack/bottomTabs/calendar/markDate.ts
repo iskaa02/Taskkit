@@ -11,7 +11,7 @@ export default function useDateMarks(
 ) {
   const [markedDates, setM] = React.useState<{ [x: string]: MarkingProps }>({});
   const onChange = (i: DateData) => {
-    if (date && dayjs(date).isSame(i.timestamp, "day")) {
+    if (date && dayjs(i.timestamp).format("YYYY-MM-DD") === date) {
       setDate(undefined);
     } else {
       setDate(dayjs(i.timestamp).format("YYYY-MM-DD"));
@@ -42,5 +42,7 @@ const MarkDates = async (tasks: Task[], selected?: string) => {
       ...obj[selected],
       selected: true,
     };
+  console.log(obj);
+
   return obj;
 };
