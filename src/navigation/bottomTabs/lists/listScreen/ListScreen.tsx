@@ -14,9 +14,9 @@ import Database from "@nozbe/watermelondb/Database";
 import { Box, Icon, Text, useColorModeValue } from "native-base";
 import * as React from "react";
 import { ScrollView } from "react-native";
-import EditHeaderButton from "./EditHeaderButton";
+import EditHeaderButton from "../EditHeaderButton";
 import { EditListSheet } from "./EditListSheet";
-import { ListStackScreenProps } from "./Stack";
+import { ListStackScreenProps } from "@/navigation/navPropsType";
 
 type ListScreenProps = ListStackScreenProps<"List"> & {
   list: List;
@@ -28,6 +28,7 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
   const tintColor = useColorModeValue("#fff", "#000");
   const accent = useAccent(list.theme);
   const sheetRef = React.useRef<BottomSheetModalMethods>(null);
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerStyle: {
@@ -39,7 +40,10 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
           onEditPress={() => {
             sheetRef.current?.present();
           }}
-          onDeletePress={() => {}}
+          onDeletePress={() => {
+            list.markAsDeleted();
+            navigation.goBack();
+          }}
           name={list.name}
           tintColor={tintColor}
         />
@@ -55,7 +59,7 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
         <Box bg="background" flex={1}>
           <StatusBar _dark={"dark-content"} _light={"light-content"} />
           <Box bg={accent} px="20px" pb="20px">
-            <Text bold color="em.10" fontSize="2xl">
+            <Text bold color="em.10" fontSize="3xl">
               {list.name}
             </Text>
 

@@ -9,7 +9,7 @@ import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
 import { Box, Text, useTheme } from "native-base";
 import React, { useCallback, useMemo } from "react";
-import { useNavigationProps } from "../lists/ListStackType";
+import { useNavigationProps } from "@/navigation/navPropsType";
 import isToday from "dayjs/plugin/isToday";
 import isTomorrow from "dayjs/plugin/isTomorrow";
 dayjs.extend(isToday);

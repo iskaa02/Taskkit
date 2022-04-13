@@ -4,7 +4,7 @@ import { database } from "@/db/db";
 import List from "@/db/models/List";
 import { Tables } from "@/db/models/schema";
 import useKeyboardStatus from "@/hooks/useKeyboardStatus";
-import { RootStackScreenProps } from "@/navigation/types";
+import { RootStackScreenProps } from "@/navigation/navPropsType";
 import {
   Box,
   Input,
@@ -13,7 +13,7 @@ import {
   Switch,
 } from "native-base";
 import React from "react";
-import Footer from "../../../components/Footer";
+import Footer from "../../components/Footer";
 import Label from "./Label";
 import ListChips from "./ListChips";
 import { Reminders } from "./Reminders";

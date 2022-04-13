@@ -52,6 +52,15 @@ export default class List extends Model {
       task.id = id;
     });
   }
+  @writer async markAsDeleted() {
+    const tasks = await this.collections.get<Task>(Tables.Task).query().fetch();
+    const deleted = tasks.map(task => {
+      task.cancelNotification().catch(e => console.log(e));
+      return task.prepareMarkAsDeleted();
+    });
+    await this.database.batch(...deleted, super.prepareMarkAsDeleted());
+  }
+
   @writer async editList({ name, theme }: editListType) {
     this.update(r => {
       if (name) r.name = name;

@@ -1,10 +1,9 @@
 import { scheduleNotificationAsync } from "expo-notifications";
 
-export function uid(num = 14) {
-  return (performance.now().toString(num) + Math.random().toString(14)).replace(
-    /\./g,
-    ""
-  );
+export function uid(num = 10) {
+  return (
+    performance.now().toString(num) + Math.random().toString(num)
+  ).replace(/\./g, "");
 }
 
 type scheduleNotification = {
@@ -26,5 +25,7 @@ export function scheduleNotification({
       body: description,
     },
     trigger: date,
+  }).then(a => {
+    console.log(a !== id ? "NOT EQUAL" : "EQUAL");
   });
 }

@@ -1,4 +1,4 @@
-import { RootStackParamList } from "@/navigation/types";
+import { RootStackParamList } from "@/navigation/navPropsType";
 import { listThemeType } from "@/theme/listThemes";
 import {
   CompositeScreenProps,
@@ -8,9 +8,9 @@ import {
   createNativeStackNavigator,
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
-import TaskListView from "./ListScreen";
-import ListTab from "./ListTab";
-import TaskScreen from "./TaskScreen";
+import ListScreen from "./listScreen/ListScreen";
+import ListStackRoot from "./ListStackRoot";
+import TaskScreen from "./task/TaskScreen";
 
 export type ListTabStack = {
   Root: undefined;
@@ -36,7 +36,7 @@ export default function Lists() {
     <Stack.Navigator initialRouteName="Root">
       <Stack.Screen
         name="Root"
-        component={ListTab}
+        component={ListStackRoot}
         options={{
           headerShown: false,
         }}
@@ -55,7 +55,7 @@ export default function Lists() {
           headerShadowVisible: false,
         }}
         name="List"
-        component={TaskListView}
+        component={ListScreen}
       />
     </Stack.Navigator>
   );

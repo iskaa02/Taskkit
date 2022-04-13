@@ -43,7 +43,7 @@ type ButtonProps = {
   label?: string;
   bg: string;
   color: string;
-  onPress: () => void;
+  onPress?: () => void;
 };
 const Button = ({ icon, bg, color, label, onPress }: ButtonProps) => {
   return (

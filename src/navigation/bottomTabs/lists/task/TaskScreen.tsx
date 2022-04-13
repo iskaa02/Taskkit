@@ -1,29 +1,27 @@
 import CheckBox from "@/components/CheckBox";
 import Footer from "@/components/Footer";
 import StatusBar from "@/components/StatusBar";
-import { AddSubtask, SubtaskCard } from "@/components/Subtasks";
 import { database } from "@/db/db";
 import { Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
 import { withDB } from "@/db/models/withDB";
 import useAccent from "@/hooks/useAccent";
 import useKeyboardStatus from "@/hooks/useKeyboardStatus";
-import { Feather } from "@expo/vector-icons";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import Database from "@nozbe/watermelondb/Database";
 import dayjs from "dayjs";
 import {
   Box,
-  Icon,
   KeyboardAvoidingView,
   ScrollView,
   Text,
   useColorModeValue,
 } from "native-base";
 import * as React from "react";
-import EditHeaderButton from "./EditHeaderButton";
+import EditHeaderButton from "../EditHeaderButton";
 import { EditTaskSheet } from "./EditTaskSheet";
-import { ListStackScreenProps } from "./Stack";
+import { ListStackScreenProps } from "@/navigation/navPropsType";
+import { DateInfo, SubtaskSection } from "./TaskInfo";
 
 export default function TaskScreen(p: ListStackScreenProps<"Task">) {
   return <Screen database={database} taskID={p.route.params.taskID} {...p} />;
@@ -49,14 +47,18 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
           onEditPress={() => {
             sheetRef.current?.present();
           }}
-          onDeletePress={() => {}}
+          onDeletePress={() => {
+            database.write(async () => {
+              await task.markAsDeleted();
+            });
+            navigation.goBack();
+          }}
           name={task.name}
           tintColor={tintColor}
         />
       ),
     });
   }, [route.params]);
-  console.log(task.reminder);
   const keyboardVisible = useKeyboardStatus();
   const topCheckboxColor = useColorModeValue("#fff", "#000");
   return (
@@ -105,7 +107,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
           <Box mt="4">
             {!!task.reminder?.valueOf() ? (
               <>
-                <ExtraInfo
+                <DateInfo
                   iconName="clock"
                   label={dayjs(task.reminder).format(
                     dayjs(task.reminder).isSame(Date.now(), "year")
@@ -113,11 +115,11 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
                       : "ddd, MMM D, YYYY"
                   )}
                 />
-                <ExtraInfo
+                <DateInfo
                   iconName="calendar"
                   label={dayjs(task.reminder).format("h:m A")}
                 />
-                <ExtraInfo iconName="repeat" label="Every week" />
+                <DateInfo iconName="repeat" label="Every week" />
               </>
             ) : null}
           </Box>
@@ -145,56 +147,3 @@ const Screen = withDB<TaskScreenProps, { task: Task }>(
     };
   }
 );
-
-type ExtraInfoProps = {
-  iconName: string;
-  label: string;
-};
-const ExtraInfo = ({ iconName, label }: ExtraInfoProps) => {
-  if (label == "") return null;
-  return (
-    <Box mb="3" py="1" flexDir="row" alignItems="center">
-      <Icon
-        style={{ marginEnd: 20 }}
-        as={<Feather />}
-        name={iconName}
-        color="em.2"
-        size="22px"
-      />
-      <Text fontSize="md" color="em.2">
-        {label}
-      </Text>
-    </Box>
-  );
-};
-
-const SubtaskSection = ({ task, accent }: { task: Task; accent: string }) => {
-  return (
-    <>
-      <Text mt={4} bold color="em.1" fontSize="2xl">
-        SubTasks
-      </Text>
-      <Box mt={3}>
-        {Object.keys(task.subtasks).map(i => {
-          const v = task.subtasks[i];
-          return (
-            <SubtaskCard
-              {...v}
-              color={accent}
-              key={v.id}
-              changeSubtaskName={name => task.changeSubtaskName(v.id, name)}
-              onToggle={() => task.toggleSubtask(v.id)}
-              onDelete={() => task.deleteSubtask(v.id)}
-            />
-          );
-        })}
-      </Box>
-      <AddSubtask
-        onAdd={i => {
-          if (i.replaceAll(" ", "") !== "") task.addSubTask(i);
-        }}
-        color={accent}
-      />
-    </>
-  );
-};

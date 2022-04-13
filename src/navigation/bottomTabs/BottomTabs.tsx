@@ -1,10 +1,10 @@
 import { CalendarIcon, HomeIcon, ListIcon } from "@/assets/TabBarIcons";
-import { RootTabParamList } from "@/navigation/types";
+import { RootTabParamList } from "@/navigation/navPropsType";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import CalendarScreen from "./calendar/Calendar";
 import HomeScreen from "./home/Home";
-import ListScreen from "./lists/Stack";
+import ListScreen from "./lists/ListRoot";
 
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 

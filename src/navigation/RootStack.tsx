@@ -1,9 +1,8 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import * as React from "react";
-import BottomTabNavigator from "./rootStack/bottomTabs/BottomTabs";
-import AddTaskScreen from "./rootStack/addTask/AddTaskScreen";
-import NotFoundScreen from "./rootStack/NotFoundScreen";
-import { RootStackParamList } from "./types";
+import BottomTabNavigator from "./bottomTabs/BottomTabs";
+import AddTaskScreen from "./addTask/AddTaskScreen";
+import { RootStackParamList } from "./navPropsType";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -15,16 +14,12 @@ export function RootNavigator() {
         component={BottomTabNavigator}
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name="NotFound"
-        component={NotFoundScreen}
-        options={{ title: "Oops!" }}
-      />
       <Stack.Group>
         <Stack.Screen
           options={{
             headerShadowVisible: false,
             title: "Create New Task",
+            presentation: "modal",
           }}
           name="AddTask"
           component={AddTaskScreen}

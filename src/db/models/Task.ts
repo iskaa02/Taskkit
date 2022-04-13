@@ -8,6 +8,7 @@ import {
 } from "@nozbe/watermelondb/decorators";
 import date from "@nozbe/watermelondb/decorators/date";
 import { associations } from "@nozbe/watermelondb/Model";
+import { cancelScheduledNotificationAsync } from "expo-notifications";
 import List from "./List";
 import { Columns, Tables } from "./schema";
 import { uid } from "./utils";
@@ -52,6 +53,13 @@ export default class Task extends Model {
       newSubtasks[id] = { name, id, isCompleted: false };
       r.subtasks = newSubtasks;
     });
+  }
+  async markAsDeleted() {
+    await this.cancelNotification();
+    await super.markAsDeleted();
+  }
+  async cancelNotification() {
+    await cancelScheduledNotificationAsync(this.id);
   }
   @writer async changeSubtaskName(id: string, name: string) {
     await this.update(r => {

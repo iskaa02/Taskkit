@@ -1,5 +1,4 @@
 import "@/db/db";
-import dayjs from "dayjs";
 import { setNotificationHandler } from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
@@ -10,6 +9,7 @@ import Providers from "./src/Providers";
 // require("dayjs/locale/ar-ly");
 export default function App() {
   const isLoadingComplete = useCachedResources();
+
   if (!isLoadingComplete) {
     return null;
   }

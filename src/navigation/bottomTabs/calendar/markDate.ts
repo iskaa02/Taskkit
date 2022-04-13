@@ -42,7 +42,6 @@ const MarkDates = async (tasks: Task[], selected?: string) => {
       ...obj[selected],
       selected: true,
     };
-  console.log(obj);
 
   return obj;
 };

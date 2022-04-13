@@ -14,8 +14,8 @@ import {
   useTheme,
 } from "native-base";
 import React from "react";
-import Label from "../../addTask/Label";
-import { Reminders } from "../../addTask/Reminders";
+import Label from "@/navigation/addTask/Label";
+import { Reminders } from "@/navigation/addTask/Reminders";
 
 type EditTaskSheetProps = {
   task: Task;

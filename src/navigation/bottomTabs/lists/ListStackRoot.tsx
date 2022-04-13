@@ -11,8 +11,8 @@ import Database from "@nozbe/watermelondb/Database";
 import { Icon, ScrollView, Text } from "native-base";
 import * as React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { AddListSheet } from "./AddListSheet";
-import { ListStackScreenProps } from "./Stack";
+import { AddListSheet } from "./listScreen/AddListSheet";
+import { ListStackScreenProps } from "./ListRoot";
 
 export default function TaskListGroup(p: ListStackScreenProps<"Root">) {
   const addListRef = React.useRef<BottomSheetModalMethods>(null);

@@ -6,7 +6,6 @@ import { database } from "@/db/db";
 import { Columns, Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
 import { withDB } from "@/db/models/withDB";
-import { RootTabScreenProps } from "@/navigation/types";
 import { Q } from "@nozbe/watermelondb";
 import Database from "@nozbe/watermelondb/Database";
 import { Box } from "native-base";
@@ -71,6 +70,6 @@ const Screen = withDB<ScreenProps, { tasks: Task[] }>(
   })
 );
 
-export default function CalendarScreen({}: RootTabScreenProps<"Calendar">) {
+export default function CalendarScreen() {
   return <Screen database={database} />;
 }
