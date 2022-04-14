@@ -1,16 +1,35 @@
+import Fab from "@/components/Fab";
 import StatusBar from "@/components/StatusBar";
+import { database } from "@/db/db";
+import { Columns, Tables } from "@/db/models/schema";
+import Task from "@/db/models/Task";
+import withDB from "@/db/models/withDB";
 import { RootTabScreenProps } from "@/navigation/navPropsType";
-import { getAllScheduledNotificationsAsync } from "expo-notifications";
+import { Q } from "@nozbe/watermelondb";
+import Database from "@nozbe/watermelondb/Database";
+import dayjs from "dayjs";
 import { Box, Text } from "native-base";
 import React from "react";
 import { ScrollView } from "react-native";
-import { Fab } from "@/components/Fab";
-function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
-  getAllScheduledNotificationsAsync().then(i => {
-    i.forEach(n => {
-      console.log(n);
+type HomeScreenProps = RootTabScreenProps<"Home"> & {
+  todayTasks: Task[];
+  futureTasks: Task[];
+  database: Database;
+};
+function RawScreen({ todayTasks, navigation }: HomeScreenProps) {
+  const countString = (() => {
+    let completed = 0;
+    let left = 0;
+    todayTasks.map(task => {
+      task.isCompleted ? completed++ : left++;
     });
-  });
+    let s = "";
+    left > 0
+      ? (s += `${left} Tasks Left For Today`)
+      : (s = "No Tasks Left For Today");
+
+    return s;
+  })();
   return (
     <Box flex={1}>
       <ScrollView>
@@ -21,7 +40,7 @@ function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
             ISKAA
           </Text>
           <Text fontSize="xl" fontWeight="semibold">
-            5 Tasks for today
+            {countString}
           </Text>
         </Box>
       </ScrollView>
@@ -29,6 +48,29 @@ function HomeScreen({ navigation }: RootTabScreenProps<"Home">) {
     </Box>
   );
 }
-// const enhance = withObservables(["task"], ({ task }: { task: Task }) => task);
-// export default enhance(HomeScreen);
-export default HomeScreen;
+const Screen = withDB<
+  HomeScreenProps,
+  { todayTasks: Task[]; futureTasks: Task[] }
+>(RawScreen, ["database"], ({ database }) => ({
+  todayTasks: database
+    .get<Task>(Tables.Task)
+    .query(
+      Q.where(Columns.task.reminder, Q.gte(dayjs().startOf("day").valueOf())),
+      Q.where(
+        Columns.task.reminder,
+        Q.lte(dayjs().startOf("day").add(5, "day").valueOf())
+      )
+    ),
+  futureTasks: database
+    .get<Task>(Tables.Task)
+    .query(
+      Q.where(Columns.task.reminder, Q.gte(dayjs().startOf("day").valueOf())),
+      Q.where(
+        Columns.task.reminder,
+        Q.lte(dayjs().startOf("day").add(5, "day").valueOf())
+      )
+    ),
+}));
+export default function HomeScreenProps(p: RootTabScreenProps<"Home">) {
+  return <Screen database={database} {...p} />;
+}

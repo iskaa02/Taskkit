@@ -1,5 +1,5 @@
 import Task from "@/db/models/Task";
-import { withDB } from "@/db/models/withDB";
+import withDB from "@/db/models/withDB";
 import useAccent from "@/hooks/useAccent";
 import { listThemeType } from "@/theme/listThemes";
 import { Text, useTheme } from "native-base";

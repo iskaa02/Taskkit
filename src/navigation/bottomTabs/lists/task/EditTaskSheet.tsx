@@ -59,14 +59,18 @@ export const EditTaskSheet = React.forwardRef<
           }}
         >
           <Box bg="surface" px="5" pt="2">
-            <StatusBar />
             <Label l="Name" mb={2} />
-            <Input value={name} onChangeText={i => setName(i)} fontSize="lg" />
+            <Input
+              h="40px"
+              defaultValue={name}
+              onChangeText={i => setName(i)}
+              fontSize="lg"
+            />
 
             <Label mb={2} l="Description" mt="5" />
 
             <Input
-              value={description}
+              defaultValue={description}
               onChangeText={i => setDescription(i)}
               fontSize="lg"
               numberOfLines={4}

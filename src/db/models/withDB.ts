@@ -1,4 +1,4 @@
-import { Model, Query, Collection } from "@nozbe/watermelondb";
+import { Collection, Model, Query } from "@nozbe/watermelondb";
 import withObservable from "@nozbe/with-observables";
 import React from "react";
 import { Observable } from "rxjs";
@@ -18,10 +18,12 @@ export type ObservedObject<T> = {
 //@ts-ignore
 export type Optional<T, K extends keyof any> = Pick<Partial<T>, K> & Omit<T, K>;
 
-export function withDB<InputProps, ObservableProps>(
+export default function withDB<InputProps, ObservableProps>(
   component: React.ComponentType<InputProps>,
   triggerProps: Array<keyof InputProps>,
-  getObservables: (props: InputProps) => ObservedObject<ObservableProps>
+  getObservables: (
+    props: InputProps
+  ) => ObservedObject<ObservableProps> | { [x: string]: any }
 ): React.FC<Optional<InputProps, keyof ObservableProps>> {
   const A: React.FC<Optional<InputProps, keyof ObservableProps>> =
     withObservable<InputProps, ObservableProps>(

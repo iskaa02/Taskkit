@@ -1,8 +1,8 @@
 import { Model, Relation, TableName } from "@nozbe/watermelondb";
 import {
   field,
-  immutableRelation,
   json,
+  relation,
   text,
   writer,
 } from "@nozbe/watermelondb/decorators";
@@ -44,7 +44,7 @@ export default class Task extends Model {
   @json(Column.subtasks, sanitize) subtasks!: subtaskObject;
   @date(Column.reminder) reminder!: Date | null;
 
-  @immutableRelation(Tables.List, Column.listID) list!: Relation<List>;
+  @relation(Tables.List, Column.listID) list!: Relation<List>;
 
   @writer async addSubTask(name: string) {
     await this.update(r => {
@@ -76,6 +76,8 @@ export default class Task extends Model {
     await this.update(r => {
       r.isCompleted = !r.isCompleted;
     });
+    const list = await this.list.fetch();
+    list?.update(() => {});
   }
   @writer async toggleSubtask(id: string) {
     await this.update(r => {

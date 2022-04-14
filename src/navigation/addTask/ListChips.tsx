@@ -1,6 +1,6 @@
 import List from "@/db/models/List";
 import { Tables } from "@/db/models/schema";
-import { withDB } from "@/db/models/withDB";
+import withDB from "@/db/models/withDB";
 import { listThemeType } from "@/theme/listThemes";
 import Database from "@nozbe/watermelondb/Database";
 import { Box, ITextProps, Text, useColorModeValue } from "native-base";

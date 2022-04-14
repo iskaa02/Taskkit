@@ -8,11 +8,11 @@ type FabProps = {
   children?: React.ReactNode;
   style?: ViewStyle;
 };
-export const Fab = ({
+export default function Fab({
   children = <Icon as={<Feather name="plus" />} color="em.1" />,
   onPress,
   style,
-}: FabProps) => {
+}: FabProps) {
   const surface = useTheme().colors.surface;
   return (
     <Box w="100%" px="20px" pb="20px" position="absolute" bottom="0">
@@ -36,4 +36,4 @@ export const Fab = ({
       />
     </Box>
   );
-};
+}

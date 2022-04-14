@@ -1,8 +1,8 @@
-import { LeftAccentCard } from "@/components/Cards";
+import LeftAccentCard from "@/components/Cards";
 import List from "@/db/models/List";
 import { Columns, Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
-import { withDB } from "@/db/models/withDB";
+import withDB from "@/db/models/withDB";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Database, Q } from "@nozbe/watermelondb";
 import { useNavigation } from "@react-navigation/native";

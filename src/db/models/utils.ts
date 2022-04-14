@@ -25,7 +25,5 @@ export function scheduleNotification({
       body: description,
     },
     trigger: date,
-  }).then(a => {
-    console.log(a !== id ? "NOT EQUAL" : "EQUAL");
   });
 }

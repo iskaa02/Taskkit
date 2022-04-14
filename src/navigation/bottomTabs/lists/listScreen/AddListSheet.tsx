@@ -9,84 +9,76 @@ import { Box, Input, Text, useTheme, Pressable } from "native-base";
 import * as React from "react";
 import Footer from "../../../../components/Footer";
 
-export const AddListSheet = React.forwardRef<BottomSheetModalMethods>(
-  (_, ref) => {
-    const surface = useTheme().colors.surface;
-    const innerRef = React.useRef<BottomSheetModalMethods>(null);
-    // @ts-ignore
-    React.useImperativeHandle(ref, () => innerRef.current);
-    const [name, setName] = React.useState("");
-    const [activeTheme, setActiveTheme] = React.useState(listThemes.mint);
-    return (
-      <BottomSheetModal
-        snapPoints={["90%"]}
-        onDismiss={() => {
-          setName("");
-        }}
-        enableDismissOnClose
-        ref={innerRef}
-        backgroundStyle={{
-          backgroundColor: surface,
-        }}
+const AddListSheet = React.forwardRef<BottomSheetModalMethods>((_, ref) => {
+  const surface = useTheme().colors.surface;
+  const innerRef = React.useRef<BottomSheetModalMethods>(null);
+  // @ts-ignore
+  React.useImperativeHandle(ref, () => innerRef.current);
+  const [name, setName] = React.useState("");
+  const [activeTheme, setActiveTheme] = React.useState(listThemes.mint);
+  return (
+    <BottomSheetModal
+      snapPoints={["90%"]}
+      onDismiss={() => {
+        setName("");
+      }}
+      enableDismissOnClose
+      ref={innerRef}
+      backgroundStyle={{
+        backgroundColor: surface,
+      }}
+    >
+      <BottomSheetScrollView
+        style={{ paddingHorizontal: 20, paddingVertical: 10 }}
       >
-        <BottomSheetScrollView
-          style={{ paddingHorizontal: 20, paddingVertical: 10 }}
-        >
-          <Text fontSize="2xl" bold mb="5" color="em.1">
-            Create New List
-          </Text>
+        <Text fontSize="2xl" bold mb="5" color="em.1">
+          Create New List
+        </Text>
 
-          <Text mb="2" fontSize="md" bold>
-            List Name
-          </Text>
-          <Input
-            value={name}
-            onChangeText={v => setName(v)}
-            borderWidth={1}
-            selectionColor={"#000"}
-            borderColor="em.3"
-            color="em.1"
-            borderRadius={5}
-            px="5px"
-            py="5px"
-            fontSize="lg"
-          />
-
-          <Text mt="5" mb="2" fontSize="md" bold>
-            Theme
-          </Text>
-          <Box flexDirection="row" flexWrap="wrap">
-            {Object.keys(listThemes).map((v, i) => {
-              const theme = listThemes[v];
-              return (
-                <ThemeButton
-                  onPress={() => {
-                    setActiveTheme(theme);
-                  }}
-                  key={i}
-                  active={theme === activeTheme}
-                  theme={theme}
-                />
-              );
-            })}
-          </Box>
-        </BottomSheetScrollView>
-        <Footer
-          onPress={async () => {
-            database.write(async () => {
-              database.get<List>(Tables.List).create(list => {
-                list.name = name;
-                list.theme = activeTheme;
-              });
-            });
-            innerRef.current?.close();
-          }}
-          label="Create New List"
+        <Text mb="2" fontSize="md" bold>
+          List Name
+        </Text>
+        <Input
+          h="40px"
+          defaultValue={name}
+          onChangeText={i => setName(i)}
+          fontSize="lg"
         />
-      </BottomSheetModal>
-    );
-  }
-);
+
+        <Text mt="5" mb="2" fontSize="md" bold>
+          Theme
+        </Text>
+        <Box flexDirection="row" flexWrap="wrap">
+          {Object.keys(listThemes).map((v, i) => {
+            const theme = listThemes[v];
+            return (
+              <ThemeButton
+                onPress={() => {
+                  setActiveTheme(theme);
+                }}
+                key={i}
+                active={theme === activeTheme}
+                theme={theme}
+              />
+            );
+          })}
+        </Box>
+      </BottomSheetScrollView>
+      <Footer
+        onPress={async () => {
+          database.write(async () => {
+            database.get<List>(Tables.List).create(list => {
+              list.name = name;
+              list.theme = activeTheme;
+            });
+          });
+          innerRef.current?.close();
+        }}
+        label="Create New List"
+      />
+    </BottomSheetModal>
+  );
+});
 
 type ThemeButtonProps = {
   theme: listThemeType;
@@ -130,3 +122,5 @@ export const ThemeButton = ({
     </Pressable>
   );
 };
+
+export default AddListSheet;

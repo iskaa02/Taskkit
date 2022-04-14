@@ -5,7 +5,7 @@ import StatusBar from "@/components/StatusBar";
 import { database } from "@/db/db";
 import { Columns, Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
-import { withDB } from "@/db/models/withDB";
+import withDB from "@/db/models/withDB";
 import { Q } from "@nozbe/watermelondb";
 import Database from "@nozbe/watermelondb/Database";
 import { Box } from "native-base";

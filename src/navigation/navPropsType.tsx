@@ -10,6 +10,17 @@ import {
   NativeStackScreenProps,
 } from "@react-navigation/native-stack";
 
+export type RootTabParamList = {
+  Home: undefined;
+  Calendar: undefined;
+  Lists: undefined;
+};
+
+export type RootStackParamList = {
+  Root: NavigatorScreenParams<RootTabParamList> | undefined;
+  AddTask: { defaultList: string } | undefined;
+};
+
 export type ListStackType = {
   Root: undefined;
   List: {
@@ -20,23 +31,6 @@ export type ListStackType = {
     theme: listThemeType;
     taskID: string;
   };
-};
-
-declare global {
-  namespace ReactNavigation {
-    interface RootParamList extends RootStackParamList {}
-  }
-}
-
-export type RootTabParamList = {
-  Home: undefined;
-  Calendar: undefined;
-  Lists: undefined;
-};
-
-export type RootStackParamList = {
-  Root: NavigatorScreenParams<RootTabParamList> | undefined;
-  AddTask: { defaultList: string } | undefined;
 };
 
 export type RootStackScreenProps<Screen extends keyof RootStackParamList> =

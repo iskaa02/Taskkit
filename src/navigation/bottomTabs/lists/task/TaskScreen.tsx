@@ -4,9 +4,10 @@ import StatusBar from "@/components/StatusBar";
 import { database } from "@/db/db";
 import { Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
-import { withDB } from "@/db/models/withDB";
+import withDB from "@/db/models/withDB";
 import useAccent from "@/hooks/useAccent";
 import useKeyboardStatus from "@/hooks/useKeyboardStatus";
+import { ListStackScreenProps } from "@/navigation/navPropsType";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import Database from "@nozbe/watermelondb/Database";
 import dayjs from "dayjs";
@@ -20,7 +21,6 @@ import {
 import * as React from "react";
 import EditHeaderButton from "../EditHeaderButton";
 import { EditTaskSheet } from "./EditTaskSheet";
-import { ListStackScreenProps } from "@/navigation/navPropsType";
 import { DateInfo, SubtaskSection } from "./TaskInfo";
 
 export default function TaskScreen(p: ListStackScreenProps<"Task">) {
@@ -35,6 +35,7 @@ type TaskScreenProps = ListStackScreenProps<"Task"> & {
 const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
   const tintColor = useColorModeValue("#fff", "#000");
   const accent = useAccent(route.params.theme);
+  const secondary = useAccent(route.params.theme, { flip: true });
   const sheetRef = React.useRef<BottomSheetModalMethods>(null);
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -128,8 +129,12 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
       </ScrollView>
       <Footer
         keyboardVisible={keyboardVisible}
-        style={{ backgroundColor: accent, elevation: 0 }}
-        textStyle={{ color: "em.10", fontSize: 18, bold: true }}
+        style={{ backgroundColor: secondary, elevation: 0 }}
+        textStyle={{
+          color: route.params.theme.secondary ? "em.1" : "em.10",
+          fontSize: 18,
+          bold: true,
+        }}
         label={`Mark as ${task.isCompleted ? "Uncompleted" : "Completed"}`}
         onPress={() => {
           task.toggleTask();

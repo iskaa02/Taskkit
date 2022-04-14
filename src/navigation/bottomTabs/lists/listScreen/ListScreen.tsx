@@ -1,12 +1,13 @@
-import { Fab } from "@/components/Fab";
+import Fab from "@/components/Fab";
 import StatusBar from "@/components/StatusBar";
 import TaskCard from "@/components/TaskCard";
 import { database } from "@/db/db";
 import List from "@/db/models/List";
 import { Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
-import { withDB } from "@/db/models/withDB";
+import withDB from "@/db/models/withDB";
 import useAccent from "@/hooks/useAccent";
+import { ListStackScreenProps } from "@/navigation/navPropsType";
 import { Feather } from "@expo/vector-icons";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { Q } from "@nozbe/watermelondb";
@@ -16,7 +17,6 @@ import * as React from "react";
 import { ScrollView } from "react-native";
 import EditHeaderButton from "../EditHeaderButton";
 import { EditListSheet } from "./EditListSheet";
-import { ListStackScreenProps } from "@/navigation/navPropsType";
 
 type ListScreenProps = ListStackScreenProps<"List"> & {
   list: List;
@@ -27,8 +27,19 @@ type ListScreenProps = ListStackScreenProps<"List"> & {
 const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
   const tintColor = useColorModeValue("#fff", "#000");
   const accent = useAccent(list.theme);
+  const secondary = useAccent(list.theme, { flip: true });
   const sheetRef = React.useRef<BottomSheetModalMethods>(null);
-
+  const countString = (() => {
+    let completed = 0;
+    let left = 0;
+    tasks.map(task => {
+      task.isCompleted ? completed++ : left++;
+    });
+    let s = "";
+    left > 0 ? (s += `${left} Tasks Left`) : "No Tasks Left";
+    if (completed > 0) s += ` ${completed} Completed`;
+    return s;
+  })();
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerStyle: {
@@ -64,7 +75,7 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
             </Text>
 
             <Text mt={4} color={"em.10"} fontSize="md">
-              5 Tasks left 3 completed
+              {countString}
             </Text>
           </Box>
 
@@ -88,12 +99,15 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
         </Box>
       </ScrollView>
       <Fab
-        style={{ backgroundColor: accent }}
+        style={{ backgroundColor: secondary }}
         onPress={() => {
           navigation.push("AddTask", { defaultList: list.id });
         }}
       >
-        <Icon as={<Feather name="plus" />} color={tintColor} />
+        <Icon
+          as={<Feather name="plus" />}
+          color={list.theme.secondary ? "em.1" : "em.10"}
+        />
       </Fab>
       <EditListSheet ref={sheetRef} list={list} />
     </>
