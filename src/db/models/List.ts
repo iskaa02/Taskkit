@@ -39,11 +39,10 @@ export default class List extends Model {
       task.isCompleted = false;
       const subtasks: subtaskObject = {};
       t.subtasks.map(i => {
-        const id = uid(8);
+        const id = uid(6);
         subtasks[id] = {
           isCompleted: false,
           name: i,
-          id: id,
         };
         task.subtasks = subtasks;
       });

@@ -8,12 +8,15 @@ import Task from "@/db/models/Task";
 import withDB from "@/db/models/withDB";
 import { Q } from "@nozbe/watermelondb";
 import Database from "@nozbe/watermelondb/Database";
-import { Box } from "native-base";
+import { Box, Icon } from "native-base";
 import React from "react";
 import { Calendar } from "react-native-calendars";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AgendaSheet } from "./AgendaSheet";
 import useDateMarks from "./markDate";
+import "@/i18n/calendar";
+import { Feather } from "@expo/vector-icons";
+import { I18nManager } from "react-native";
 
 type ScreenProps = {
   tasks: Task[];
@@ -43,6 +46,21 @@ function RawScreen({ tasks, database }: ScreenProps) {
             selectedDayBackgroundColor: "#eaeaea",
             selectedDayTextColor: "black",
           }}
+          renderArrow={direction => (
+            <Icon
+              as={<Feather />}
+              size="sm"
+              name={
+                direction === "left"
+                  ? I18nManager.isRTL
+                    ? "chevron-right"
+                    : "chevron-left"
+                  : I18nManager.isRTL
+                  ? "chevron-left"
+                  : "chevron-right"
+              }
+            />
+          )}
           markedDates={markedDates}
           onDayPress={onChange}
           markingType={"multi-dot"}

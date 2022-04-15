@@ -1,5 +1,6 @@
 import { Feather } from "@expo/vector-icons";
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { Alert } from "react-native";
 import {
   HeaderButton,
@@ -20,6 +21,7 @@ type EditHeaderButtonProps = {
   name: string;
 };
 export default function EditHeaderButton(p: EditHeaderButtonProps) {
+  const { t } = useTranslation();
   return (
     <HeaderButtons HeaderButtonComponent={FeatherHeader}>
       <OverflowMenu
@@ -27,17 +29,17 @@ export default function EditHeaderButton(p: EditHeaderButtonProps) {
           <Feather name="more-vertical" size={23} color={p.tintColor} />
         )}
       >
-        <HiddenItem title="Edit" onPress={p.onEditPress} />
+        <HiddenItem title={t("edit")} onPress={p.onEditPress} />
         <HiddenItem
-          title="Delete"
+          title={t("delete")}
           onPress={() => {
             Alert.alert(
-              `Delete ${p.name}`,
-              "Are your sure this",
+              `${t("delete")} ${p.name} ${t("?")}`,
+              t("delete-confirmation"),
               [
-                { text: "Cancel" },
+                { text: t("cancel") },
                 {
-                  text: "Delete",
+                  text: t("delete"),
                   onPress: p.onDeletePress,
                 },
               ],

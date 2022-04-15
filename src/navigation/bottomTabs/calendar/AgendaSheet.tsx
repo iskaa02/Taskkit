@@ -12,6 +12,7 @@ import React, { useCallback, useMemo } from "react";
 import { useNavigationProps } from "@/navigation/navPropsType";
 import isToday from "dayjs/plugin/isToday";
 import isTomorrow from "dayjs/plugin/isTomorrow";
+import { useTranslation } from "react-i18next";
 dayjs.extend(isToday);
 dayjs.extend(isTomorrow);
 
@@ -102,18 +103,19 @@ type SeparatorProps = {
   l?: string;
 };
 const DateSeparator = ({ date, previous, l }: SeparatorProps) => {
+  const { t } = useTranslation();
   const d = dayjs(l ?? date);
   if (!l && d.isSame(previous, "day")) {
     return null;
   }
   const label = d.isToday()
-    ? "Today"
+    ? t("today")
     : d.isTomorrow()
-    ? "Tomorrow"
+    ? t("tomorrow")
     : d.format("MMMM D");
   return (
     <Box my="2" px="10px">
-      <Text fontSize="xl" bold>
+      <Text textAlign="justify" fontSize="xl" bold>
         {label}
       </Text>
     </Box>
@@ -137,10 +139,12 @@ const RawAgendaCard = ({ list, task, navigation }: AgendaCardProps) => {
     >
       <Box alignItems="flex-start" flexDir="row">
         <Box w="73%">
-          <Text fontSize="xl" bold>
+          <Text textAlign="justify" fontSize="xl" bold>
             {task.name}
           </Text>
-          <Text fontSize="md">{list.name}</Text>
+          <Text fontSize="md" textAlign="justify">
+            {list.name}
+          </Text>
         </Box>
         <Box style={{ marginStart: "auto" }}>
           <Text fontSize="md">{dayjs(task.reminder).format("h:mmA")}</Text>

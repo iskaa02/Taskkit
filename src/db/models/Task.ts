@@ -1,8 +1,8 @@
 import { Model, Relation, TableName } from "@nozbe/watermelondb";
 import {
   field,
+  immutableRelation,
   json,
-  relation,
   text,
   writer,
 } from "@nozbe/watermelondb/decorators";
@@ -17,7 +17,6 @@ const Column = Columns.task;
 export type subtaskObject = { [x: string]: subtask };
 export type subtask = {
   name: string;
-  id: string;
   isCompleted: boolean;
 };
 export type addTaskType = {
@@ -44,13 +43,13 @@ export default class Task extends Model {
   @json(Column.subtasks, sanitize) subtasks!: subtaskObject;
   @date(Column.reminder) reminder!: Date | null;
 
-  @relation(Tables.List, Column.listID) list!: Relation<List>;
+  @immutableRelation(Tables.List, Column.listID) list!: Relation<List>;
 
   @writer async addSubTask(name: string) {
     await this.update(r => {
       let newSubtasks = r.subtasks;
-      const id = uid(8);
-      newSubtasks[id] = { name, id, isCompleted: false };
+      const id = uid(6);
+      newSubtasks[id] = { name, isCompleted: false };
       r.subtasks = newSubtasks;
     });
   }
@@ -62,34 +61,35 @@ export default class Task extends Model {
     await cancelScheduledNotificationAsync(this.id);
   }
   @writer async changeSubtaskName(id: string, name: string) {
+    let newSubtasks = this.subtasks;
+    if (name) {
+      newSubtasks[id].name = name;
+    } else {
+      delete newSubtasks[id];
+    }
     await this.update(r => {
-      const newSubtasks = r.subtasks;
-      if (name) {
-        newSubtasks[id].name = name;
-      } else {
-        delete newSubtasks[id];
-      }
       r.subtasks = newSubtasks;
     });
   }
   @writer async toggleTask() {
-    await this.update(r => {
+    this.update(r => {
       r.isCompleted = !r.isCompleted;
     });
-    const list = await this.list.fetch();
-    list?.update(() => {});
+    this.list.fetch().then(list => {
+      list?.update(() => {});
+    });
   }
   @writer async toggleSubtask(id: string) {
+    let newSubtasks = this.subtasks;
+    newSubtasks[id].isCompleted = !newSubtasks[id].isCompleted;
     await this.update(r => {
-      const newSubtasks = r.subtasks;
-      newSubtasks[id].isCompleted = !newSubtasks[id].isCompleted;
       r.subtasks = newSubtasks;
     });
   }
   @writer async deleteSubtask(subTaskID: string) {
+    let newSubtasks = this.subtasks;
+    delete newSubtasks[subTaskID];
     await this.update(r => {
-      const newSubtasks = r.subtasks;
-      delete newSubtasks[subTaskID];
       r.subtasks = newSubtasks;
     });
   }

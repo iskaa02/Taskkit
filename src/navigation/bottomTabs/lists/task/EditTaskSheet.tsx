@@ -9,13 +9,14 @@ import {
   Box,
   Input,
   KeyboardAvoidingView,
-  StatusBar,
   Switch,
   useTheme,
 } from "native-base";
 import React from "react";
 import Label from "@/navigation/addTask/Label";
 import { Reminders } from "@/navigation/addTask/Reminders";
+import { useTranslation } from "react-i18next";
+import { I18nManager } from "react-native";
 
 type EditTaskSheetProps = {
   task: Task;
@@ -34,6 +35,7 @@ export const EditTaskSheet = React.forwardRef<
   const sheetRef = React.useRef<BottomSheetModalMethods>(null);
   // @ts-ignore
   React.useImperativeHandle(ref, () => sheetRef.current);
+  const { t } = useTranslation();
 
   return (
     <BottomSheetModal
@@ -59,17 +61,19 @@ export const EditTaskSheet = React.forwardRef<
           }}
         >
           <Box bg="surface" px="5" pt="2">
-            <Label l="Name" mb={2} />
+            <Label l={t("task-title")} mb={2} />
             <Input
+              textAlign={I18nManager.isRTL ? "right" : "left"}
               h="40px"
               defaultValue={name}
               onChangeText={i => setName(i)}
               fontSize="lg"
             />
 
-            <Label mb={2} l="Description" mt="5" />
+            <Label mb={2} l={t("description")} mt="5" />
 
             <Input
+              textAlign={I18nManager.isRTL ? "right" : "left"}
               defaultValue={description}
               onChangeText={i => setDescription(i)}
               fontSize="lg"
@@ -78,7 +82,7 @@ export const EditTaskSheet = React.forwardRef<
               multiline={true}
             />
             <Box mb={2} mt="5" flexDirection="row" alignItems="center">
-              <Label l="Reminders" />
+              <Label l={t("reminders")} />
               <Switch
                 defaultIsChecked={!!task.reminder}
                 style={{ marginStart: "auto" }}
@@ -107,7 +111,7 @@ export const EditTaskSheet = React.forwardRef<
             });
             sheetRef.current?.close();
           }}
-          label="Save"
+          label={t("save")}
           keyboardVisible={keyboardVisible}
         />
       </KeyboardAvoidingView>

@@ -14,6 +14,7 @@ import { Q } from "@nozbe/watermelondb";
 import Database from "@nozbe/watermelondb/Database";
 import { Box, Icon, Text, useColorModeValue } from "native-base";
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
 import EditHeaderButton from "../EditHeaderButton";
 import { EditListSheet } from "./EditListSheet";
@@ -26,7 +27,9 @@ type ListScreenProps = ListStackScreenProps<"List"> & {
 };
 const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
   const tintColor = useColorModeValue("#fff", "#000");
+
   const accent = useAccent(list.theme);
+  const { t } = useTranslation();
   const secondary = useAccent(list.theme, { flip: true });
   const sheetRef = React.useRef<BottomSheetModalMethods>(null);
   const countString = (() => {
@@ -35,9 +38,8 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
     tasks.map(task => {
       task.isCompleted ? completed++ : left++;
     });
-    let s = "";
-    left > 0 ? (s += `${left} Tasks Left`) : "No Tasks Left";
-    if (completed > 0) s += ` ${completed} Completed`;
+    let s = t("task-left_count", { count: left, postProcess: "interval" });
+    if (completed > 0) s += `\n${completed} ${t("completed")}`;
     return s;
   })();
   React.useLayoutEffect(() => {
@@ -70,7 +72,7 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
         <Box bg="background" flex={1}>
           <StatusBar _dark={"dark-content"} _light={"light-content"} />
           <Box bg={accent} px="20px" pb="20px">
-            <Text bold color="em.10" fontSize="3xl">
+            <Text bold textAlign="justify" color="em.10" fontSize="3xl">
               {list.name}
             </Text>
 
@@ -81,7 +83,7 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
 
           <Box mt={4} px="20px">
             <Text bold color="em.2" fontSize="2xl">
-              Tasks
+              {t("task", { count: 2, postProcess: "interval" })}
             </Text>
             {tasks.map(i => {
               return (

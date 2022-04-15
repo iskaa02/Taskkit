@@ -12,6 +12,7 @@ import { Database, Q } from "@nozbe/watermelondb";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Icon, ScrollView, Text } from "native-base";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AddListSheet from "./listScreen/AddListSheet";
 import ListScreen from "./listScreen/ListScreen";
@@ -42,12 +43,13 @@ export default function Lists() {
 
 function ListRoot(p: ListStackScreenProps<"Root">) {
   const addListRef = React.useRef<BottomSheetModalMethods>(null);
+  const { t } = useTranslation();
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar />
       <ScrollView px="10px">
         <Text fontSize="2xl" mx="10px" my="3" bold color="em.1">
-          Lists
+          {t("list", { count: 2, postProcess: "interval" })}
         </Text>
         <ListView {...p} database={database} />
       </ScrollView>
@@ -69,7 +71,7 @@ function ListRoot(p: ListStackScreenProps<"Root">) {
           color="em.1"
         />
         <Text color="em.1" fontSize="md" bold>
-          Add List
+          {t("add") + " " + t("list", { count: 1, postProcess: "interval" })}
         </Text>
       </Fab>
       <AddListSheet ref={addListRef} />
@@ -91,6 +93,7 @@ const RawListView = ({ lists, ...p }: ListViewProps) => {
 };
 const RawCard = ({ list, navigation }: { list: List; navigation: any }) => {
   const [count, setCount] = React.useState(0);
+  const { t } = useTranslation();
   list.tasks
     .extend(Q.where(Columns.task.isCompleted, Q.eq(false)))
     .fetchCount()
@@ -106,11 +109,11 @@ const RawCard = ({ list, navigation }: { list: List; navigation: any }) => {
       }}
       theme={list.theme}
     >
-      <Text fontSize="xl" bold>
+      <Text textAlign="justify" fontSize="xl" bold>
         {list.name}
       </Text>
       <Text fontSize="md">
-        {!!count ? `${count} Tasks Left` : "No Tasks Left"}
+        {t("task-left_count", { count, postProcess: "interval" })}
       </Text>
     </LeftAccentCard>
   );

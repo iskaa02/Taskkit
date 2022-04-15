@@ -19,7 +19,7 @@ const CheckBox = ({
 }: CheckBoxProps) => {
   return (
     <Pressable
-      hitSlop={20}
+      hitSlop={{ bottom: 20, top: 20, left: 40, right: 40 }}
       w={`${size}px`}
       h={`${size}px`}
       borderRadius={size / 2}

@@ -19,6 +19,7 @@ import {
   useColorModeValue,
 } from "native-base";
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import EditHeaderButton from "../EditHeaderButton";
 import { EditTaskSheet } from "./EditTaskSheet";
 import { DateInfo, SubtaskSection } from "./TaskInfo";
@@ -62,6 +63,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
   }, [route.params]);
   const keyboardVisible = useKeyboardStatus();
   const topCheckboxColor = useColorModeValue("#fff", "#000");
+  const { t } = useTranslation();
   return (
     <KeyboardAvoidingView bg="surface" flex={1}>
       <EditTaskSheet ref={sheetRef} task={task} />
@@ -109,7 +111,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
             {!!task.reminder?.valueOf() ? (
               <>
                 <DateInfo
-                  iconName="clock"
+                  iconName="calendar"
                   label={dayjs(task.reminder).format(
                     dayjs(task.reminder).isSame(Date.now(), "year")
                       ? "ddd, MMM D"
@@ -117,8 +119,8 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
                   )}
                 />
                 <DateInfo
-                  iconName="calendar"
-                  label={dayjs(task.reminder).format("h:m A")}
+                  iconName="clock"
+                  label={dayjs(task.reminder).format("h:mm A")}
                 />
                 <DateInfo iconName="repeat" label="Every week" />
               </>
@@ -135,7 +137,9 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
           fontSize: 18,
           bold: true,
         }}
-        label={`Mark as ${task.isCompleted ? "Uncompleted" : "Completed"}`}
+        label={
+          !task.isCompleted ? t("mark-as-completed") : t("mark-as-uncompleted")
+        }
         onPress={() => {
           task.toggleTask();
         }}

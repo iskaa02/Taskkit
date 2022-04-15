@@ -5,15 +5,14 @@ import React from "react";
 import useCachedResources from "./src/hooks/useCachedResources";
 import Navigation from "./src/navigation";
 import Providers from "./src/Providers";
+import "@/i18n/i18n";
 
-// require("dayjs/locale/ar-ly");
 export default function App() {
   const isLoadingComplete = useCachedResources();
 
   if (!isLoadingComplete) {
     return null;
   }
-
   setNotificationHandler({
     handleNotification: async () => ({
       shouldShowAlert: true,

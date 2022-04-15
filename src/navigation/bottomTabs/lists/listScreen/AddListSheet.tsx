@@ -2,9 +2,11 @@ import BottomSheetModal from "@/components/BottomSheetModal";
 import { database } from "@/db/db";
 import List from "@/db/models/List";
 import { Tables } from "@/db/models/schema";
+import { uid } from "@/db/models/utils";
 import { listThemes, listThemeType } from "@/theme/listThemes";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
+import { t } from "i18next";
 import { Box, Input, Text, useTheme, Pressable } from "native-base";
 import * as React from "react";
 import Footer from "../../../../components/Footer";
@@ -32,11 +34,11 @@ const AddListSheet = React.forwardRef<BottomSheetModalMethods>((_, ref) => {
         style={{ paddingHorizontal: 20, paddingVertical: 10 }}
       >
         <Text fontSize="2xl" bold mb="5" color="em.1">
-          Create New List
+          {t("create-new-list")}
         </Text>
 
         <Text mb="2" fontSize="md" bold>
-          List Name
+          {t("list-name")}
         </Text>
         <Input
           h="40px"
@@ -46,7 +48,7 @@ const AddListSheet = React.forwardRef<BottomSheetModalMethods>((_, ref) => {
         />
 
         <Text mt="5" mb="2" fontSize="md" bold>
-          Theme
+          {t("theme")}
         </Text>
         <Box flexDirection="row" flexWrap="wrap">
           {Object.keys(listThemes).map((v, i) => {
@@ -69,12 +71,13 @@ const AddListSheet = React.forwardRef<BottomSheetModalMethods>((_, ref) => {
           database.write(async () => {
             database.get<List>(Tables.List).create(list => {
               list.name = name;
+              list.id = uid();
               list.theme = activeTheme;
             });
           });
           innerRef.current?.close();
         }}
-        label="Create New List"
+        label={t("create-new-list")}
       />
     </BottomSheetModal>
   );

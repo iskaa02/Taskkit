@@ -3,10 +3,12 @@ import * as React from "react";
 import BottomTabNavigator from "./bottomTabs/BottomTabs";
 import AddTaskScreen from "./addTask/AddTaskScreen";
 import { RootStackParamList } from "./navPropsType";
+import { useTranslation } from "react-i18next";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export function RootNavigator() {
+  const { t } = useTranslation();
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -18,7 +20,7 @@ export function RootNavigator() {
         <Stack.Screen
           options={{
             headerShadowVisible: false,
-            title: "Create New Task",
+            title: t("create-new-task"),
             presentation: "modal",
           }}
           name="AddTask"

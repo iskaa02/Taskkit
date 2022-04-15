@@ -3,6 +3,7 @@ import Task from "@/db/models/Task";
 import { Feather } from "@expo/vector-icons";
 import { Box, Icon, Text } from "native-base";
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 
 type ExtraInfoProps = {
   iconName: string;
@@ -32,10 +33,11 @@ export const SubtaskSection = ({
   task: Task;
   accent: string;
 }) => {
+  const { t } = useTranslation();
   return (
     <>
       <Text mt={4} bold color="em.1" fontSize="2xl">
-        SubTasks
+        {t("subtask", { count: 1 })}
       </Text>
       <Box mt={3}>
         {Object.keys(task.subtasks).map(i => {
@@ -44,10 +46,10 @@ export const SubtaskSection = ({
             <SubtaskCard
               {...v}
               color={accent}
-              key={v.id}
-              changeSubtaskName={name => task.changeSubtaskName(v.id, name)}
-              onToggle={() => task.toggleSubtask(v.id)}
-              onDelete={() => task.deleteSubtask(v.id)}
+              key={i}
+              changeSubtaskName={name => task.changeSubtaskName(i, name)}
+              onToggle={() => task.toggleSubtask(i)}
+              onDelete={() => task.deleteSubtask(i)}
             />
           );
         })}

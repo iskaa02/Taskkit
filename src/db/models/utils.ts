@@ -1,6 +1,6 @@
 import { scheduleNotificationAsync } from "expo-notifications";
 
-export function uid(num = 10) {
+export function uid(num = 8) {
   return (
     performance.now().toString(num) + Math.random().toString(num)
   ).replace(/\./g, "");

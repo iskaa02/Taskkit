@@ -6,6 +6,8 @@ import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { Box, Input, Text, useTheme } from "native-base";
 import React from "react";
+import { useTranslation } from "react-i18next";
+import { I18nManager } from "react-native";
 import { ThemeButton } from "./AddListSheet";
 
 type EditListSheetProps = {
@@ -21,6 +23,7 @@ export const EditListSheet = React.forwardRef<
   React.useImperativeHandle(ref, () => sheetRef.current);
   const [name, setName] = React.useState(list.name);
   const [activeTheme, setActiveTheme] = React.useState(list.theme);
+  const { t } = useTranslation();
   return (
     <BottomSheetModal
       snapPoints={["90%"]}
@@ -38,11 +41,11 @@ export const EditListSheet = React.forwardRef<
         style={{ paddingHorizontal: 20, paddingVertical: 10 }}
       >
         <Text fontSize="xl" bold mb="5" color="em.1">
-          Edit List
+          {t("edit") + " " + t("list", { count: 1, postProcess: "interval" })}
         </Text>
 
         <Text mb="2" fontSize="md" bold>
-          List Name
+          {t("list-name")}
         </Text>
         <Input
           value={name}
@@ -52,13 +55,14 @@ export const EditListSheet = React.forwardRef<
           borderColor="em.3"
           color="em.1"
           borderRadius={5}
+          textAlign={I18nManager.isRTL ? "right" : "left"}
           px="5px"
           py="5px"
           fontSize="lg"
         />
 
         <Text mt="5" mb="2" fontSize="md" bold>
-          Theme
+          {t("theme")}
         </Text>
         <Box flexDirection="row" flexWrap="wrap">
           {Object.keys(listThemes).map((v, i) => {
@@ -86,7 +90,7 @@ export const EditListSheet = React.forwardRef<
             sheetRef.current?.close();
           });
         }}
-        label="Save"
+        label={t("save")}
       />
     </BottomSheetModal>
   );

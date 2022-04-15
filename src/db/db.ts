@@ -3,6 +3,8 @@ import SQLiteAdapter from "@nozbe/watermelondb/adapters/sqlite";
 import List from "./models/List";
 import schema from "./models/schema";
 import Task from "./models/Task";
+import { MMKV } from "react-native-mmkv";
+export const storage = new MMKV();
 
 const adapter = new SQLiteAdapter({
   schema,

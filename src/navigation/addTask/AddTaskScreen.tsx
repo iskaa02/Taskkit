@@ -13,6 +13,7 @@ import {
   Switch,
 } from "native-base";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import Footer from "../../components/Footer";
 import Label from "./Label";
 import ListChips from "./ListChips";
@@ -29,6 +30,7 @@ export default function AddTaskScreen({
   const [description, setDescription] = React.useState("");
   const [reminder, setReminder] = React.useState<Date>(new Date(Date.now()));
   const [withReminder, setWithReminder] = React.useState(true);
+  const { t } = useTranslation();
   return (
     <KeyboardAvoidingView bg="surface" flex={1}>
       <ScrollView
@@ -40,15 +42,15 @@ export default function AddTaskScreen({
       >
         <Box bg="surface" px="5" pt="2">
           <StatusBar />
-          <Label l="Task Title" mb={2} />
+          <Label l={t("task-title")} mb={2} />
           <Input value={name} onChangeText={i => setName(i)} fontSize="lg" />
-          <Label l="List" mt="5" />
+          <Label l={t("list", { count: 2 })} mt="5" />
           <ListChips
             initialListID={route.params?.defaultList}
             {...{ database, activeListID, setActiveListID }}
           />
           <Box mb={2} mt="5" flexDirection="row" alignItems="center">
-            <Label l="Reminders" />
+            <Label l={t("reminders")} />
             <Switch
               defaultIsChecked
               style={{ marginStart: "auto" }}
@@ -62,7 +64,7 @@ export default function AddTaskScreen({
             setValue={setReminder}
           />
 
-          <Label mb={2} l="Description" mt="5" />
+          <Label mb={2} l={t("description")} mt="5" />
 
           <Input
             value={description}
@@ -72,7 +74,7 @@ export default function AddTaskScreen({
             textAlignVertical="top"
             multiline={true}
           />
-          <Label l="SubTasks" mt="5" />
+          <Label l={t("subtask", { count: 1 })} mt="5" />
           <AddSubtasks {...{ subtasks, setSubtasks }} />
         </Box>
       </ScrollView>
@@ -94,7 +96,7 @@ export default function AddTaskScreen({
               navigation.pop();
             });
         }}
-        label="Create New Task"
+        label={t("create-new-task")}
         keyboardVisible={keyboardVisible}
       />
     </KeyboardAvoidingView>

@@ -10,6 +10,7 @@ import Database from "@nozbe/watermelondb/Database";
 import dayjs from "dayjs";
 import { Box, Text } from "native-base";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
 type HomeScreenProps = RootTabScreenProps<"Home"> & {
   todayTasks: Task[];
@@ -17,28 +18,26 @@ type HomeScreenProps = RootTabScreenProps<"Home"> & {
   database: Database;
 };
 function RawScreen({ todayTasks, navigation }: HomeScreenProps) {
+  const { t } = useTranslation();
   const countString = (() => {
     let completed = 0;
-    let left = 0;
+    let count = 0;
     todayTasks.map(task => {
-      task.isCompleted ? completed++ : left++;
+      task.isCompleted ? completed++ : count++;
     });
-    let s = "";
-    left > 0
-      ? (s += `${left} Tasks Left For Today`)
-      : (s = "No Tasks Left For Today");
 
-    return s;
+    return (
+      t("task-left_count", { count, postProcess: "interval" }) +
+      " " +
+      t("for-today")
+    );
   })();
   return (
     <Box flex={1}>
       <ScrollView>
         <StatusBar animated />
         <Box shadow={2} pb={2} px={5} bg="surface">
-          <Text fontSize="lg">Hello</Text>
-          <Text fontSize="3xl" fontWeight="bold">
-            ISKAA
-          </Text>
+          <Text fontSize="lg">{t("hello")}</Text>
           <Text fontSize="xl" fontWeight="semibold">
             {countString}
           </Text>

@@ -2,7 +2,8 @@ import { subtask } from "@/db/models/Task";
 import { Feather } from "@expo/vector-icons";
 import { Text, Box, Icon, Input } from "native-base";
 import * as React from "react";
-import { Pressable, TextInput } from "react-native";
+import { useTranslation } from "react-i18next";
+import { I18nManager, Pressable, TextInput } from "react-native";
 import CheckBox from "./CheckBox";
 
 type SubtaskCardProps = Partial<subtask> & {
@@ -23,6 +24,7 @@ export const SubtaskCard = React.forwardRef<TextInput, SubtaskCardProps>(
           ref={ref}
           fontSize="lg"
           variant="unstyled"
+          textAlign={I18nManager.isRTL ? "right" : "left"}
           multiline
           blurOnSubmit
           flex={1}
@@ -50,6 +52,7 @@ export type AddSubtaskProps = {
 export const AddSubtask = ({ onAdd, color }: AddSubtaskProps) => {
   const [isOpen, setIsOpen] = React.useState(false);
   const ref = React.useRef<TextInput>(null);
+  const { t } = useTranslation();
 
   React.useEffect(() => {
     if (isOpen) {
@@ -81,7 +84,7 @@ export const AddSubtask = ({ onAdd, color }: AddSubtaskProps) => {
         style={{ marginStart: 10 }}
       >
         <Text _dark={{ color: "blue.400" }} color="blue.500" fontSize="md">
-          Add Sub Task
+          {t("add")} {t("subtask", { count: 1 })}
         </Text>
       </Pressable>
     </>
