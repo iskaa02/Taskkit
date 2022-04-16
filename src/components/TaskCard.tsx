@@ -1,5 +1,4 @@
 import Task from "@/db/models/Task";
-import withDB from "@/db/models/withDB";
 import useAccent from "@/hooks/useAccent";
 import { listThemeType } from "@/theme/listThemes";
 import { Text, useTheme } from "native-base";
@@ -15,7 +14,7 @@ type TaskCardProps = {
   theme: listThemeType;
   onPress: () => void;
 };
-function RawTaskCard({ task, theme, onPress }: TaskCardProps) {
+export default function TaskCard({ task, theme, onPress }: TaskCardProps) {
   const surface = useTheme().colors.surface;
   const s = useAnimatedStyle(
     () => ({
@@ -48,13 +47,13 @@ function RawTaskCard({ task, theme, onPress }: TaskCardProps) {
     </Pressable>
   );
 }
-export default withDB<TaskCardProps, { task: Task }>(
-  RawTaskCard,
-  ["task"],
-  ({ task }) => ({
-    task,
-  })
-);
+// export default withDB<TaskCardProps, { task: Task }>(
+//   RawTaskCard,
+//   ["task"],
+//   ({ task }) => ({
+//     task,
+//   })
+// );
 
 const styles = StyleSheet.create({
   container: {

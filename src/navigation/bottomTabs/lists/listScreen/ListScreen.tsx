@@ -39,7 +39,7 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
       task.isCompleted ? completed++ : left++;
     });
     let s = t("task-left_count", { count: left, postProcess: "interval" });
-    if (completed > 0) s += `\n${completed} ${t("completed")}`;
+    if (completed > 0) s += ` ${completed} ${t("completed")}`;
     return s;
   })();
   React.useLayoutEffect(() => {

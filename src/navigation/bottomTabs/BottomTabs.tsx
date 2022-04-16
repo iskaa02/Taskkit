@@ -39,6 +39,7 @@ export default function BottomTabNavigator() {
         component={CalendarScreen}
         options={{
           tabBarIcon: p => <CalendarIcon {...p} />,
+          lazy: false,
         }}
       />
     </BottomTab.Navigator>
