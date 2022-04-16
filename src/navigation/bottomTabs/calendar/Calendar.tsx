@@ -43,8 +43,10 @@ function RawScreen({ tasks, database }: ScreenProps) {
             monthTextColor: "white",
             textDisabledColor: "rgba(255,255,255,0.3)",
             dayTextColor: "white",
-            selectedDayBackgroundColor: "#eaeaea",
-            selectedDayTextColor: "black",
+            selectedDayBackgroundColor: "rgba(255,255,255,0.2)",
+            todayBackgroundColor: "#22577E",
+            todayTextColor: "white",
+            selectedDayTextColor: "white",
           }}
           renderArrow={direction => (
             <Icon

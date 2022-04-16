@@ -44,7 +44,7 @@ export default function AddTaskScreen({
           <StatusBar />
           <Label l={t("task-title")} mb={2} />
           <Input value={name} onChangeText={i => setName(i)} fontSize="lg" />
-          <Label l={t("list", { count: 2 })} mt="5" />
+          <Label l={t("list", { count: 2, postProcess: "interval" })} mt="5" />
           <ListChips
             initialListID={route.params?.defaultList}
             {...{ database, activeListID, setActiveListID }}
@@ -119,7 +119,8 @@ function AddSubtasks({ subtasks, setSubtasks }: AddSubtaskProps) {
           onDelete={() => {
             setSubtasks(s => s.filter(a => a !== subtask));
           }}
-          changeSubtaskName={name => {
+          onEndEditing={name => {
+            if (!name) return;
             setSubtasks(sub => {
               sub[i] = name;
               return sub;

@@ -111,6 +111,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
             {!!task.reminder?.valueOf() ? (
               <>
                 <DateInfo
+                  index={0}
                   iconName="calendar"
                   label={dayjs(task.reminder).format(
                     dayjs(task.reminder).isSame(Date.now(), "year")
@@ -119,10 +120,11 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
                   )}
                 />
                 <DateInfo
+                  index={1}
                   iconName="clock"
                   label={dayjs(task.reminder).format("h:mm A")}
                 />
-                <DateInfo iconName="repeat" label="Every week" />
+                <DateInfo index={2} iconName="repeat" label="Every week" />
               </>
             ) : null}
           </Box>

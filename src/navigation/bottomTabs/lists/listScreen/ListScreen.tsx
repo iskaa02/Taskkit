@@ -85,14 +85,15 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
             <Text bold color="em.2" fontSize="2xl">
               {t("task", { count: 2, postProcess: "interval" })}
             </Text>
-            {tasks.map(i => {
+            {tasks.map((v, i) => {
               return (
                 <TaskCard
-                  key={i.id}
+                  index={i}
+                  key={v.id}
                   theme={list.theme}
-                  task={i}
+                  task={v}
                   onPress={() =>
-                    navigation.push("Task", { theme: list.theme, taskID: i.id })
+                    navigation.push("Task", { theme: list.theme, taskID: v.id })
                   }
                 />
               );

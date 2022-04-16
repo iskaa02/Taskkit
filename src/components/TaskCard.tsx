@@ -1,20 +1,24 @@
 import Task from "@/db/models/Task";
 import useAccent from "@/hooks/useAccent";
 import { listThemeType } from "@/theme/listThemes";
+import { MotiView } from "moti";
 import { Text, useTheme } from "native-base";
 import * as React from "react";
 import { Pressable, StyleSheet } from "react-native";
-import Animated, {
-  useAnimatedStyle,
-  withSpring,
-} from "react-native-reanimated";
+import { useAnimatedStyle, withSpring } from "react-native-reanimated";
 import CheckBox from "./CheckBox";
 type TaskCardProps = {
   task: Task;
   theme: listThemeType;
   onPress: () => void;
+  index?: number;
 };
-export default function TaskCard({ task, theme, onPress }: TaskCardProps) {
+export default function TaskCard({
+  task,
+  theme,
+  onPress,
+  index,
+}: TaskCardProps) {
   const surface = useTheme().colors.surface;
   const s = useAnimatedStyle(
     () => ({
@@ -25,8 +29,11 @@ export default function TaskCard({ task, theme, onPress }: TaskCardProps) {
   const accent = useAccent(theme);
   return (
     <Pressable onPress={onPress}>
-      <Animated.View
+      <MotiView
         style={[styles.container, { backgroundColor: surface }, s]}
+        animate={{ top: 0, opacity: 1 }}
+        transition={{ delay: index ? index * 120 : 0, damping: 26 }}
+        from={{ top: 18, opacity: 0.4 }}
       >
         <CheckBox
           value={task.isCompleted}
@@ -43,7 +50,7 @@ export default function TaskCard({ task, theme, onPress }: TaskCardProps) {
         >
           {task.name}
         </Text>
-      </Animated.View>
+      </MotiView>
     </Pressable>
   );
 }
