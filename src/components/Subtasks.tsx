@@ -48,7 +48,7 @@ export const SubtaskCard = React.forwardRef<TextInput, SubtaskCardProps>(
         }}
         animate={{
           opacity: 1,
-          marginBottom: 10,
+          marginBottom: 15,
           paddingVertical: 3,
         }}
         exit={{

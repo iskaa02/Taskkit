@@ -8,22 +8,19 @@ import Animated, {
 
 type BackdropProps = BottomSheetBackdropProps & {
   pointerEvents?: "none" | "auto";
-  initialOpacity?: number;
+  from?: number[];
+  to?: number[];
 };
 const Backdrop = ({
   animatedIndex,
   style,
   pointerEvents,
-  initialOpacity = 0,
+  from = [-1, 0],
+  to = [0, 0.8],
 }: BackdropProps) => {
   // animated variables
   const containerAnimatedStyle = useAnimatedStyle(() => ({
-    opacity: interpolate(
-      animatedIndex.value,
-      [-1, 0, 1],
-      [0, initialOpacity, 1],
-      Extrapolate.CLAMP
-    ),
+    opacity: interpolate(animatedIndex.value, from, to, Extrapolate.CLAMP),
   }));
 
   // styles

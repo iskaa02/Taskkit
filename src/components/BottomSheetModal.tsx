@@ -46,9 +46,6 @@ const NotesBottomSheet = React.forwardRef<
         backgroundColor: colors.em[2],
       }}
       backgroundStyle={{ backgroundColor: colors.background }}
-      backdropComponent={i => (
-        <Backdrop {...i} pointerEvents="auto" initialOpacity={0.4} />
-      )}
       {...p}
       onChange={onChange}
       ref={innerRef}

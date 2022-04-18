@@ -1,10 +1,12 @@
 import { AddSubtask, SubtaskCard } from "@/components/Subtasks";
 import Task from "@/db/models/Task";
 import { Feather } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 import { AnimatePresence, MotiView } from "moti";
 import { Box, Icon, Text } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
+import useSubtaskReducer from "./SubtasksReducer";
 
 type ExtraInfoProps = {
   iconName: string;
@@ -34,14 +36,25 @@ export const DateInfo = ({ iconName, label, index }: ExtraInfoProps) => {
     </MotiView>
   );
 };
-export const SubtaskSection = ({
-  task,
-  accent,
-}: {
+type SubtaskSectionProps = {
   task: Task;
   accent: string;
-}) => {
+};
+
+export const SubtaskSection = ({ accent, task }: SubtaskSectionProps) => {
   const { t } = useTranslation();
+  const { subtasks, actions, setSubtasks } = useSubtaskReducer(task.subtasks);
+  const nav = useNavigation();
+  React.useEffect(() => {
+    return () => {
+      nav.addListener("blur", () => {
+        setSubtasks(s => {
+          if (!(s === subtasks)) task.updateSubtasks(s);
+          return s;
+        });
+      });
+    };
+  }, []);
   return (
     <>
       <Text mt={4} bold color="em.1" fontSize="2xl">
@@ -49,25 +62,31 @@ export const SubtaskSection = ({
       </Text>
       <Box mt={3}>
         <AnimatePresence>
-          {Object.keys(task.subtasks).map((key, i) => {
-            const v = task.subtasks[key];
+          {Object.keys(subtasks).map((key, i) => {
+            const v = subtasks[key];
             return (
               <SubtaskCard
                 {...v}
                 index={i}
                 color={accent}
                 key={key}
-                onEndEditing={name => task.changeSubtaskName(key, name)}
-                onToggle={() => task.toggleSubtask(key)}
-                onDelete={() => task.deleteSubtask(key)}
+                onEndEditing={name => {
+                  actions.renameSubtask(key, name);
+                }}
+                onToggle={() => {
+                  actions.toggleSubtask(key);
+                }}
+                onDelete={() => {
+                  actions.deleteSubtask(key);
+                }}
               />
             );
           })}
         </AnimatePresence>
       </Box>
       <AddSubtask
-        onAdd={i => {
-          if (i.replaceAll(" ", "") !== "") task.addSubTask(i);
+        onAdd={name => {
+          if (name.replaceAll(" ", "") !== "") actions.addSubtask(name);
         }}
         color={accent}
       />

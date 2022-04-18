@@ -5,7 +5,7 @@ import * as React from "react";
 
 type CheckBoxProps = {
   value: boolean;
-  onToggle?: () => void;
+  onToggle?: (i: boolean) => void;
   color: string;
   iconColor?: string;
   size?: number;
@@ -28,7 +28,9 @@ const CheckBox = ({
       borderColor={color}
       justifyContent="center"
       alignItems="center"
-      onPress={toggle}
+      onPress={() => {
+        toggle && toggle(!value);
+      }}
     >
       <MotiView
         style={{
@@ -43,6 +45,7 @@ const CheckBox = ({
           scale: value ? 1 : 0.3,
           opacity: value ? 1 : 0,
         }}
+        transition={{ damping: 10 }}
       >
         <Icon
           as={<Feather name="check" />}

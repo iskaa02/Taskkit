@@ -12,6 +12,7 @@ import { Feather } from "@expo/vector-icons";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { Q } from "@nozbe/watermelondb";
 import Database from "@nozbe/watermelondb/Database";
+import { AnimatePresence } from "moti";
 import { Box, Icon, Text, useColorModeValue } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
@@ -63,6 +64,12 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
       ),
     });
   }, [list.theme]);
+  const [delay, setdelay] = React.useState(120);
+  React.useEffect(() => {
+    setTimeout(() => {
+      setdelay(0);
+    }, tasks.length * 120);
+  }, []);
   return (
     <>
       <ScrollView
@@ -85,19 +92,24 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
             <Text bold color="em.2" fontSize="2xl">
               {t("task", { count: 2, postProcess: "interval" })}
             </Text>
-            {tasks.map((v, i) => {
-              return (
-                <TaskCard
-                  index={i}
-                  key={v.id}
-                  theme={list.theme}
-                  task={v}
-                  onPress={() =>
-                    navigation.push("Task", { theme: list.theme, taskID: v.id })
-                  }
-                />
-              );
-            })}
+            <AnimatePresence>
+              {tasks.map((v, i) => {
+                return (
+                  <TaskCard
+                    animationDelay={delay * i}
+                    key={v.id}
+                    theme={list.theme}
+                    task={v}
+                    onPress={() =>
+                      navigation.push("Task", {
+                        theme: list.theme,
+                        taskID: v.id,
+                      })
+                    }
+                  />
+                );
+              })}
+            </AnimatePresence>
           </Box>
         </Box>
       </ScrollView>

@@ -48,7 +48,7 @@ function ListRoot(p: ListStackScreenProps<"Root">) {
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar />
       <ScrollView px="10px">
-        <Text fontSize="2xl" mx="10px" my="3" bold color="em.1">
+        <Text fontSize="2xl" mx="10px" my="3" color="em.1">
           {t("list", { count: 2, postProcess: "interval" })}
         </Text>
         <ListView {...p} database={database} />

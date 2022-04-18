@@ -2,6 +2,7 @@ import StatusBar from "@/components/StatusBar";
 import { AddSubtask, SubtaskCard } from "@/components/Subtasks";
 import { database } from "@/db/db";
 import List from "@/db/models/List";
+import { repeatType } from "@/db/models/scheduleNotification";
 import { Tables } from "@/db/models/schema";
 import useKeyboardStatus from "@/hooks/useKeyboardStatus";
 import { RootStackScreenProps } from "@/navigation/navPropsType";
@@ -29,6 +30,7 @@ export default function AddTaskScreen({
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
   const [reminder, setReminder] = React.useState<Date>(new Date(Date.now()));
+  const [reminderRepeat, setReminderRepeat] = React.useState<repeatType>(null);
   const [withReminder, setWithReminder] = React.useState(true);
   const { t } = useTranslation();
   return (
@@ -59,9 +61,10 @@ export default function AddTaskScreen({
             />
           </Box>
           <Reminders
+            setRepeat={setReminderRepeat}
             active={withReminder}
-            value={reminder}
-            setValue={setReminder}
+            date={reminder}
+            setDate={setReminder}
           />
 
           <Label mb={2} l={t("description")} mt="5" />
@@ -89,6 +92,7 @@ export default function AddTaskScreen({
                 name,
                 description,
                 subtasks,
+                reminderRepeat,
                 reminder: withReminder ? reminder : undefined,
               });
             })

@@ -1,66 +1,107 @@
 import Task from "@/db/models/Task";
+import withDB from "@/db/models/withDB";
 import useAccent from "@/hooks/useAccent";
 import { listThemeType } from "@/theme/listThemes";
+import dayjs from "dayjs";
 import { MotiView } from "moti";
-import { Text, useTheme } from "native-base";
+import { Box, Text, useTheme } from "native-base";
 import * as React from "react";
 import { Pressable, StyleSheet } from "react-native";
-import { useAnimatedStyle, withSpring } from "react-native-reanimated";
 import CheckBox from "./CheckBox";
 type TaskCardProps = {
   task: Task;
-  theme: listThemeType;
+  theme?: listThemeType;
   onPress: () => void;
-  index?: number;
+  animationDelay?: number;
+  withDate?: boolean;
+  withList?: boolean;
+  withTime?: boolean;
 };
-export default function TaskCard({
+function TaskCard({
   task,
-  theme,
+  theme: initialTheme,
   onPress,
-  index,
+  ...options
 }: TaskCardProps) {
-  const surface = useTheme().colors.surface;
-  const s = useAnimatedStyle(
-    () => ({
-      opacity: task.isCompleted ? withSpring(0.8) : withSpring(1),
-    }),
-    [task.isCompleted]
-  );
+  const { surface, em } = useTheme().colors;
+  const [{ listName, theme }, setListProps] = React.useState(() => {
+    if (initialTheme) return { theme: initialTheme, listName: "" };
+    return { theme: { main: em[1] }, listName: "" };
+  });
   const accent = useAccent(theme);
+  React.useLayoutEffect(() => {
+    if (initialTheme && !options.withList) return;
+    task.list.fetch().then(l => {
+      if (l?.name === listName) return;
+      if (l) {
+        setListProps({ listName: l.name, theme: l.theme });
+      }
+    });
+  }, [task, initialTheme, options.withList]);
   return (
     <Pressable onPress={onPress}>
       <MotiView
-        style={[styles.container, { backgroundColor: surface }, s]}
-        animate={{ top: 0, opacity: 1 }}
-        transition={{ delay: index ? index * 120 : 0, damping: 26 }}
+        style={[styles.container, { backgroundColor: surface }]}
+        animate={{
+          top: 0,
+          opacity: task.isCompleted ? 0.6 : 1,
+          height: options.withList ? 70 : 60,
+        }}
+        transition={{ delay: options.animationDelay, damping: 26 }}
         from={{ top: 18, opacity: 0.4 }}
+        exit={{
+          height: 0,
+          opacity: 0,
+          marginBottom: -6,
+          paddingVertical: 0,
+        }}
       >
         <CheckBox
           value={task.isCompleted}
-          onToggle={() => {
-            task.toggleTask();
-          }}
+          onToggle={i => task.setIsCompleted(i)}
           color={accent}
         />
-
-        <Text
-          fontSize="xl"
-          color={accent}
-          textDecorationLine={task.isCompleted ? "line-through" : undefined}
-        >
-          {task.name}
-        </Text>
+        <Box flex={1}>
+          <Text
+            textAlign="justify"
+            fontSize="xl"
+            color={accent}
+            isTruncated
+            textDecorationLine={task.isCompleted ? "line-through" : undefined}
+          >
+            {task.name}
+          </Text>
+          {!options.withList ? null : (
+            <Text textAlign="justify" fontSize="md" color={accent} isTruncated>
+              {listName}
+            </Text>
+          )}
+        </Box>
+        <Box>
+          <Box>
+            {!options.withDate ? null : (
+              <Text textAlign="justify" color={accent} fontSize="sm">
+                {dayjs(task.reminder).format("ddd")}
+              </Text>
+            )}
+            {!options.withTime ? null : (
+              <Text textAlign="center" fontSize="md" color={accent}>
+                {dayjs(task.reminder).format("h:mmA")}
+              </Text>
+            )}
+          </Box>
+        </Box>
       </MotiView>
     </Pressable>
   );
 }
-// export default withDB<TaskCardProps, { task: Task }>(
-//   RawTaskCard,
-//   ["task"],
-//   ({ task }) => ({
-//     task,
-//   })
-// );
+export default withDB<TaskCardProps, { task: Task }>(
+  TaskCard,
+  ["task"],
+  ({ task }) => ({
+    task,
+  })
+);
 
 const styles = StyleSheet.create({
   container: {
@@ -76,7 +117,7 @@ const styles = StyleSheet.create({
       height: 1,
     },
     shadowOpacity: 0.18,
-    shadowRadius: 1.0,
+    shadowRadius: 1,
     marginBottom: 10,
   },
 });

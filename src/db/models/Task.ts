@@ -10,8 +10,8 @@ import date from "@nozbe/watermelondb/decorators/date";
 import { associations } from "@nozbe/watermelondb/Model";
 import { cancelScheduledNotificationAsync } from "expo-notifications";
 import List from "./List";
+import { repeatType } from "./scheduleNotification";
 import { Columns, Tables } from "./schema";
-import { uid } from "./utils";
 
 const Column = Columns.task;
 export type subtaskObject = { [x: string]: subtask };
@@ -23,6 +23,7 @@ export type addTaskType = {
   name: string;
   description: string;
   reminder?: Date;
+  reminderRepeat: repeatType;
   subtasks: string[];
 };
 
@@ -42,17 +43,9 @@ export default class Task extends Model {
   @text(Column.description) description!: string;
   @json(Column.subtasks, sanitize) subtasks!: subtaskObject;
   @date(Column.reminder) reminder!: Date | null;
-
+  @text(Column.repeat) repeat!: repeatType;
   @immutableRelation(Tables.List, Column.listID) list!: Relation<List>;
 
-  @writer async addSubTask(name: string) {
-    await this.update(r => {
-      let newSubtasks = r.subtasks;
-      const id = uid(6);
-      newSubtasks[id] = { name, isCompleted: false };
-      r.subtasks = newSubtasks;
-    });
-  }
   async markAsDeleted() {
     await this.cancelNotification();
     await super.markAsDeleted();
@@ -60,15 +53,19 @@ export default class Task extends Model {
   async cancelNotification() {
     await cancelScheduledNotificationAsync(this.id);
   }
-  @writer async changeSubtaskName(id: string, name: string) {
-    let newSubtasks = this.subtasks;
-    if (name) {
-      newSubtasks[id].name = name;
-    } else {
-      delete newSubtasks[id];
-    }
+
+  @writer async updateSubtasks(newSubtasks: subtaskObject) {
     await this.update(r => {
       r.subtasks = newSubtasks;
+    });
+  }
+
+  @writer async setIsCompleted(t: boolean = false) {
+    await this.update(r => {
+      r.isCompleted = t;
+    });
+    this.list.fetch().then(list => {
+      list?.update(() => {});
     });
   }
   @writer async toggleTask() {
@@ -79,24 +76,18 @@ export default class Task extends Model {
       list?.update(() => {});
     });
   }
-  @writer async toggleSubtask(id: string) {
-    let newSubtasks = this.subtasks;
-    newSubtasks[id].isCompleted = !newSubtasks[id].isCompleted;
-    await this.update(r => {
-      r.subtasks = newSubtasks;
-    });
-  }
-  @writer async deleteSubtask(subTaskID: string) {
-    let newSubtasks = this.subtasks;
-    delete newSubtasks[subTaskID];
-    await this.update(r => {
-      r.subtasks = newSubtasks;
-    });
-  }
-  @writer async editTask({ name, description, reminder }: editTaskType) {
+  @writer async editTask({
+    name,
+    description,
+    reminder,
+    repeat,
+  }: editTaskType) {
     this.update(r => {
       if (name) r.name = name;
       if (description) r.description = description;
+      if (typeof repeat !== "undefined") {
+        r.repeat = repeat;
+      }
       if (!(typeof reminder === "undefined")) {
         if (reminder) {
           r.reminder = new Date(reminder);
@@ -111,4 +102,5 @@ type editTaskType = {
   name?: string;
   description?: string;
   reminder?: Date | null;
+  repeat: repeatType;
 };

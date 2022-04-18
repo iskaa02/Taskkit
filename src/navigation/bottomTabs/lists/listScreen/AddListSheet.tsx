@@ -111,8 +111,14 @@ export const ThemeButton = ({
       bg={active ? "em.4:alpha.50" : undefined}
       alignItems="center"
     >
-      <Box left={2} w="30px" h="30px" bg={main} rounded="full" />
-      {
+      <Box
+        left={!!secondary ? 2 : 0}
+        w={!!secondary ? "30px" : "35px"}
+        h={!!secondary ? "30px" : "35px"}
+        bg={main}
+        rounded="full"
+      />
+      {!secondary ? null : (
         <Box
           right={2}
           opacity={0.9}
@@ -121,7 +127,7 @@ export const ThemeButton = ({
           bg={secondary ?? "background"}
           rounded="full"
         />
-      }
+      )}
     </Pressable>
   );
 };

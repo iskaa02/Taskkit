@@ -17,6 +17,7 @@ import Label from "@/navigation/addTask/Label";
 import { Reminders } from "@/navigation/addTask/Reminders";
 import { useTranslation } from "react-i18next";
 import { I18nManager } from "react-native";
+import { repeatType } from "@/db/models/scheduleNotification";
 
 type EditTaskSheetProps = {
   task: Task;
@@ -30,22 +31,19 @@ export const EditTaskSheet = React.forwardRef<
   const [description, setDescription] = React.useState(task.description);
   const [reminder, setReminder] = React.useState<Date | null>(task.reminder);
   const [withReminder, setWithReminder] = React.useState(!!task.reminder);
+  const [reminderRepeat, setReminderRepeat] = React.useState<repeatType>(
+    task.repeat
+  );
 
   const surface = useTheme().colors.surface;
   const sheetRef = React.useRef<BottomSheetModalMethods>(null);
   // @ts-ignore
   React.useImperativeHandle(ref, () => sheetRef.current);
   const { t } = useTranslation();
-
   return (
     <BottomSheetModal
       snapPoints={["90%"]}
-      onDismiss={() => {
-        setName(task.name);
-        setDescription(task.description);
-        setReminder(task.reminder);
-        setWithReminder(!!task.reminder);
-      }}
+      stackBehavior="push"
       enableDismissOnClose
       ref={sheetRef}
       backgroundStyle={{
@@ -95,9 +93,11 @@ export const EditTaskSheet = React.forwardRef<
             </Box>
             <Reminders
               active={withReminder}
-              value={reminder ?? dayjs().toDate()}
+              initialRepeat={task.repeat}
+              date={reminder ?? dayjs().toDate()}
+              setRepeat={setReminderRepeat}
               //@ts-ignore
-              setValue={setReminder}
+              setDate={setReminder}
             />
           </Box>
         </BottomSheetScrollView>
@@ -108,6 +108,7 @@ export const EditTaskSheet = React.forwardRef<
               name,
               description,
               reminder: withReminder ? reminder : null,
+              repeat: reminderRepeat,
             });
             sheetRef.current?.close();
           }}

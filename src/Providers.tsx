@@ -12,7 +12,7 @@ export default function Providers({ children }: ProviderProps) {
   // can't use this use async storage
   const t = React.useMemo(() => {
     // if (colorMode==="light")
-    // return theme;
+    return theme;
     theme.colors = {
       ...theme.colors,
       ...DARK_MODE,

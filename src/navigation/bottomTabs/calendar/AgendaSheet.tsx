@@ -1,18 +1,18 @@
 import LeftAccentCard from "@/components/Cards";
+import DateSeparator from "@/components/DateSeparator";
 import List from "@/db/models/List";
 import { Columns, Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
 import withDB from "@/db/models/withDB";
+import { useNavigationProps } from "@/navigation/navPropsType";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Database, Q } from "@nozbe/watermelondb";
 import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
-import { Box, Text, useTheme } from "native-base";
-import React, { useCallback, useMemo } from "react";
-import { useNavigationProps } from "@/navigation/navPropsType";
 import isToday from "dayjs/plugin/isToday";
 import isTomorrow from "dayjs/plugin/isTomorrow";
-import { useTranslation } from "react-i18next";
+import { Box, Text, useTheme } from "native-base";
+import React, { useCallback, useMemo, useRef } from "react";
 dayjs.extend(isToday);
 dayjs.extend(isTomorrow);
 
@@ -53,7 +53,13 @@ const RawAgendaSheet = ({
       <BottomSheetScrollView
         contentContainerStyle={{ paddingBottom: 40, paddingHorizontal: 10 }}
       >
-        {!selectedDate ? null : <DateSeparator l={selectedDate} />}
+        {!selectedDate ? (
+          tasks.length !== 0 ? null : (
+            <DateSeparator l={selectedDate ?? dayjs().toString()} />
+          )
+        ) : (
+          <DateSeparator l={selectedDate ?? dayjs().toString()} />
+        )}
         {tasks.map((v, i) => {
           const previous = i === 0 ? null : tasks[i - 1].reminder;
           return (
@@ -97,30 +103,6 @@ export const AgendaSheet = withDB<AgendaProps, { tasks: Task[] }>(
     ),
   })
 );
-type SeparatorProps = {
-  date?: Date;
-  previous?: Date | null;
-  l?: string;
-};
-const DateSeparator = ({ date, previous, l }: SeparatorProps) => {
-  const { t } = useTranslation();
-  const d = dayjs(l ?? date);
-  if (!l && d.isSame(previous, "day")) {
-    return null;
-  }
-  const label = d.isToday()
-    ? t("today")
-    : d.isTomorrow()
-    ? t("tomorrow")
-    : d.format("MMMM D");
-  return (
-    <Box my="2" px="10px">
-      <Text textAlign="justify" fontSize="xl" bold>
-        {label}
-      </Text>
-    </Box>
-  );
-};
 type AgendaCardProps = {
   task: Task;
   list: List;

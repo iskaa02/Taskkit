@@ -17,6 +17,7 @@ export const Columns = {
     listID: columnName("list_id"),
     description: columnName("description"),
     reminder: columnName("reminder"),
+    repeat: columnName("repeat"),
     isCompleted: columnName("is_completed"),
   },
   list: {
@@ -42,6 +43,7 @@ export default appSchema({
         { name: Columns.task.description, type: "string" },
         { name: Columns.task.subtasks, type: "string" },
         { name: Columns.task.reminder, type: "number", isOptional: true },
+        { name: Columns.task.repeat, type: "string", isOptional: true },
         { name: Columns.task.listID, type: "string" },
         { name: Columns.task.isCompleted, type: "boolean" },
       ],

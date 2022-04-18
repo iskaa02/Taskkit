@@ -1,12 +1,17 @@
 import Fab from "@/components/Fab";
 import StatusBar from "@/components/StatusBar";
+import TaskCard from "@/components/TaskCard";
 import { database } from "@/db/db";
 import { Columns, Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
 import withDB from "@/db/models/withDB";
-import { RootTabScreenProps } from "@/navigation/navPropsType";
+import {
+  RootTabScreenProps,
+  useNavigationProps,
+} from "@/navigation/navPropsType";
 import { Q } from "@nozbe/watermelondb";
 import Database from "@nozbe/watermelondb/Database";
+import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
 import { Box, Text } from "native-base";
 import React from "react";
@@ -17,30 +22,55 @@ type HomeScreenProps = RootTabScreenProps<"Home"> & {
   futureTasks: Task[];
   database: Database;
 };
-function RawScreen({ todayTasks, navigation }: HomeScreenProps) {
+function RawScreen({ todayTasks, futureTasks }: HomeScreenProps) {
   const { t } = useTranslation();
-  const countString = (() => {
-    let completed = 0;
-    let count = 0;
-    todayTasks.map(task => {
-      task.isCompleted ? completed++ : count++;
-    });
-
-    return (
-      t("task-left_count", { count, postProcess: "interval" }) +
-      " " +
-      t("for-today")
-    );
-  })();
+  const navigation = useNavigation<useNavigationProps>();
   return (
     <Box flex={1}>
-      <ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: 90 }}>
         <StatusBar animated />
-        <Box shadow={2} pb={2} px={5} bg="surface">
-          <Text fontSize="lg">{t("hello")}</Text>
-          <Text fontSize="xl" fontWeight="semibold">
-            {countString}
-          </Text>
+        <Box px="20px" mt="5">
+          {todayTasks.length === 0 ? null : (
+            <Box mb="3">
+              <Text textAlign="justify" fontSize="xl" bold>
+                {t("today-tasks")}
+              </Text>
+            </Box>
+          )}
+          {todayTasks.map(task => (
+            <TaskCard
+              key={task.id}
+              onPress={async () => {
+                const list = await task.list.fetch();
+                if (!list) return;
+                navigation.navigate("Task", {
+                  theme: list.theme,
+                  taskID: task.id,
+                });
+              }}
+              task={task}
+              withList
+              withTime
+            />
+          ))}
+
+          {futureTasks.length === 0 ? null : (
+            <Box my="3">
+              <Text textAlign="justify" fontSize="xl" bold>
+                {t("next-week-tasks")}
+              </Text>
+            </Box>
+          )}
+          {futureTasks.map(task => (
+            <TaskCard
+              onPress={() => {}}
+              task={task}
+              key={task.id}
+              withList
+              withDate
+              withTime
+            />
+          ))}
         </Box>
       </ScrollView>
       <Fab onPress={() => navigation.push("AddTask")} />
@@ -57,13 +87,16 @@ const Screen = withDB<
       Q.where(Columns.task.reminder, Q.gte(dayjs().startOf("day").valueOf())),
       Q.where(
         Columns.task.reminder,
-        Q.lte(dayjs().startOf("day").add(5, "day").valueOf())
+        Q.lte(dayjs().startOf("day").add(1, "day").valueOf())
       )
     ),
   futureTasks: database
     .get<Task>(Tables.Task)
     .query(
-      Q.where(Columns.task.reminder, Q.gte(dayjs().startOf("day").valueOf())),
+      Q.where(
+        Columns.task.reminder,
+        Q.gte(dayjs().add(1, "day").startOf("day").valueOf())
+      ),
       Q.where(
         Columns.task.reminder,
         Q.lte(dayjs().startOf("day").add(5, "day").valueOf())

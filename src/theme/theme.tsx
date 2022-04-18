@@ -3,7 +3,7 @@ import { listThemes } from "./listThemes";
 
 const config = {
   useSystemColorMode: false,
-  initialColorMode: "dark",
+  initialColorMode: "light",
 };
 export const DARK_MODE = {
   background: "#131313",

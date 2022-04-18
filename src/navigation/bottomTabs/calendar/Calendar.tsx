@@ -44,7 +44,7 @@ function RawScreen({ tasks, database }: ScreenProps) {
             textDisabledColor: "rgba(255,255,255,0.3)",
             dayTextColor: "white",
             selectedDayBackgroundColor: "rgba(255,255,255,0.2)",
-            todayBackgroundColor: "#22577E",
+            todayBackgroundColor: "#174582",
             todayTextColor: "white",
             selectedDayTextColor: "white",
           }}
@@ -61,6 +61,7 @@ function RawScreen({ tasks, database }: ScreenProps) {
                   ? "chevron-left"
                   : "chevron-right"
               }
+              color="white"
             />
           )}
           markedDates={markedDates}

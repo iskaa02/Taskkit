@@ -1,29 +1,16 @@
-import { scheduleNotificationAsync } from "expo-notifications";
+// export function uid(num = 8) {
+//   return (
+//     performance.now().toString(num) + Math.random().toString(num)
+//   ).replace(/\./g, "");
+// }
 
-export function uid(num = 8) {
-  return (
-    performance.now().toString(num) + Math.random().toString(num)
-  ).replace(/\./g, "");
-}
-
-type scheduleNotification = {
-  name: string;
-  id: string;
-  date: Date;
-  description: string;
-};
-export function scheduleNotification({
-  name,
-  id,
-  date,
-  description,
-}: scheduleNotification) {
-  scheduleNotificationAsync({
-    identifier: id,
-    content: {
-      title: name,
-      body: description,
-    },
-    trigger: date,
-  });
+export function uid(num = 18) {
+  let result = "";
+  let characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let charactersLength = characters.length;
+  for (let i = 0; i < num; i++) {
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return result;
 }

@@ -1,9 +1,7 @@
 {
-  "plugins": ["@morrowdigital/watermelondb-expo-plugin",
-	  [
-        "expo-notifications",
-        { "icon": "./src/assets/notification-icon.png" }
-      ]
+  "plugins": [
+    "@morrowdigital/watermelondb-expo-plugin",
+    ["expo-notifications", { "icon": "./src/assets/notification-icon.png" }]
   ],
   "name": "taskkit",
   "slug": "taskkit",
@@ -15,7 +13,7 @@
   "splash": {
     "image": "./src/assets/splash.png",
     "resizeMode": "contain",
-    "backgroundColor": "#f1f1f1"
+    "backgroundColor": "#174582"
   },
   "androidNavigationBar": {
     "backgroundColor": "#f1f1f1"
@@ -31,8 +29,9 @@
   "android": {
     "adaptiveIcon": {
       "foregroundImage": "./src/assets/adaptive-icon.png",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#174582"
     },
+  "icon": "./src/assets/android-icon.png",
     "package": "com.iskaa.taskkit",
     "jsEngine": "hermes"
   }

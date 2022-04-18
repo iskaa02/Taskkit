@@ -60,7 +60,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
         />
       ),
     });
-  }, [route.params]);
+  }, [route.params, navigation]);
   const keyboardVisible = useKeyboardStatus();
   const topCheckboxColor = useColorModeValue("#fff", "#000");
   const { t } = useTranslation();
@@ -124,11 +124,17 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
                   iconName="clock"
                   label={dayjs(task.reminder).format("h:mm A")}
                 />
-                <DateInfo index={2} iconName="repeat" label="Every week" />
+                {!task.repeat ? null : (
+                  <DateInfo
+                    index={2}
+                    iconName="repeat"
+                    label={t("r-" + task.repeat)}
+                  />
+                )}
               </>
             ) : null}
           </Box>
-          <SubtaskSection {...{ task, accent }} />
+          <SubtaskSection {...{ accent, task }} />
         </Box>
       </ScrollView>
       <Footer
