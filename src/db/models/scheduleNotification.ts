@@ -35,8 +35,6 @@ export function scheduleNotification({
       body: description === "" ? undefined : description,
     },
     trigger: getTrigger(date, repeat),
-  }).then(i => {
-    console.log(i === id);
   });
 }
 function getTrigger(
@@ -61,7 +59,7 @@ function getTrigger(
     case "monthly": {
       dayjs.extend(duration);
       return {
-        seconds: 4,
+        seconds: dayjs.duration({ months: 1 }).asSeconds(),
         repeats: true,
       };
     }

@@ -1,5 +1,5 @@
-import { extendTheme } from "native-base";
-import { listThemes } from "./listThemes";
+import { storage } from "@/db/db";
+import { extendTheme, StorageManager } from "native-base";
 
 const config = {
   useSystemColorMode: false,
@@ -30,10 +30,7 @@ export const LIGHT_MODE = {
   },
 };
 const theme = extendTheme({
-  colors: {
-    ...LIGHT_MODE,
-    ...listThemes,
-  },
+  colors: LIGHT_MODE,
   components: {
     Text: {
       fontSize: 16,
@@ -53,3 +50,15 @@ declare module "native-base" {
 }
 
 export default theme;
+export const colorModeManager: StorageManager = {
+  get: async () => {
+    const colorMode = storage.getString("@color-mode");
+    if (colorMode === "dark") {
+      return "dark";
+    }
+    return "light";
+  },
+  set: async value => {
+    if (value) storage.set("@color-mode", value);
+  },
+};

@@ -79,12 +79,12 @@ function TaskCard({
         </Box>
         <Box>
           <Box>
-            {!options.withDate ? null : (
+            {!options.withDate && task.reminder ? null : (
               <Text textAlign="justify" color={accent} fontSize="sm">
-                {dayjs(task.reminder).format("ddd")}
+                {dayjs(task.reminder).format("MMM D")}
               </Text>
             )}
-            {!options.withTime ? null : (
+            {!options.withTime && task.reminder ? null : (
               <Text textAlign="center" fontSize="md" color={accent}>
                 {dayjs(task.reminder).format("h:mmA")}
               </Text>

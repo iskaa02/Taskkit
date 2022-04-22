@@ -1,3 +1,4 @@
+import Backdrop from "@/components/Backdrop";
 import LeftAccentCard from "@/components/Cards";
 import DateSeparator from "@/components/DateSeparator";
 import List from "@/db/models/List";
@@ -12,36 +13,26 @@ import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
 import isTomorrow from "dayjs/plugin/isTomorrow";
 import { Box, Text, useTheme } from "native-base";
-import React, { useCallback, useMemo, useRef } from "react";
+import React, { useMemo } from "react";
 dayjs.extend(isToday);
 dayjs.extend(isTomorrow);
 
 type AgendaProps = {
-  BSindex: number;
-  setBSindex: React.Dispatch<React.SetStateAction<number>>;
   tasks: Task[];
   database: Database;
   selectedDate: string | undefined;
 };
 
-const RawAgendaSheet = ({
-  BSindex,
-  setBSindex,
-  tasks,
-  selectedDate,
-}: AgendaProps) => {
+const RawAgendaSheet = ({ tasks, selectedDate }: AgendaProps) => {
   const navigation = useNavigation<useNavigationProps>();
   const snapPoints = useMemo(() => ["45%", "90%"], []);
-  const onChange = useCallback((i: number) => {
-    setBSindex(i);
-  }, []);
   const colors = useTheme().colors;
   return (
     <BottomSheet
       animateOnMount={false}
-      // backdropComponent={CustomBackdrop}
-      onChange={onChange}
-      index={BSindex}
+      backdropComponent={p => (
+        <Backdrop pointerEvents="none" {...p} from={[0, 1]} />
+      )}
       handleIndicatorStyle={{
         width: 45,
         marginTop: 8,

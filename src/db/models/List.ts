@@ -4,7 +4,7 @@ import { children, json, text, writer } from "@nozbe/watermelondb/decorators";
 import { Associations } from "@nozbe/watermelondb/Model";
 import { Columns, Tables } from "./schema";
 import Task, { addTaskType, subtaskObject } from "./Task";
-import { uid } from "./utils";
+import { uid } from "./uid";
 import { scheduleNotification } from "./scheduleNotification";
 
 const Column = Columns.list;

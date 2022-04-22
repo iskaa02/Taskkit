@@ -14,11 +14,12 @@ export type RootTabParamList = {
   Home: undefined;
   Calendar: undefined;
   Lists: undefined;
+  Settings: undefined;
 };
 
 export type RootStackParamList = {
   Root: NavigatorScreenParams<RootTabParamList> | undefined;
-  AddTask: { defaultList: string } | undefined;
+  AddTask: { defaultList?: string; date?: number } | undefined;
 };
 
 export type ListStackType = {

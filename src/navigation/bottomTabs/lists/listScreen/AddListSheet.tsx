@@ -2,7 +2,7 @@ import BottomSheetModal from "@/components/BottomSheetModal";
 import { database } from "@/db/db";
 import List from "@/db/models/List";
 import { Tables } from "@/db/models/schema";
-import { uid } from "@/db/models/utils";
+import { uid } from "@/db/models/uid";
 import { listThemes, listThemeType } from "@/theme/listThemes";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";

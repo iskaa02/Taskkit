@@ -7,7 +7,6 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useTheme } from "native-base";
 import * as React from "react";
 import { BackHandler } from "react-native";
-import Backdrop from "./Backdrop";
 
 const NotesBottomSheet = React.forwardRef<
   BottomSheetModalMethods,

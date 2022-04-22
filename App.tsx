@@ -1,12 +1,11 @@
 import "@/db/db";
+import "@/i18n/i18n";
 import { setNotificationHandler } from "expo-notifications";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import useCachedResources from "./src/hooks/useCachedResources";
 import Navigation from "./src/navigation";
 import Providers from "./src/Providers";
-import "@/i18n/i18n";
-
 export default function App() {
   const isLoadingComplete = useCachedResources();
 

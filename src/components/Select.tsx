@@ -19,7 +19,7 @@ const SelectSheet = React.forwardRef<BottomSheetModalMethods, SelectProps>(
       () => [60 * items.length + 40, "80%"],
       [items]
     );
-    const { em } = useTheme().colors;
+    const { em, surface } = useTheme().colors;
 
     return (
       <BottomSheetModal
@@ -27,10 +27,13 @@ const SelectSheet = React.forwardRef<BottomSheetModalMethods, SelectProps>(
         enableDismissOnClose
         index={0}
         snapPoints={snapPoints}
-        handleIndicatorStyle={{ backgroundColor: "gray", width: 40 }}
+        handleIndicatorStyle={{
+          width: 45,
+          marginTop: 8,
+          backgroundColor: em[2],
+        }}
+        backgroundStyle={{ backgroundColor: surface }}
         backdropComponent={i => <Backdrop {...i} />}
-        backgroundStyle={{ borderRadius: 28 }}
-        handleStyle={{ marginTop: 10 }}
       >
         <BottomSheetScrollView>
           <>

@@ -29,7 +29,9 @@ export default function AddTaskScreen({
   const [subtasks, setSubtasks] = React.useState<string[]>([]);
   const [name, setName] = React.useState("");
   const [description, setDescription] = React.useState("");
-  const [reminder, setReminder] = React.useState<Date>(new Date(Date.now()));
+  const [reminder, setReminder] = React.useState<Date>(
+    new Date(route.params?.date ?? Date.now())
+  );
   const [reminderRepeat, setReminderRepeat] = React.useState<repeatType>(null);
   const [withReminder, setWithReminder] = React.useState(true);
   const { t } = useTranslation();

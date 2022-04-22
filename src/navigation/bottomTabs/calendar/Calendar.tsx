@@ -24,7 +24,6 @@ type ScreenProps = {
 };
 function RawScreen({ tasks, database }: ScreenProps) {
   const [selectedDate, setSelectedDate] = React.useState<string>();
-  const [BSindex, setBSindex] = React.useState(0);
   const { onChange, markedDates } = useDateMarks(
     selectedDate,
     i => setSelectedDate(i),
@@ -69,11 +68,7 @@ function RawScreen({ tasks, database }: ScreenProps) {
           markingType={"multi-dot"}
         />
       </Box>
-      <AgendaSheet
-        {...{ BSindex, setBSindex }}
-        selectedDate={selectedDate}
-        database={database}
-      />
+      <AgendaSheet selectedDate={selectedDate} database={database} />
     </SafeAreaView>
   );
 }

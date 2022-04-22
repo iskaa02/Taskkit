@@ -14,7 +14,7 @@ export default function LeftAccentCard({
   onPress,
 }: ListCardProps) {
   const surface = useTheme().colors.surface;
-  // const bg = Color(theme.main).mix(Color(surface), 0.5).hex();
+
   const bg = useColorModeValue(
     Color(theme.main).mix(Color(surface), 0.5).hex(),
     theme.secondary
