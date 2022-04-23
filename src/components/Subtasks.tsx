@@ -25,8 +25,8 @@ type SubtaskCardProps = Partial<subtask> & {
   index?: number;
 };
 export const SubtaskCard = React.forwardRef<TextInput, SubtaskCardProps>(
-  (
-    {
+  (props, ref) => {
+    const {
       onToggle,
       isCompleted,
       color,
@@ -36,9 +36,7 @@ export const SubtaskCard = React.forwardRef<TextInput, SubtaskCardProps>(
       onDelete,
       onSubmitEditing,
       blurOnSubmit = true,
-    },
-    ref
-  ) => {
+    } = props;
     return (
       <MotiView
         from={{
@@ -58,7 +56,7 @@ export const SubtaskCard = React.forwardRef<TextInput, SubtaskCardProps>(
           maxHeight: -10,
         }}
         transition={{ delay: index ? index * 40 : 0, damping: 25 }}
-        style={{ flexDirection: "row" }}
+        style={{ flexDirection: "row", alignItems: "center" }}
       >
         <CheckBox value={!!isCompleted} onToggle={onToggle} color={color} />
         <Input

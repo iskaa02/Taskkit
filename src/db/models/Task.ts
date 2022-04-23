@@ -47,6 +47,10 @@ export default class Task extends Model {
   @immutableRelation(Tables.List, Column.listID) list!: Relation<List>;
 
   async markAsDeleted() {
+    // to update the list number
+    this.list.fetch().then(list => {
+      list?.update(() => {});
+    });
     await this.cancelNotification();
     await super.markAsDeleted();
   }

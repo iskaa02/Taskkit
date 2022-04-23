@@ -112,8 +112,6 @@ const RawSection = ({
           }}
           task={task}
           key={task.id}
-          withDate={section.key !== "tomorrow" && section.key !== "today"}
-          withTime
           withList
         />
       )}

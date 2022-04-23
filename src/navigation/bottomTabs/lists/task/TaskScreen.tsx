@@ -65,12 +65,12 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
   const topCheckboxColor = useColorModeValue("#fff", "#000");
   const { t } = useTranslation();
   return (
-    <KeyboardAvoidingView bg="surface" flex={1}>
+    <KeyboardAvoidingView bg="background" flex={1}>
       <EditTaskSheet ref={sheetRef} task={task} />
       <StatusBar _dark={"dark-content"} _light={"light-content"} />
       <ScrollView
         _contentContainerStyle={{
-          bg: "surface",
+          bg: "background",
           pb: "90px",
           flexGrow: 1,
         }}

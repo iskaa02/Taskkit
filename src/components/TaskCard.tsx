@@ -6,6 +6,7 @@ import dayjs from "dayjs";
 import { MotiView } from "moti";
 import { Box, Text, useTheme } from "native-base";
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet } from "react-native";
 import CheckBox from "./CheckBox";
 type TaskCardProps = {
@@ -15,7 +16,6 @@ type TaskCardProps = {
   animationDelay?: number;
   withDate?: boolean;
   withList?: boolean;
-  withTime?: boolean;
 };
 function TaskCard({
   task,
@@ -23,29 +23,29 @@ function TaskCard({
   onPress,
   ...options
 }: TaskCardProps) {
-  const { surface, em } = useTheme().colors;
-  const [{ listName, theme }, setListProps] = React.useState(() => {
-    if (initialTheme) return { theme: initialTheme, listName: "" };
-    return { theme: { main: em[1] }, listName: "" };
+  const { em } = useTheme().colors;
+  const [theme, setTheme] = React.useState(() => {
+    if (initialTheme) return initialTheme;
+    return { main: em[1] };
   });
+  const [listName, setListName] = React.useState("");
   const accent = useAccent(theme);
   React.useLayoutEffect(() => {
-    if (initialTheme && !options.withList) return;
     task.list.fetch().then(l => {
-      if (l?.name === listName) return;
       if (l) {
-        setListProps({ listName: l.name, theme: l.theme });
+        if (options.withList) setListName(l.name);
+        setTheme(l.theme);
       }
     });
-  }, [task, initialTheme, options.withList]);
+  }, [task, initialTheme]);
   return (
     <Pressable onPress={onPress}>
       <MotiView
-        style={[styles.container, { backgroundColor: surface }]}
+        style={[styles.container]}
         animate={{
           top: 0,
           opacity: task.isCompleted ? 0.6 : 1,
-          height: options.withList ? 70 : 60,
+          height: 40,
         }}
         transition={{ delay: options.animationDelay, damping: 26 }}
         from={{ top: 18, opacity: 0.4 }}
@@ -61,7 +61,7 @@ function TaskCard({
           onToggle={i => task.setIsCompleted(i)}
           color={accent}
         />
-        <Box flex={1}>
+        <Box alignItems="center" flex={1} flexDir="row">
           <Text
             textAlign="justify"
             fontSize="xl"
@@ -71,30 +71,52 @@ function TaskCard({
           >
             {task.name}
           </Text>
-          {!options.withList ? null : (
-            <Text textAlign="justify" fontSize="md" color={accent} isTruncated>
-              {listName}
-            </Text>
+          {!task.reminder ? null : (
+            <DateChip accentColor={accent} date={task.reminder} />
           )}
-        </Box>
-        <Box>
-          <Box>
-            {!options.withDate && task.reminder ? null : (
-              <Text textAlign="justify" color={accent} fontSize="sm">
-                {dayjs(task.reminder).format("MMM D")}
-              </Text>
-            )}
-            {!options.withTime && task.reminder ? null : (
-              <Text textAlign="center" fontSize="md" color={accent}>
-                {dayjs(task.reminder).format("h:mmA")}
-              </Text>
-            )}
-          </Box>
+          {!listName ? null : <Chip accentColor={accent} label={listName} />}
         </Box>
       </MotiView>
     </Pressable>
   );
 }
+type DateChipProps = {
+  accentColor: string;
+  date: Date;
+};
+const Chip = ({
+  label,
+  accentColor,
+}: {
+  label: string;
+  accentColor: string;
+}) => {
+  return (
+    <Box
+      px="2"
+      style={{ marginStart: 5 }}
+      borderWidth={1}
+      borderColor={accentColor}
+      rounded="full"
+      alignItems="center"
+    >
+      <Text color={accentColor} fontSize="xs">
+        {label}
+      </Text>
+    </Box>
+  );
+};
+const DateChip = ({ date, accentColor }: DateChipProps) => {
+  const { t } = useTranslation();
+  const label = React.useMemo(() => {
+    const d = dayjs(date);
+    if (d.isToday()) return d.format("h:mm A");
+    if (d.isTomorrow()) return t("tomorrow") + d.format(" hh:mm A");
+    if (d.isSame(date, "year")) return d.format("MMM D");
+    return d.format("MMM D, YYYY");
+  }, [date]);
+  return <Chip {...{ accentColor, label }} />;
+};
 export default withDB<TaskCardProps, { task: Task }>(
   TaskCard,
   ["task"],
@@ -107,17 +129,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    borderRadius: 10,
-    paddingHorizontal: 12,
-    paddingVertical: 15,
-    elevation: 1,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 1,
-    },
-    shadowOpacity: 0.18,
-    shadowRadius: 1,
+    paddingHorizontal: 5,
     marginBottom: 10,
   },
 });
