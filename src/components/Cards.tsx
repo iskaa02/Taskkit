@@ -1,5 +1,5 @@
 import { listThemeType } from "@/theme/listThemes";
-import Color from "color";
+import chroma from "chroma-js";
 import { Box, useColorModeValue, useTheme } from "native-base";
 import * as React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -16,7 +16,7 @@ export default function LeftAccentCard({
   const surface = useTheme().colors.surface;
 
   const bg = useColorModeValue(
-    Color(theme.main).mix(Color(surface), 0.5).hex(),
+    chroma(theme.main).mix(surface, 0.5).hex(),
     theme.secondary
   );
   const accentBg = useColorModeValue(theme.secondary ?? theme.main, theme.main);

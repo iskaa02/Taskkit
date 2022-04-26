@@ -1,5 +1,6 @@
 import StatusBar from "@/components/StatusBar";
-import { database, storage } from "@/db/db";
+import { database } from "@/db/db";
+import { storage } from "@/db/storage";
 import { Columns, Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
 import withDB from "@/db/models/withDB";

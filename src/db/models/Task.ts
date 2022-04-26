@@ -9,7 +9,7 @@ import {
 import date from "@nozbe/watermelondb/decorators/date";
 import { associations } from "@nozbe/watermelondb/Model";
 import { cancelScheduledNotificationAsync } from "expo-notifications";
-import { storage } from "../db";
+import { storage } from "../storage";
 import List from "./List";
 import { repeatType } from "./scheduleNotification";
 import { Columns, Tables } from "./schema";

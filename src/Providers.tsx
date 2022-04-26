@@ -5,7 +5,7 @@ import React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useMMKVString } from "react-native-mmkv";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { storage } from "./db/db";
+import { storage } from "./db/storage";
 
 type ProviderProps = {
   children: React.ReactNode;

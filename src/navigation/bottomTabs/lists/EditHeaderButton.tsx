@@ -1,4 +1,4 @@
-import { storage } from "@/db/db";
+import { storage } from "@/db/storage";
 import { Feather } from "@expo/vector-icons";
 import * as React from "react";
 import { useTranslation } from "react-i18next";

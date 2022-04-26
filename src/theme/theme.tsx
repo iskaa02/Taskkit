@@ -1,4 +1,4 @@
-import { storage } from "@/db/db";
+import { storage } from "@/db/storage";
 import { extendTheme, StorageManager } from "native-base";
 
 const config = {

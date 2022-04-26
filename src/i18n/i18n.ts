@@ -1,4 +1,4 @@
-import { storage } from "@/db/db";
+import { storage } from "@/db/storage";
 import dayjs from "dayjs";
 import "dayjs/locale/ar";
 import i18n from "i18next";

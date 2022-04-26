@@ -1,7 +1,7 @@
 import SelectSheet from "@/components/Select";
 import StatusBar from "@/components/StatusBar";
 import Switch from "@/components/Switch";
-import { storage } from "@/db/db";
+import { storage } from "@/db/storage";
 import i18n, { changeLanguage } from "@/i18n/i18n";
 import { languages } from "@/i18n/langs";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
