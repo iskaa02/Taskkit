@@ -9,13 +9,13 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { Pressable, StyleSheet } from "react-native";
 import CheckBox from "./CheckBox";
+import Chip from "./Chip";
 type TaskCardProps = {
   task: Task;
   theme?: listThemeType;
   onPress: () => void;
   animationDelay?: number;
   withDate?: boolean;
-  withList?: boolean;
 };
 function TaskCard({
   task,
@@ -28,16 +28,12 @@ function TaskCard({
     if (initialTheme) return initialTheme;
     return { main: em[1] };
   });
-  const [listName, setListName] = React.useState("");
   const accent = useAccent(theme);
   React.useLayoutEffect(() => {
     task.list.fetch().then(l => {
-      if (l) {
-        if (options.withList) setListName(l.name);
-        setTheme(l.theme);
-      }
+      if (l) setTheme(l.theme);
     });
-  }, [task, initialTheme]);
+  }, [task]);
   return (
     <Pressable onPress={onPress}>
       <MotiView
@@ -71,42 +67,17 @@ function TaskCard({
           >
             {task.name}
           </Text>
-          {!task.reminder ? null : (
-            <DateChip accentColor={accent} date={task.reminder} />
-          )}
-          {!listName ? null : <Chip accentColor={accent} label={listName} />}
+          {!task.reminder ? null : <DateChip date={task.reminder} />}
         </Box>
       </MotiView>
     </Pressable>
   );
 }
+
 type DateChipProps = {
-  accentColor: string;
   date: Date;
 };
-const Chip = ({
-  label,
-  accentColor,
-}: {
-  label: string;
-  accentColor: string;
-}) => {
-  return (
-    <Box
-      px="2"
-      style={{ marginStart: 5 }}
-      borderWidth={1}
-      borderColor={accentColor}
-      rounded="full"
-      alignItems="center"
-    >
-      <Text color={accentColor} fontSize="xs">
-        {label}
-      </Text>
-    </Box>
-  );
-};
-const DateChip = ({ date, accentColor }: DateChipProps) => {
+const DateChip = ({ date }: DateChipProps) => {
   const { t } = useTranslation();
   const label = React.useMemo(() => {
     const d = dayjs(date);
@@ -115,7 +86,7 @@ const DateChip = ({ date, accentColor }: DateChipProps) => {
     if (d.isSame(date, "year")) return d.format("MMM D");
     return d.format("MMM D, YYYY");
   }, [date]);
-  return <Chip {...{ accentColor, label }} />;
+  return <Chip {...{ label }} />;
 };
 export default withDB<TaskCardProps, { task: Task }>(
   TaskCard,

@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-import { Box, Text } from "native-base";
+import { Box, Heading } from "native-base";
 import React from "react";
 import { useTranslation } from "react-i18next";
 
@@ -21,9 +21,7 @@ export default function ({ date, previous, l }: SeparatorProps) {
     : d.format("MMMM D");
   return (
     <Box my="2" px="10px">
-      <Text textAlign="justify" fontSize="xl" bold>
-        {label}
-      </Text>
+      <Heading textAlign="justify">{label}</Heading>
     </Box>
   );
 }

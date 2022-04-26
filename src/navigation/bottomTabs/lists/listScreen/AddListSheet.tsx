@@ -1,3 +1,4 @@
+import Backdrop from "@/components/Backdrop";
 import BottomSheetModal from "@/components/BottomSheetModal";
 import { database } from "@/db/db";
 import List from "@/db/models/List";
@@ -25,6 +26,7 @@ const AddListSheet = React.forwardRef<BottomSheetModalMethods>((_, ref) => {
         setName("");
       }}
       enableDismissOnClose
+      backdropComponent={Backdrop}
       ref={innerRef}
       backgroundStyle={{
         backgroundColor: surface,

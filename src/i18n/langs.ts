@@ -1,21 +1,27 @@
-import { storage } from "@/db/db";
-import dayjs from "dayjs";
-import { I18nManager } from "react-native";
-import { default as ar } from "./ar.json";
-import { default as en } from "./en.json";
+import { LocaleConfig } from "react-native-calendars";
 
 export type languageType = {
   type: "rtl" | "ltr";
-  translation: { [x: string]: any };
-};
-export const languages = {
-  ar: { translation: ar, type: "rtl" },
-  en: { translation: en, type: "ltr" },
+  name: string;
 };
 
-export const changeLanguage = (lang: keyof typeof languages) => {
-  storage.set("lang", lang);
-  I18nManager.allowRTL(languages[lang].type === "rtl");
-  I18nManager.forceRTL(languages[lang].type === "rtl");
-  dayjs.locale(lang);
+export const languages: { [x: string]: languageType } = {
+  ar: { type: "rtl", name: "العربية" },
+  en: { type: "ltr", name: "English" },
 };
+
+export function setCalendarLanguage(lang: string) {
+  LocaleConfig.locales["ar"] = {
+    monthNames:
+      "يناير_فبراير_مارس_أبريل_مايو_يونيو_يوليو_أغسطس_سبتمبر_أكتوبر_نوفمبر_ديسمبر".split(
+        "_"
+      ),
+    dayNames: "أحد_إثنين_ثلاثاء_أربعاء_خميس_جمعة_سبت".split("_"),
+    monthNamesShort:
+      "يناير_فبراير_مارس_أبريل_مايو_يونيو_يوليو_أغسطس_سبتمبر_أكتوبر_نوفمبر_ديسمبر".split(
+        "_"
+      ),
+    dayNamesShort: "ح_ن_ث_ر_خ_ج_س".split("_"),
+  };
+  if (lang !== "en") LocaleConfig.defaultLocale = lang;
+}

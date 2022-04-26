@@ -112,7 +112,6 @@ const RawSection = ({
           }}
           task={task}
           key={task.id}
-          withList
         />
       )}
       stickySectionHeadersEnabled

@@ -10,7 +10,7 @@ import { Feather } from "@expo/vector-icons";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { Database, Q } from "@nozbe/watermelondb";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Icon, ScrollView, Text } from "native-base";
+import { Heading, Icon, ScrollView, Text } from "native-base";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -48,9 +48,9 @@ function ListRoot(p: ListStackScreenProps<"Root">) {
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar />
       <ScrollView px="10px">
-        <Text fontSize="2xl" mx="10px" my="3" color="em.1">
+        <Heading mx="10px" my="3">
           {t("list", { count: 2, postProcess: "interval" })}
-        </Text>
+        </Heading>
         <ListView {...p} database={database} />
       </ScrollView>
       <Fab

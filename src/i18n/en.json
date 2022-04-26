@@ -34,5 +34,10 @@
   "subtask_one": "Subtask",
   "subtask_other": "Subtasks",
   "add": "Add",
-  "reminders": "Reminders"
+  "reminders": "Reminders",
+  "color-mode": "Theme",
+  "preferences": "Preferences",
+  "settings": "Settings",
+  "language": "Language",
+  "send-notification-even-when-completed": "Send notification even when task is completed"
 }

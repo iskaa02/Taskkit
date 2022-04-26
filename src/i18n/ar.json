@@ -35,5 +35,11 @@
   "subtask_one": "مهمة جانبية",
   "subtask_other": "مهام جانبية",
   "add": "أضف",
-  "reminders": "التنبيهات"
+  "reminders": "التنبيهات",
+  "color-mode": "اللون",
+  "preferences": "التفضيلات",
+  "settings": "الإعدادات",
+  "language": "اللغة",
+  "warn-before-delete": "تحذير قبل الحذف",
+  "send-notification-even-when-completed": "إشعار حتى إن كانت المهمة مكتملة"
 }

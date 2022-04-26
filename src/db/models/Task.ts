@@ -9,6 +9,7 @@ import {
 import date from "@nozbe/watermelondb/decorators/date";
 import { associations } from "@nozbe/watermelondb/Model";
 import { cancelScheduledNotificationAsync } from "expo-notifications";
+import { storage } from "../db";
 import List from "./List";
 import { repeatType } from "./scheduleNotification";
 import { Columns, Tables } from "./schema";
@@ -68,6 +69,12 @@ export default class Task extends Model {
     await this.update(r => {
       r.isCompleted = t;
     });
+
+    const shouldCancelNotification = storage.getBoolean(
+      "send-notification-even-when-completed"
+    );
+    if (shouldCancelNotification) this.cancelNotification();
+
     this.list.fetch().then(list => {
       list?.update(() => {});
     });

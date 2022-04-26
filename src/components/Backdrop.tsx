@@ -1,5 +1,9 @@
-import { BottomSheetBackdropProps } from "@gorhom/bottom-sheet";
+import {
+  BottomSheetBackdropProps,
+  useBottomSheetModal,
+} from "@gorhom/bottom-sheet";
 import React, { useMemo } from "react";
+import { TapGestureHandler } from "react-native-gesture-handler";
 import Animated, {
   Extrapolate,
   interpolate,
@@ -22,6 +26,7 @@ const Backdrop = ({
   const containerAnimatedStyle = useAnimatedStyle(() => ({
     opacity: interpolate(animatedIndex.value, from, to, Extrapolate.CLAMP),
   }));
+  const { dismiss } = useBottomSheetModal();
 
   // styles
   const containerStyle = useMemo(
@@ -34,7 +39,21 @@ const Backdrop = ({
     ],
     [style, containerAnimatedStyle]
   );
-  return <Animated.View pointerEvents={pointerEvents} style={containerStyle} />;
+  return (
+    <TapGestureHandler
+      onEnded={i => {
+        dismiss();
+      }}
+    >
+      <Animated.View
+        onTouchEnd={() => {
+          dismiss();
+        }}
+        pointerEvents={pointerEvents}
+        style={containerStyle}
+      />
+    </TapGestureHandler>
+  );
 };
 
 export default Backdrop;

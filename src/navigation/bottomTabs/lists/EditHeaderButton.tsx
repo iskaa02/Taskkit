@@ -1,3 +1,4 @@
+import { storage } from "@/db/db";
 import { Feather } from "@expo/vector-icons";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
@@ -33,18 +34,23 @@ export default function EditHeaderButton(p: EditHeaderButtonProps) {
         <HiddenItem
           title={t("delete")}
           onPress={() => {
-            Alert.alert(
-              `${t("delete")} ${p.name} ${t("?")}`,
-              t("delete-confirmation"),
-              [
-                { text: t("cancel") },
-                {
-                  text: t("delete"),
-                  onPress: p.onDeletePress,
-                },
-              ],
-              { cancelable: true }
-            );
+            const shouldWarn = storage.getBoolean("warn-before-delete");
+            if (shouldWarn) {
+              Alert.alert(
+                `${t("delete")} ${p.name} ${t("?")}`,
+                t("delete-confirmation"),
+                [
+                  { text: t("cancel") },
+                  {
+                    text: t("delete"),
+                    onPress: p.onDeletePress,
+                  },
+                ],
+                { cancelable: true }
+              );
+            } else {
+              p.onDeletePress();
+            }
           }}
           destructive
         />

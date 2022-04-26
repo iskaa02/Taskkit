@@ -1,7 +1,8 @@
-import { BottomSheetScrollView, BottomSheetModal } from "@gorhom/bottom-sheet";
+import { BottomSheetModal, BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { Box, Pressable, Text, useTheme } from "native-base";
 import * as React from "react";
+import { BackHandler } from "react-native";
 import Backdrop from "./Backdrop";
 import CheckBox from "./CheckBox";
 
@@ -13,6 +14,7 @@ type SelectProps = {
 const SelectSheet = React.forwardRef<BottomSheetModalMethods, SelectProps>(
   ({ onChange, value, items }, ref) => {
     const bottomSheetRef = React.useRef<BottomSheetModalMethods>(null);
+    const [isShowing, setIsShowing] = React.useState(false);
     // @ts-ignore
     React.useImperativeHandle(ref, () => bottomSheetRef.current);
     const snapPoints = React.useMemo(
@@ -21,8 +23,24 @@ const SelectSheet = React.forwardRef<BottomSheetModalMethods, SelectProps>(
     );
     const { em, surface } = useTheme().colors;
 
+    React.useEffect(() => {
+      // addEventListener and removeEventListener must refer to the same function
+      const onBackPress = () => {
+        if (isShowing) {
+          bottomSheetRef.current?.dismiss();
+          return true; // TS complains if handler doesn't return a boolean
+        } else {
+          return false;
+        }
+      };
+      BackHandler.addEventListener("hardwareBackPress", onBackPress);
+      return () =>
+        BackHandler.removeEventListener("hardwareBackPress", onBackPress);
+    }, [bottomSheetRef, isShowing]);
+
     return (
       <BottomSheetModal
+        onChange={i => setIsShowing(i > -1)}
         ref={bottomSheetRef}
         enableDismissOnClose
         index={0}

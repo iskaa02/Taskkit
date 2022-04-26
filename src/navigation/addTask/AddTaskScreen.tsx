@@ -6,13 +6,8 @@ import { repeatType } from "@/db/models/scheduleNotification";
 import { Tables } from "@/db/models/schema";
 import useKeyboardStatus from "@/hooks/useKeyboardStatus";
 import { RootStackScreenProps } from "@/navigation/navPropsType";
-import {
-  Box,
-  Input,
-  KeyboardAvoidingView,
-  ScrollView,
-  Switch,
-} from "native-base";
+import { Box, Input, KeyboardAvoidingView, ScrollView } from "native-base";
+import Switch from "@/components/Switch";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import Footer from "../../components/Footer";
@@ -56,10 +51,9 @@ export default function AddTaskScreen({
           <Box mb={2} mt="5" flexDirection="row" alignItems="center">
             <Label l={t("reminders")} />
             <Switch
-              defaultIsChecked
               style={{ marginStart: "auto" }}
               value={withReminder}
-              onChange={i => setWithReminder(i => !i)}
+              onValueChange={i => setWithReminder(i)}
             />
           </Box>
           <Reminders

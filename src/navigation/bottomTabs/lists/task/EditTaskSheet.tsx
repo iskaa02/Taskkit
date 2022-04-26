@@ -5,13 +5,8 @@ import useKeyboardStatus from "@/hooks/useKeyboardStatus";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import dayjs from "dayjs";
-import {
-  Box,
-  Input,
-  KeyboardAvoidingView,
-  Switch,
-  useTheme,
-} from "native-base";
+import Switch from "@/components/Switch";
+import { Box, Input, KeyboardAvoidingView, useTheme } from "native-base";
 import React from "react";
 import Label from "@/navigation/addTask/Label";
 import { Reminders } from "@/navigation/addTask/Reminders";

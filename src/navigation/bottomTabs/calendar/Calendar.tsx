@@ -1,22 +1,19 @@
-// import {
-//   StatusBar,
-// } from "expo-status-bar";
 import StatusBar from "@/components/StatusBar";
-import { database } from "@/db/db";
+import { database, storage } from "@/db/db";
 import { Columns, Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
 import withDB from "@/db/models/withDB";
+import { Feather } from "@expo/vector-icons";
 import { Q } from "@nozbe/watermelondb";
 import Database from "@nozbe/watermelondb/Database";
 import { Box, Icon } from "native-base";
 import React from "react";
+import { I18nManager } from "react-native";
 import { Calendar } from "react-native-calendars";
+import { useMMKVString } from "react-native-mmkv";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AgendaSheet } from "./AgendaSheet";
 import useDateMarks from "./markDate";
-import "@/i18n/calendar";
-import { Feather } from "@expo/vector-icons";
-import { I18nManager } from "react-native";
 
 type ScreenProps = {
   tasks: Task[];
@@ -24,11 +21,14 @@ type ScreenProps = {
 };
 function RawScreen({ tasks, database }: ScreenProps) {
   const [selectedDate, setSelectedDate] = React.useState<string>();
+  // Rerender when language change
+  useMMKVString("lang", storage);
   const { onChange, markedDates } = useDateMarks(
     selectedDate,
     i => setSelectedDate(i),
     tasks
   );
+
   return (
     <SafeAreaView style={{ backgroundColor: "#323232", flex: 1 }}>
       <StatusBar barStyle="light-content" />

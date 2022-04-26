@@ -2,7 +2,7 @@ import {
   CalendarIcon,
   HomeIcon,
   ListIcon,
-  ProfileIcon,
+  ProfileIcon as SettingsIcon,
 } from "@/assets/TabBarIcons";
 import { RootTabParamList } from "@/navigation/navPropsType";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -11,6 +11,7 @@ import { useTranslation } from "react-i18next";
 import CalendarScreen from "./calendar/Calendar";
 import HomeScreen from "./home/Home";
 import ListScreen from "./lists/ListRoot";
+import Settings from "./Settings/Settings";
 
 const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
@@ -52,9 +53,11 @@ export default function BottomTabNavigator() {
       />
       <BottomTab.Screen
         name="Settings"
-        component={HomeScreen}
+        component={Settings}
         options={{
-          tabBarIcon: p => <ProfileIcon {...p} />,
+          tabBarIcon: p => <SettingsIcon {...p} />,
+          headerShown: true,
+          title: t("settings"),
         }}
       />
     </BottomTab.Navigator>

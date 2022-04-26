@@ -18,7 +18,7 @@ export const DARK_MODE = {
   },
 };
 export const LIGHT_MODE = {
-  background: "#f1f1f1",
+  background: "#fafafa",
   surface: "#fff",
   em: {
     1: "#000",

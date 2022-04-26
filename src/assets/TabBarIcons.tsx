@@ -1,4 +1,3 @@
-import { useColorModeValue } from "native-base";
 import Svg, { Path } from "react-native-svg";
 type IconProps = {
   focused: boolean;
