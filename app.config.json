@@ -3,8 +3,8 @@
     "@morrowdigital/watermelondb-expo-plugin",
     ["expo-notifications", { "icon": "./src/assets/notification-icon.png" }]
   ],
-  "name": "taskkit",
-  "slug": "taskkit",
+  "name": "Taskkit",
+  "slug": "Taskkit",
   "version": "1.0.0",
   "orientation": "portrait",
   "icon": "./src/assets/icon.png",
@@ -31,7 +31,7 @@
       "foregroundImage": "./src/assets/adaptive-icon.png",
       "backgroundColor": "#174582"
     },
-  "icon": "./src/assets/android-icon.png",
+    "icon": "./src/assets/android-icon.png",
     "package": "com.iskaa.taskkit",
     "jsEngine": "hermes"
   }
