@@ -66,6 +66,7 @@ export default function AddTaskScreen({
           <Label mb={2} l={t("description")} mt="5" />
 
           <Input
+            selectionColor="em.10"
             value={description}
             onChangeText={i => setDescription(i)}
             fontSize="lg"

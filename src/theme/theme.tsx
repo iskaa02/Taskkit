@@ -39,6 +39,14 @@ const theme = extendTheme({
       _focus: {
         borderColor: "blue.500",
       },
+      baseStyle: {
+        _light: {
+          selectionColor: "rgba(0,0,0,0.4)",
+        },
+        _dark: {
+          selectionColor: "rgba(255,255,255,0.4)",
+        },
+      },
     },
   },
   config,

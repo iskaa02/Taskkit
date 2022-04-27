@@ -1,74 +1,66 @@
+import List from "@/db/models/List";
 import Task from "@/db/models/Task";
 import withDB from "@/db/models/withDB";
 import useAccent from "@/hooks/useAccent";
-import { listThemeType } from "@/theme/listThemes";
 import dayjs from "dayjs";
 import { MotiView } from "moti";
-import { Box, Text, useTheme } from "native-base";
+import { Box, Text } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, StyleSheet } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import CheckBox from "./CheckBox";
 import Chip from "./Chip";
 type TaskCardProps = {
   task: Task;
-  theme?: listThemeType;
+  list: List;
   onPress: () => void;
   animationDelay?: number;
   withDate?: boolean;
 };
 function TaskCard({
   task,
-  theme: initialTheme,
+  list: { theme },
   onPress,
   ...options
 }: TaskCardProps) {
-  const { em } = useTheme().colors;
-  const [theme, setTheme] = React.useState(() => {
-    if (initialTheme) return initialTheme;
-    return { main: em[1] };
-  });
   const accent = useAccent(theme);
-  React.useLayoutEffect(() => {
-    task.list.fetch().then(l => {
-      if (l) setTheme(l.theme);
-    });
-  }, [task]);
+  const ref = React.useRef<View>(null);
   return (
     <Pressable onPress={onPress}>
       <MotiView
-        style={[styles.container]}
         animate={{
           top: 0,
           opacity: task.isCompleted ? 0.6 : 1,
-          height: 40,
+          height: undefined,
+          marginBottom: 10,
         }}
         transition={{ delay: options.animationDelay, damping: 26 }}
-        from={{ top: 18, opacity: 0.4 }}
+        from={{ top: 18, opacity: 0.4, marginBottom: 0 }}
         exit={{
           height: 0,
           opacity: 0,
-          marginBottom: -6,
+          marginBottom: -1,
           paddingVertical: 0,
         }}
       >
-        <CheckBox
-          value={task.isCompleted}
-          onToggle={i => task.setIsCompleted(i)}
-          color={accent}
-        />
-        <Box alignItems="center" flex={1} flexDir="row">
-          <Text
-            textAlign="justify"
-            fontSize="xl"
+        <View style={styles.container} ref={ref}>
+          <CheckBox
+            value={task.isCompleted}
+            onToggle={i => task.setIsCompleted(i)}
             color={accent}
-            isTruncated
-            textDecorationLine={task.isCompleted ? "line-through" : undefined}
-          >
-            {task.name}
-          </Text>
-          {!task.reminder ? null : <DateChip date={task.reminder} />}
-        </Box>
+          />
+          <Box alignItems="center" flex={1} flexDir="row">
+            <Text
+              textAlign="justify"
+              fontSize="xl"
+              color={accent}
+              textDecorationLine={task.isCompleted ? "line-through" : undefined}
+            >
+              {task.name}{" "}
+              {!task.reminder ? null : <DateChip date={task.reminder} />}
+            </Text>
+          </Box>
+        </View>
       </MotiView>
     </Pressable>
   );
@@ -88,11 +80,12 @@ const DateChip = ({ date }: DateChipProps) => {
   }, [date]);
   return <Chip {...{ label }} />;
 };
-export default withDB<TaskCardProps, { task: Task }>(
+export default withDB<TaskCardProps, { task: Task; list: List }>(
   TaskCard,
   ["task"],
   ({ task }) => ({
     task,
+    list: task.list,
   })
 );
 
@@ -100,7 +93,5 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 5,
-    marginBottom: 10,
   },
 });

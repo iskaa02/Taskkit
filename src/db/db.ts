@@ -6,12 +6,11 @@ import Task from "./models/Task";
 const adapter = new SQLiteAdapter({
   schema,
   dbName: "taskkit",
-  jsi: false,
+  jsi: true,
   onSetUpError: err => {
     console.log(err);
   },
 });
-
 export const database = new Database({
   adapter,
   modelClasses: [Task, List],
