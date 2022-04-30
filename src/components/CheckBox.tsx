@@ -19,12 +19,10 @@ const CheckBox = ({
 }: CheckBoxProps) => {
   return (
     <Pressable
-      hitSlop={{ bottom: 20, top: 20, left: 40, right: 40 }}
-      w={`${size}px`}
-      h={`${size}px`}
-      borderRadius={size / 2}
+      hitSlop={15}
+      borderRadius={size}
       borderWidth={value ? 0 : 2}
-      style={{ marginEnd: 18 }}
+      style={{ marginEnd: 18, width: size, height: size }}
       borderColor={color}
       justifyContent="center"
       alignItems="center"
@@ -39,7 +37,7 @@ const CheckBox = ({
           height: "105%",
           justifyContent: "center",
           alignItems: "center",
-          borderRadius: size / 2,
+          borderRadius: size,
         }}
         animate={{
           scale: value ? 1 : 0.3,

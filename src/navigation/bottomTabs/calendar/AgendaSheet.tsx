@@ -2,12 +2,13 @@ import Backdrop from "@/components/Backdrop";
 import LeftAccentCard from "@/components/Cards";
 import DateSeparator from "@/components/DateSeparator";
 import List from "@/db/models/List";
-import { Columns, Tables } from "@/db/models/schema";
+import { Columns } from "@/db/models/schema";
 import Task from "@/db/models/Task";
 import withDB from "@/db/models/withDB";
+import { queryTasks } from "@/db/queries";
 import { useNavigationProps } from "@/navigation/navPropsType";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import { Database, Q } from "@nozbe/watermelondb";
+import { Q } from "@nozbe/watermelondb";
 import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
@@ -19,7 +20,6 @@ dayjs.extend(isTomorrow);
 
 type AgendaProps = {
   tasks: Task[];
-  database: Database;
   selectedDate: string | undefined;
 };
 
@@ -69,27 +69,15 @@ const RawAgendaSheet = ({ tasks, selectedDate }: AgendaProps) => {
 
 export const AgendaSheet = withDB<AgendaProps, { tasks: Task[] }>(
   RawAgendaSheet,
-  ["database", "selectedDate"],
-  ({ database, selectedDate }) => ({
-    tasks: database.get<Task>(Tables.Task).query(
-      Q.where(Columns.task.isCompleted, Q.eq(false)),
-      Q.where(Columns.task.reminder, Q.notEq(null)),
-      typeof selectedDate === "undefined"
-        ? Q.where(
-            Columns.task.reminder,
-            Q.gte(dayjs().startOf("day").valueOf())
-          )
-        : Q.and(
-            Q.where(
-              Columns.task.reminder,
-              Q.gte(dayjs(selectedDate).startOf("day").valueOf())
-            ),
-            Q.where(
-              Columns.task.reminder,
-              Q.lte(dayjs(selectedDate).startOf("day").add(1, "day").valueOf())
-            )
-          ),
-
+  ["selectedDate"],
+  ({ selectedDate }) => ({
+    tasks: queryTasks(
+      {
+        from: dayjs(selectedDate).startOf("day").valueOf(),
+        to: selectedDate
+          ? dayjs(selectedDate).endOf("day").valueOf()
+          : undefined,
+      },
       Q.sortBy(Columns.task.reminder, Q.asc)
     ),
   })

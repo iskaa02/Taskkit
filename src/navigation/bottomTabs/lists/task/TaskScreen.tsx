@@ -13,6 +13,7 @@ import Database from "@nozbe/watermelondb/Database";
 import dayjs from "dayjs";
 import {
   Box,
+  Heading,
   KeyboardAvoidingView,
   ScrollView,
   Text,
@@ -91,14 +92,14 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
               value={task.isCompleted}
               onToggle={() => {}}
             />
-            <Text
-              bold
+            <Heading
               color={"em.10"}
-              fontSize="3xl"
               strikeThrough={task.isCompleted}
+              textAlign="justify"
+              textBreakStrategy="balanced"
             >
               {task.name}
-            </Text>
+            </Heading>
           </Box>
         </Box>
         {task.description ? (
@@ -149,7 +150,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
           !task.isCompleted ? t("mark-as-completed") : t("mark-as-uncompleted")
         }
         onPress={() => {
-          task.toggleTask();
+          task.setIsCompleted(!task.isCompleted);
         }}
       />
     </KeyboardAvoidingView>

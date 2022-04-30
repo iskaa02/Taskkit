@@ -73,7 +73,10 @@ const LanguageSettings = () => {
   const [selectedLang, setSelectedLang] = React.useState<{
     name: string;
     code: string;
-  }>({ name: languages[i18n.language].name, code: i18n.language });
+  }>(() => {
+    let code = i18n.language[0] + i18n.language[1];
+    return { name: languages[code].name, code };
+  });
   const sheetRef = React.useRef<BottomSheetModal>(null);
   return (
     <SettingsContainer

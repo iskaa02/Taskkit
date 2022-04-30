@@ -1,5 +1,6 @@
 import { storage } from "@/db/storage";
 import { changeLanguage } from "@/i18n/i18n";
+import { languages } from "@/i18n/langs";
 import { Feather } from "@expo/vector-icons";
 import * as Font from "expo-font";
 import { locale } from "expo-localization";
@@ -16,17 +17,18 @@ export default function useCachedResources() {
         SplashScreen.preventAutoHideAsync();
         const lang = storage.getString("lang");
         if (!lang) {
-          changeLanguage(locale);
+          let code = locale[0] + locale[1];
+          if (typeof languages[code] === "undefined") {
+            code = "en";
+          }
+          changeLanguage(code);
         } else {
           changeLanguage(lang);
         }
-
-        // Load fonts
         await Font.loadAsync({
           ...Feather.font,
         });
       } catch (e) {
-        // We might want to provide this error information to an error reporting service
         console.warn(e);
       } finally {
         setLoadingComplete(true);

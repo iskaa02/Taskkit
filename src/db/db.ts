@@ -6,7 +6,7 @@ import Task from "./models/Task";
 const adapter = new SQLiteAdapter({
   schema,
   dbName: "taskkit",
-  jsi: true,
+  jsi: false,
   onSetUpError: err => {
     console.log(err);
   },

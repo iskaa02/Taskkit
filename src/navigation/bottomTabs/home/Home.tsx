@@ -1,17 +1,14 @@
 import Fab from "@/components/Fab";
 import StatusBar from "@/components/StatusBar";
 import TaskCard from "@/components/TaskCard";
-import { database } from "@/db/db";
-import { Columns, Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
 import withDB from "@/db/models/withDB";
+import { getIntervalDate as getDateHelper, queryTasks } from "@/db/queries";
 import {
   RootTabScreenProps,
   useNavigationProps,
 } from "@/navigation/navPropsType";
 import { Feather } from "@expo/vector-icons";
-import { Q } from "@nozbe/watermelondb";
-import Database from "@nozbe/watermelondb/Database";
 import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
 import { Box, Icon, Text } from "native-base";
@@ -24,7 +21,7 @@ export default function RawScreen({}: HomeScreenProps) {
   return (
     <Box flex={1}>
       <StatusBar />
-      <Section database={database} />
+      <Section />
       <Fab onPress={() => navigation.push("AddTask")} />
     </Box>
   );
@@ -35,7 +32,6 @@ type TaskSectionListProps = {
   upcoming: Task[];
   tomorrow: Task[];
   other: Task[];
-  database: Database;
 };
 const RawSection = ({
   today,
@@ -58,10 +54,6 @@ const RawSection = ({
         { data: upcoming, key: "upcoming" },
         { data: other, key: "other" },
       ]}
-      getItemLayout={(_, index) => {
-        const itemHeight = 70 + 10 + 15;
-        return { length: itemHeight, offset: itemHeight * index, index };
-      }}
       style={{
         paddingHorizontal: 20,
       }}
@@ -105,7 +97,7 @@ const RawSection = ({
           </Box>
         );
       }}
-      renderItem={({ item: task, section }) => (
+      renderItem={({ item: task }) => (
         <TaskCard
           onPress={() => {
             onPress(task);
@@ -121,46 +113,16 @@ const RawSection = ({
 
 const Section = withDB<TaskSectionListProps, TaskSectionListProps>(
   RawSection,
-  ["database"],
-  ({ database }) => ({
-    today: database
-      .get<Task>(Tables.Task)
-      .query(
-        Q.where(Columns.task.reminder, Q.gte(dayjs().startOf("day").valueOf())),
-        Q.where(
-          Columns.task.reminder,
-          Q.lte(dayjs().startOf("day").add(1, "day").valueOf())
-        )
-      ),
-    tomorrow: database
-      .get<Task>(Tables.Task)
-      .query(
-        Q.where(
-          Columns.task.reminder,
-          Q.between(
-            dayjs().add(1, "day").startOf("day").valueOf(),
-            dayjs().endOf("day").add(1, "day").valueOf()
-          )
-        )
-      ),
-    upcoming: database
-      .get<Task>(Tables.Task)
-      .query(
-        Q.where(
-          Columns.task.reminder,
-          Q.gte(dayjs().add(2, "day").startOf("day").valueOf())
-        )
-      ),
-    other: database
-      .get<Task>(Tables.Task)
-      .query(
-        Q.or(
-          Q.where(
-            Columns.task.reminder,
-            Q.lte(dayjs().subtract(1, "day").endOf("day").valueOf())
-          ),
-          Q.where(Columns.task.reminder, Q.eq(null))
-        )
-      ),
+  [],
+  () => ({
+    today: queryTasks(getDateHelper({ day: dayjs().valueOf() })),
+    tomorrow: queryTasks(
+      getDateHelper({ day: dayjs().add(1, "day").valueOf() })
+    ),
+    upcoming: queryTasks(getDateHelper({ afterDays: 2 })),
+    other: queryTasks({
+      ...getDateHelper({ beforeDays: 1 }),
+      withNull: true,
+    }),
   })
 );

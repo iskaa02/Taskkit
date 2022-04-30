@@ -7,7 +7,7 @@ import { MotiView } from "moti";
 import { Box, Text } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, StyleSheet, View } from "react-native";
+import { I18nManager, Pressable, StyleSheet, View } from "react-native";
 import CheckBox from "./CheckBox";
 import Chip from "./Chip";
 type TaskCardProps = {
@@ -34,7 +34,11 @@ function TaskCard({
           height: undefined,
           marginBottom: 10,
         }}
-        transition={{ delay: options.animationDelay, damping: 26 }}
+        transition={{
+          delay: options.animationDelay,
+          type: "spring",
+          damping: 28,
+        }}
         from={{ top: 18, opacity: 0.4, marginBottom: 0 }}
         exit={{
           height: 0,
@@ -49,16 +53,16 @@ function TaskCard({
             onToggle={i => task.setIsCompleted(i)}
             color={accent}
           />
-          <Box alignItems="center" flex={1} flexDir="row">
+          <Box flexWrap="wrap" alignItems="center" flex={1} flexDir="row">
             <Text
-              textAlign="justify"
+              textAlign={I18nManager.isRTL ? "right" : "left"}
               fontSize="xl"
               color={accent}
               textDecorationLine={task.isCompleted ? "line-through" : undefined}
             >
-              {task.name}{" "}
-              {!task.reminder ? null : <DateChip date={task.reminder} />}
+              {task.name}
             </Text>
+            {!task.reminder ? null : <DateChip date={task.reminder} />}
           </Box>
         </View>
       </MotiView>

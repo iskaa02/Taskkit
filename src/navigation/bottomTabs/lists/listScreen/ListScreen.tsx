@@ -7,6 +7,7 @@ import { Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
 import withDB from "@/db/models/withDB";
 import useAccent from "@/hooks/useAccent";
+import useAnimationDelay from "@/hooks/useAnimationDelay";
 import { ListStackScreenProps } from "@/navigation/navPropsType";
 import { Feather } from "@expo/vector-icons";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
@@ -33,16 +34,6 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
   const { t } = useTranslation();
   const secondary = useAccent(list.theme, { flip: true });
   const sheetRef = React.useRef<BottomSheetModalMethods>(null);
-  const countString = (() => {
-    let completed = 0;
-    let left = 0;
-    tasks.map(task => {
-      task.isCompleted ? completed++ : left++;
-    });
-    let s = t("task-left_count", { count: left, postProcess: "interval" });
-    if (completed > 0) s += ` ${completed} ${t("completed")}`;
-    return s;
-  })();
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerStyle: {
@@ -64,12 +55,7 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
       ),
     });
   }, [list.theme]);
-  const [delay, setdelay] = React.useState(120);
-  React.useEffect(() => {
-    setTimeout(() => {
-      setdelay(0);
-    }, tasks.length * 120);
-  }, []);
+  const delay = useAnimationDelay(tasks.length);
   return (
     <>
       <ScrollView
@@ -81,10 +67,6 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
           <Box bg={accent} px="20px" pb="20px">
             <Text bold textAlign="justify" color="em.10" fontSize="3xl">
               {list.name}
-            </Text>
-
-            <Text mt={4} color={"em.10"} fontSize="md">
-              {countString}
             </Text>
           </Box>
 
@@ -98,7 +80,6 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
                   <TaskCard
                     animationDelay={delay * i}
                     key={v.id}
-                    theme={list.theme}
                     task={v}
                     onPress={() =>
                       navigation.push("Task", {

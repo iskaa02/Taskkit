@@ -3,12 +3,12 @@ import Fab from "@/components/Fab";
 import StatusBar from "@/components/StatusBar";
 import { database } from "@/db/db";
 import List from "@/db/models/List";
-import { Columns, Tables } from "@/db/models/schema";
+import { Tables } from "@/db/models/schema";
 import withDB from "@/db/models/withDB";
 import { ListStackScreenProps, ListStackType } from "@/navigation/navPropsType";
 import { Feather } from "@expo/vector-icons";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
-import { Database, Q } from "@nozbe/watermelondb";
+import { Database } from "@nozbe/watermelondb";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Heading, Icon, ScrollView, Text } from "native-base";
 import React from "react";
@@ -91,15 +91,16 @@ const RawListView = ({ lists, ...p }: ListViewProps) => {
     </>
   );
 };
-const RawCard = ({ list, navigation }: { list: List; navigation: any }) => {
-  const [count, setCount] = React.useState(0);
+const RawCard = ({
+  list,
+  navigation,
+  count,
+}: {
+  list: List;
+  navigation: any;
+  count: number;
+}) => {
   const { t } = useTranslation();
-  list.tasks
-    .extend(Q.where(Columns.task.isCompleted, Q.eq(false)))
-    .fetchCount()
-    .then(i => {
-      setCount(i);
-    });
   return (
     <LeftAccentCard
       onPress={() => {
@@ -121,6 +122,7 @@ const RawCard = ({ list, navigation }: { list: List; navigation: any }) => {
 
 const Card = withDB(RawCard, ["list"], ({ list }) => ({
   list,
+  count: list.tasks.observeCount(),
 }));
 
 const ListView = withDB<ListViewProps, { lists: List[] }>(

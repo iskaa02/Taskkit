@@ -39,5 +39,6 @@
   "preferences": "Preferences",
   "settings": "Settings",
   "language": "Language",
-  "send-notification-even-when-completed": "Send notification even when task is completed"
+  "send-notification-even-when-completed": "Notify even when task completed",
+  "warn-before-delete": "Warn before delete"
 }

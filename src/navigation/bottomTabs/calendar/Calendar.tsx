@@ -1,9 +1,9 @@
 import StatusBar from "@/components/StatusBar";
 import { database } from "@/db/db";
-import { storage } from "@/db/storage";
 import { Columns, Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
 import withDB from "@/db/models/withDB";
+import { storage } from "@/db/storage";
 import { Feather } from "@expo/vector-icons";
 import { Q } from "@nozbe/watermelondb";
 import Database from "@nozbe/watermelondb/Database";
@@ -69,7 +69,7 @@ function RawScreen({ tasks, database }: ScreenProps) {
           markingType={"multi-dot"}
         />
       </Box>
-      <AgendaSheet selectedDate={selectedDate} database={database} />
+      <AgendaSheet selectedDate={selectedDate} />
     </SafeAreaView>
   );
 }
