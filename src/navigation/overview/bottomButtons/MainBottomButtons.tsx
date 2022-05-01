@@ -1,6 +1,7 @@
 import { database } from "@/db/db";
 import Task from "@/db/models/Task";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
 import { BottomButton } from "./Button";
 
@@ -15,9 +16,10 @@ export function MainButtons({
 }: ButtonPageProps & {
   setPage: React.Dispatch<React.SetStateAction<"main" | "today" | "later">>;
 }) {
+  const { t } = useTranslation();
   const mainButtonData = [
     {
-      label: "Today",
+      label: t("today"),
       iconName: "coffee",
       color: "blue",
       onPress: () => {
@@ -25,7 +27,7 @@ export function MainButtons({
       },
     },
     {
-      label: "Done",
+      label: t("done"),
       iconName: "check",
       color: "green",
       onPress: () => {
@@ -35,7 +37,7 @@ export function MainButtons({
     },
 
     {
-      label: "Later",
+      label: t("later"),
       iconName: "sunset",
       color: "yellow",
       onPress: () => {
@@ -43,7 +45,7 @@ export function MainButtons({
       },
     },
     {
-      label: "Delete",
+      label: t("delete"),
       iconName: "x",
       color: "red",
       onPress: () => {

@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { LaterBottomButtons } from "./LaterBottomButtons";
 import { MainButtons } from "./MainBottomButtons";
 import { TodayBottomButtons } from "../TodayBottomButtons";
+import { useTranslation } from "react-i18next";
 
 type BottomButtonsProps = {
   tasks: Task[];
@@ -30,6 +31,7 @@ export default function BottomButtons({ tasks, setTasks }: BottomButtonsProps) {
   const removeTask = React.useCallback(() => {
     setTasks(tasks => tasks.slice(1));
   }, []);
+  const { t } = useTranslation();
   return (
     <>
       <Pressable
@@ -48,15 +50,20 @@ export default function BottomButtons({ tasks, setTasks }: BottomButtonsProps) {
         py="5px"
         px="8px"
         borderRadius={10}
-        _pressed={{ backgroundColor: "blue.700:alpha.40" }}
+        _light={{
+          _pressed: { backgroundColor: "blue.50" },
+        }}
+        _dark={{
+          _pressed: { backgroundColor: "blue.700:alpha.40" },
+        }}
         onPress={removeTask}
       >
         <Text
           fontSize="lg"
           _dark={{ color: "lightBlue.300" }}
-          _light={{ color: "lightBlue.400" }}
+          _light={{ color: "blue.500" }}
         >
-          Skip
+          {t("skip")}
         </Text>
       </Pressable>
       <Box

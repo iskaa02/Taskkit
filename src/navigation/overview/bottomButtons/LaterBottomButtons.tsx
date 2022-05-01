@@ -1,17 +1,23 @@
 import dayjs from "dayjs";
 import React from "react";
-import { ScrollView } from "react-native";
+import { I18nManager, ScrollView } from "react-native";
 import { showPicker } from "@/hooks/DatePicker";
 import { BottomButton } from "./Button";
 import { ButtonPageProps } from "./MainBottomButtons";
+import { useTranslation } from "react-i18next";
 
 export function LaterBottomButtons({ task, removeTask }: ButtonPageProps) {
+  const direction = I18nManager.isRTL ? "left" : "right";
   const laterData = [
-    { icon: "chevron-right", label: "tomorrow" },
-    { icon: "chevrons-right", label: "2 days" },
-    { icon: "skip-forward", label: "next-week" },
+    { icon: `chevron-${direction}`, label: "tomorrow" },
+    { icon: `chevrons-${direction}`, label: "2-day" },
+    {
+      icon: `skip-${I18nManager.isRTL ? "back" : "forward"}`,
+      label: "next-week",
+    },
     { icon: "calendar", label: "next-month" },
   ];
+  const { t } = useTranslation();
   const onPress = React.useCallback(
     (key: string) => {
       const date = dayjs();
@@ -33,7 +39,7 @@ export function LaterBottomButtons({ task, removeTask }: ButtonPageProps) {
           iconName={v.icon}
           colorLight="yellow.500"
           colorDark="yellow.400"
-          label={v.label}
+          label={t(v.label)}
           onPress={() => {
             onPress(v.label);
           }}
@@ -58,7 +64,7 @@ export function LaterBottomButtons({ task, removeTask }: ButtonPageProps) {
             });
           });
         }}
-        label="Custom"
+        label={t("custom")}
         colorLight="yellow.500"
         colorDark="yellow.400"
         iconName="more-horizontal"

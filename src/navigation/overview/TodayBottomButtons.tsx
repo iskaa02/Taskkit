@@ -1,5 +1,6 @@
 import dayjs from "dayjs";
 import React from "react";
+import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
 import { showPicker } from "../../hooks/DatePicker";
 import { BottomButton } from "./bottomButtons/Button";
@@ -13,6 +14,7 @@ export function TodayBottomButtons({ removeTask, task }: ButtonPageProps) {
     { hour: "7", am: "PM" },
     { hour: "9", am: "PM" },
   ];
+  const { t } = useTranslation();
   const onPress = React.useCallback(
     (hour: number, AmPm: string) => {
       if (hour === 12) {
@@ -51,7 +53,7 @@ export function TodayBottomButtons({ removeTask, task }: ButtonPageProps) {
             }
           });
         }}
-        label="Custom"
+        label={t("custom")}
         colorLight="blue.500"
         colorDark="blue.400"
         iconName="more-horizontal"

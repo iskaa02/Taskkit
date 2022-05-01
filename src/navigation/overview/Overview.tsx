@@ -6,10 +6,12 @@ import { queryTasks } from "@/db/queries";
 import useAccent from "@/hooks/useAccent";
 import { Feather } from "@expo/vector-icons";
 import { Q } from "@nozbe/watermelondb";
+import dayjs from "dayjs";
 import * as NavigationBar from "expo-navigation-bar";
 import { MotiView } from "moti";
 import { Box, Heading, Icon, Pressable, Text, useTheme } from "native-base";
 import * as React from "react";
+import { useTranslation } from "react-i18next";
 import {
   interpolateColor,
   useAnimatedStyle,
@@ -34,14 +36,31 @@ export default function Overview({
         setTasks(tasks);
       });
   }, []);
+  const { t } = useTranslation();
+  const greetings = React.useMemo(() => {
+    let hrs = dayjs().hour();
+    if (hrs > 4) return t("good-morning"); // After 6am
+    if (hrs > 12) return t("good-afternoon"); // After 12pm
+    if (hrs > 17) return t("good-evening"); // After 5pm
+    return t("good-night");
+  }, [t]);
   return (
     <SafeAreaView style={{ backgroundColor: background, flex: 1 }}>
       <Box pb="70px" px="20px" flex={1}>
-        <Pressable onPress={() => navigation.goBack()} mt="30px" mb="10">
-          <Icon as={<Feather name="arrow-left" />} size={23} color="em.1" />
+        <Pressable
+          alignSelf="flex-end"
+          onPress={() => navigation.goBack()}
+          mt="30px"
+          mb="10"
+        >
+          <Icon as={<Feather name="x" />} size={23} color="em.1" />
         </Pressable>
-        <Heading fontSize="3xl" mb="20">
-          Good morning{"\n"}Ismael,
+        <Heading fontSize="3xl">{greetings}</Heading>
+        <Heading fontSize="2xl" mb="20">
+          {t("task-left-count", {
+            count: tasks.length,
+            postProcess: "interval",
+          }) + ","}
         </Heading>
 
         <MotiView
