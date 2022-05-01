@@ -26,7 +26,7 @@ export default function Providers({ children }: ProviderProps) {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
+      <SafeAreaProvider style={{ backgroundColor: t.colors.background }}>
         <NativeBaseProvider theme={t} colorModeManager={colorModeManager}>
           <BottomSheetModalProvider>{children}</BottomSheetModalProvider>
         </NativeBaseProvider>

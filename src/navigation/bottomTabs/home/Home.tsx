@@ -15,9 +15,27 @@ import { Box, Icon, Text } from "native-base";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { SectionList, TouchableOpacity } from "react-native";
-type HomeScreenProps = RootTabScreenProps<"Home">;
-export default function RawScreen({}: HomeScreenProps) {
+import { HeaderButtons, Item } from "react-navigation-header-buttons";
+
+export default function RawScreen({}: RootTabScreenProps<"Home">) {
   const navigation = useNavigation<useNavigationProps>();
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: i => (
+        <HeaderButtons>
+          <Item
+            color={i.tintColor}
+            iconName="compass"
+            iconSize={23}
+            style={{ marginEnd: 10 }}
+            IconComponent={Feather}
+            title="Overview"
+            onPress={() => navigation.push("Overview")}
+          />
+        </HeaderButtons>
+      ),
+    });
+  }, [navigation]);
   return (
     <Box flex={1}>
       <StatusBar />

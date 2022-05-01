@@ -6,6 +6,9 @@ import {
 } from "@/assets/TabBarIcons";
 import { RootTabParamList } from "@/navigation/navPropsType";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useFocusEffect } from "@react-navigation/native";
+import { setBackgroundColorAsync } from "expo-navigation-bar";
+import { useTheme } from "native-base";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import CalendarScreen from "./calendar/Calendar";
@@ -17,6 +20,10 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 export default function BottomTabNavigator() {
   const { t } = useTranslation();
+  const { surface } = useTheme().colors;
+  useFocusEffect(() => {
+    setBackgroundColorAsync(surface);
+  });
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
