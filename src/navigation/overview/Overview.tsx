@@ -18,7 +18,7 @@ import {
 } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { RootStackScreenProps } from "../navPropsType";
-import BottomButtons from "./BottomButtons";
+import BottomButtons from "./bottomButtons/BottomButtons";
 export default function Overview({
   navigation,
 }: RootStackScreenProps<"Overview">) {

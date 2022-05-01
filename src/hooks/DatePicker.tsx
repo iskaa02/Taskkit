@@ -28,7 +28,7 @@ export const DatePicker = (
   };
   return showDatePicker;
 };
-const showPicker = (
+export const showPicker = (
   value: Date,
   mode: "time" | "date",
   onChange?: (i: DateTimePickerEvent, date: Date | undefined) => void
