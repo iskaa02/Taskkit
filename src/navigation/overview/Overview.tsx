@@ -121,7 +121,6 @@ const ActiveTask = withDB(
         backgroundColor,
       };
     }, [em, accent, task]);
-
     return (
       <MotiView
         style={{ flexDirection: "row", alignItems: "center" }}
@@ -146,9 +145,13 @@ const ActiveTask = withDB(
           from={{ opacity: 0 }}
           key={task.id + "2"}
           transition={{ type: "timing", duration: 300, delay: 600 }}
+          style={{ height: 35 }}
         >
           <Text fontSize="2xl" mx="4" color="em.1" bold>
             {task.name}
+          </Text>
+          <Text fontSize="sm" mx="4" color="em.2">
+            {list.name}
           </Text>
         </MotiView>
       </MotiView>
