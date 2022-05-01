@@ -4,12 +4,11 @@ import Task from "@/db/models/Task";
 import withDB from "@/db/models/withDB";
 import { queryTasks } from "@/db/queries";
 import useAccent from "@/hooks/useAccent";
-import { Feather } from "@expo/vector-icons";
 import { Q } from "@nozbe/watermelondb";
 import dayjs from "dayjs";
 import * as NavigationBar from "expo-navigation-bar";
 import { MotiView } from "moti";
-import { Box, Heading, Icon, Pressable, Text, useTheme } from "native-base";
+import { Box, Heading, Text, useTheme } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -18,9 +17,11 @@ import {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { RootStackScreenProps } from "../navPropsType";
 import BottomButtons from "./bottomButtons/BottomButtons";
+import { Fade } from "./Fade";
+import ModalView from "./ModalView";
+import NoTasks from "./NoTasks";
 export default function Overview({
   navigation,
 }: RootStackScreenProps<"Overview">) {
@@ -29,11 +30,13 @@ export default function Overview({
     NavigationBar.setBackgroundColorAsync(background);
   }, []);
   const [tasks, setTasks] = React.useState<Task[]>([]);
+  const [isLoading, setIsLoading] = React.useState(true);
   React.useEffect(() => {
     queryTasks({}, Q.where(Columns.task.isCompleted, Q.eq(false)))
       .fetch()
       .then(tasks => {
         setTasks(tasks);
+        setIsLoading(false);
       });
   }, []);
   const { t } = useTranslation();
@@ -44,25 +47,25 @@ export default function Overview({
     if (hrs > 17) return t("good-evening"); // After 5pm
     return t("good-night");
   }, [t]);
+  if (isLoading) return <ModalView />;
+  if (tasks.length === 0) {
+    return <NoTasks />;
+  }
   return (
-    <SafeAreaView style={{ backgroundColor: background, flex: 1 }}>
+    <ModalView>
       <Box pb="70px" px="20px" flex={1}>
-        <Pressable
-          alignSelf="flex-end"
-          onPress={() => navigation.goBack()}
-          mt="30px"
-          mb="10"
-        >
-          <Icon as={<Feather name="x" />} size={23} color="em.1" />
-        </Pressable>
-        <Heading fontSize="3xl">{greetings}</Heading>
-        <Heading fontSize="2xl" mb="20">
-          {t("task-left-count", {
-            count: tasks.length,
-            postProcess: "interval",
-          }) + ","}
-        </Heading>
+        <Fade position={28}>
+          <Heading fontSize="3xl">{greetings}</Heading>
+        </Fade>
 
+        <Fade position={27} delay={200}>
+          <Heading fontSize="2xl" mb="20">
+            {t("task-left-count", {
+              count: tasks.length,
+              postProcess: "interval",
+            }) + ","}
+          </Heading>
+        </Fade>
         <MotiView
           animate={{ marginStart: 0 }}
           from={{ marginStart: 45 }}
@@ -95,7 +98,7 @@ export default function Overview({
         })}
       </Box>
       <BottomButtons tasks={tasks} setTasks={setTasks} />
-    </SafeAreaView>
+    </ModalView>
   );
 }
 const ActiveTask = withDB(
