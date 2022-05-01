@@ -7,6 +7,9 @@ import useCachedResources from "./src/hooks/useCachedResources";
 import Navigation from "./src/navigation";
 import Providers from "./src/Providers";
 import { enableFreeze } from "react-native-screens";
+// @ts-ignore NO TYPESCRIPT d.ts
+import { connectToDevTools } from "react-devtools-core";
+
 enableFreeze(true);
 export default function App() {
   const isLoadingComplete = useCachedResources();
@@ -21,6 +24,12 @@ export default function App() {
       shouldSetBadge: true,
     }),
   });
+  if (__DEV__) {
+    connectToDevTools({
+      host: "localhost",
+      port: 8097,
+    });
+  }
   return (
     <Providers>
       <Navigation />
