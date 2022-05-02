@@ -2,10 +2,11 @@ import SelectSheet from "@/components/Select";
 import StatusBar from "@/components/StatusBar";
 import Switch from "@/components/Switch";
 import { storage } from "@/db/storage";
+import useColorMode from "@/hooks/useColorScheme";
 import i18n, { changeLanguage } from "@/i18n/i18n";
 import { languages } from "@/i18n/langs";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
-import { Box, Pressable, ScrollView, Text, useColorMode } from "native-base";
+import { Box, ScrollView, Text } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { useMMKVBoolean } from "react-native-mmkv";
@@ -33,30 +34,40 @@ export default function Profile() {
 }
 
 const ThemeSwitch = () => {
-  const { setColorMode, colorMode } = useColorMode();
-  const themes = [
-    { theme: "light", color: "#fff" },
-    { theme: "dark", color: "#323232" },
-  ];
+  const { colorMode, setColorMode, isSystemDefault } = useColorMode();
+
+  const currentColorMode = React.useMemo(() => {
+    if (isSystemDefault) return "system-default";
+    return colorMode;
+  }, [colorMode, isSystemDefault]);
   const { t } = useTranslation();
+  const sheetRef = React.useRef<BottomSheetModal>(null);
   return (
-    <SettingsContainer iconName="moon">
+    <SettingsContainer
+      iconName="moon"
+      onPress={() => {
+        sheetRef.current?.present();
+      }}
+      withEndArrow
+    >
       <SettingsLabel>{t("color-mode")}</SettingsLabel>
-      <Box justifyContent="space-between" w="70px" flexDir="row">
-        {themes.map(i => (
-          <Pressable
-            w="30px"
-            h="30px"
-            rounded="full"
-            key={i.theme}
-            bg={i.color}
-            borderColor={i.theme === colorMode ? "blue.400" : i.color}
-            borderWidth={3}
-            onPress={() => {
-              setColorMode(i.theme);
-            }}
-          />
-        ))}
+      <Box flexDirection="row">
+        <Text fontSize="md" color="em.3">
+          {t(currentColorMode)}
+        </Text>
+        <SelectSheet
+          ref={sheetRef}
+          value={currentColorMode}
+          items={[
+            { value: "light", label: t("light") },
+            { value: "dark", label: t("dark") },
+            { value: "system-default", label: t("system-default") },
+          ]}
+          onChange={v => {
+            if (v != "dark" && v !== "light" && v !== "system-default") return;
+            setColorMode(v);
+          }}
+        />
       </Box>
     </SettingsContainer>
   );

@@ -1,5 +1,6 @@
 import { storage } from "@/db/storage";
 import { extendTheme, StorageManager } from "native-base";
+import { Appearance } from "react-native";
 
 const config = {
   useSystemColorMode: false,
@@ -61,12 +62,14 @@ export default theme;
 export const colorModeManager: StorageManager = {
   get: async () => {
     const colorMode = storage.getString("@color-mode");
-    if (colorMode === "dark") {
-      return "dark";
-    }
-    return "light";
+    if (colorMode === "dark" || colorMode === "light") return colorMode;
+    return Appearance.getColorScheme();
   },
   set: async value => {
-    if (value) storage.set("@color-mode", value);
+    if (value !== "dark" && value !== "light") {
+      storage.set("@color-mode", "system-default");
+      return;
+    }
+    storage.set("@color-mode", value);
   },
 };
