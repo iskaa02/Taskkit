@@ -15,6 +15,7 @@ export const DARK_MODE = {
     3: "#ababab",
     4: "#787878",
     5: "#343434",
+    6: "#131313",
     10: "#000",
   },
 };
@@ -27,6 +28,7 @@ export const LIGHT_MODE = {
     3: "#787878",
     4: "#ababab",
     5: "#eaeaea",
+    6: "#f1f1f1",
     10: "#fff",
   },
 };

@@ -13,11 +13,7 @@ export function RootNavigator() {
   return (
     <Stack.Navigator>
       <Stack.Group screenOptions={{ headerShown: false }}>
-        <Stack.Screen
-          name="Root"
-          component={BottomTabNavigator}
-          options={{ headerShown: false }}
-        />
+        <Stack.Screen name="Root" component={BottomTabNavigator} />
         <Stack.Screen
           options={{
             presentation: "modal",

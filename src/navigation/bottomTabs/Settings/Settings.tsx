@@ -18,7 +18,7 @@ import {
 export default function Profile() {
   const { t } = useTranslation();
   return (
-    <ScrollView pt="10px" bg="background">
+    <ScrollView pt="10px" _dark={{ bg: "background" }} bg="surface">
       <StatusBar />
       <SettingsHeading>{t("preferences")}</SettingsHeading>
       <Box pb="2">

@@ -12,8 +12,8 @@ const DarkTheme: Theme = {
     background: DARK_MODE.background,
     text: DARK_MODE.em[1],
     primary: DARK_MODE.em[2],
-    card: DARK_MODE.surface,
-    border: DARK_MODE.em[4],
+    card: DARK_MODE.background,
+    border: DARK_MODE.surface,
     notification: "red",
   },
 };
@@ -32,7 +32,7 @@ export default function Navigation() {
   const { colorMode } = useColorMode();
 
   React.useEffect(() => {
-    setBackgroundColorAsync(colorMode === "dark" ? "#323232" : "#fff");
+    setBackgroundColorAsync(colorMode === "dark" ? "#131313" : "#fff");
   }, [colorMode]);
   return (
     <NavigationContainer

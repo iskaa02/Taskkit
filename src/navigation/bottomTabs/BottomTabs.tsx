@@ -8,7 +8,7 @@ import { RootTabParamList } from "@/navigation/navPropsType";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useFocusEffect } from "@react-navigation/native";
 import { setBackgroundColorAsync } from "expo-navigation-bar";
-import { useTheme } from "native-base";
+import { useColorMode, useTheme } from "native-base";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import CalendarScreen from "./calendar/Calendar";
@@ -20,9 +20,10 @@ const BottomTab = createBottomTabNavigator<RootTabParamList>();
 
 export default function BottomTabNavigator() {
   const { t } = useTranslation();
-  const { surface } = useTheme().colors;
+  const { colorMode } = useColorMode();
+  const { surface, background } = useTheme().colors;
   useFocusEffect(() => {
-    setBackgroundColorAsync(surface);
+    setBackgroundColorAsync(colorMode == "dark" ? background : surface);
   });
   return (
     <BottomTab.Navigator
@@ -31,6 +32,15 @@ export default function BottomTabNavigator() {
         tabBarShowLabel: false,
         tabBarHideOnKeyboard: true,
         headerShown: false,
+        headerStyle:
+          colorMode !== "dark"
+            ? {}
+            : {
+                borderBottomColor: surface,
+                borderBottomWidth: 1,
+                elevation: 0,
+                shadowOpacity: 0,
+              },
       }}
     >
       <BottomTab.Screen

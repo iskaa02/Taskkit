@@ -10,7 +10,7 @@ import { Feather } from "@expo/vector-icons";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { Database } from "@nozbe/watermelondb";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Heading, Icon, ScrollView, Text } from "native-base";
+import { Box, Icon, ScrollView, Text } from "native-base";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -20,6 +20,7 @@ import TaskScreen from "./task/TaskScreen";
 
 const Stack = createNativeStackNavigator<ListStackType>();
 export default function Lists() {
+  const { t } = useTranslation();
   return (
     <Stack.Navigator
       screenOptions={{
@@ -32,7 +33,22 @@ export default function Lists() {
         name="Root"
         component={ListRoot}
         options={{
-          headerShown: false,
+          header: i => {
+            return (
+              <Box
+                safeAreaTop
+                h="86px"
+                px="20px"
+                justifyContent="center"
+                borderBottomColor="surface"
+                borderBottomWidth={1}
+              >
+                <Text fontSize="2xl">
+                  {t("list", { count: 10, postProcess: "interval" })}
+                </Text>
+              </Box>
+            );
+          },
         }}
       />
       <Stack.Screen name="Task" component={TaskScreen} />
@@ -48,9 +64,6 @@ function ListRoot(p: ListStackScreenProps<"Root">) {
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar />
       <ScrollView px="10px">
-        <Heading mx="10px" my="3">
-          {t("list", { count: 2, postProcess: "interval" })}
-        </Heading>
         <ListView {...p} database={database} />
       </ScrollView>
       <Fab
@@ -82,15 +95,19 @@ type ListViewProps = ListStackScreenProps<"Root"> & {
   lists: List[];
   database: Database;
 };
-const RawListView = ({ lists, ...p }: ListViewProps) => {
-  return (
+const ListView = withDB<ListViewProps, { lists: List[] }>(
+  ({ lists, navigation }) => (
     <>
       {lists.map(list => (
-        <Card key={list.id} navigation={p.navigation} list={list} />
+        <Card key={list.id} navigation={navigation} list={list} />
       ))}
     </>
-  );
-};
+  ),
+  ["database"],
+  ({ database }) => ({
+    lists: database.get<List>(Tables.List).query(),
+  })
+);
 const RawCard = ({
   list,
   navigation,
@@ -124,11 +141,3 @@ const Card = withDB(RawCard, ["list"], ({ list }) => ({
   list,
   count: list.tasks.observeCount(),
 }));
-
-const ListView = withDB<ListViewProps, { lists: List[] }>(
-  RawListView,
-  ["database"],
-  ({ database }) => ({
-    lists: database.get<List>(Tables.List).query(),
-  })
-);

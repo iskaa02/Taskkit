@@ -15,7 +15,17 @@ export const SettingsContainer = ({
   withEndArrow,
 }: SettingsContainerProps) => {
   const component = (
-    <Box flexDirection="row" px="20px" alignItems="center" py="2" bg="surface">
+    <Box
+      flexDirection="row"
+      px="10px"
+      alignItems="center"
+      py="2"
+      _dark={{ bg: "surface" }}
+      bg="em.6"
+      mx="4"
+      mb="10px"
+      borderRadius="lg"
+    >
       {!iconName ? null : <SettingsIcon iconName={iconName} />}
       <Box
         alignItems="center"
@@ -51,7 +61,16 @@ export const SettingsLabel = ({ children }: React.PropsWithChildren<{}>) => {
 };
 export const SettingsHeading = ({ children }: React.PropsWithChildren<{}>) => {
   return (
-    <Text isTruncated px="20px" mb="2" color="em.3" fontSize="md" bold>
+    <Text
+      letterSpacing="2xl"
+      isTruncated
+      px="20px"
+      mb="2"
+      color="em.3"
+      fontSize="sm"
+      textTransform="uppercase"
+      // bold
+    >
       {children}
     </Text>
   );
