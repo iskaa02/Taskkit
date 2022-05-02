@@ -7,7 +7,7 @@ import { Box, Icon, Text, useColorModeValue } from "native-base";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { TouchableOpacity } from "react-native";
-import { DatePicker } from "./DatePicker";
+import { DatePicker } from "../../hooks/DatePicker";
 
 type RemindersProps = {
   date: Date;

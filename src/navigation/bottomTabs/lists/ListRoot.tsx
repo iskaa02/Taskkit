@@ -114,7 +114,7 @@ const RawCard = ({
         {list.name}
       </Text>
       <Text fontSize="md">
-        {t("task-left_count", { count, postProcess: "interval" })}
+        {t("task-left-count", { count, postProcess: "interval" })}
       </Text>
     </LeftAccentCard>
   );

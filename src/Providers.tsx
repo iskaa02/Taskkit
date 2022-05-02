@@ -3,15 +3,14 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
 import { NativeBaseProvider } from "native-base";
 import React from "react";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { useMMKVString } from "react-native-mmkv";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import { storage } from "./db/storage";
+import useColorMode from "./hooks/useColorScheme";
 
 type ProviderProps = {
   children: React.ReactNode;
 };
 export default function Providers({ children }: ProviderProps) {
-  const [colorMode, _] = useMMKVString("@color-mode", storage);
+  const { colorMode } = useColorMode();
   const t = React.useMemo(() => {
     if (colorMode === "dark")
       return {
@@ -26,7 +25,7 @@ export default function Providers({ children }: ProviderProps) {
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaProvider>
+      <SafeAreaProvider style={{ backgroundColor: t.colors.background }}>
         <NativeBaseProvider theme={t} colorModeManager={colorModeManager}>
           <BottomSheetModalProvider>{children}</BottomSheetModalProvider>
         </NativeBaseProvider>

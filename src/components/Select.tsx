@@ -8,8 +8,8 @@ import CheckBox from "./CheckBox";
 
 type SelectProps = {
   value: string;
-  items: string[];
-  onChange: (i: string) => void;
+  items: string[] | { value: string; label: string }[];
+  onChange: (value: string) => void;
 };
 const SelectSheet = React.forwardRef<BottomSheetModalMethods, SelectProps>(
   ({ onChange, value, items }, ref) => {
@@ -64,21 +64,29 @@ const SelectSheet = React.forwardRef<BottomSheetModalMethods, SelectProps>(
                 borderRadius="0"
                 h={60}
                 onPress={() => {
-                  onChange(item);
+                  if (typeof item == "string") {
+                    onChange(item);
+                  } else {
+                    onChange(item.value);
+                  }
                   bottomSheetRef.current?.close();
                 }}
-                key={item}
+                key={typeof item == "string" ? item : item.value}
               >
                 <Box pointerEvents="none">
                   <CheckBox
                     color={em[2]}
                     iconColor={em[10]}
-                    value={item === value}
+                    value={
+                      typeof item === "string"
+                        ? item === value
+                        : item.value === value
+                    }
                     size={20}
                   />
                 </Box>
                 <Text textAlign="justify" fontSize="lg" flex={1} color="em.2">
-                  {item}
+                  {typeof item == "string" ? item : item.label}
                 </Text>
               </Pressable>
             ))}

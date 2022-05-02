@@ -14,24 +14,28 @@ export function queryTasks(
   { from, to, withNull }: getTasksByDateProps,
   ...extend: Clause[]
 ) {
-  let q: Clause = Q.and();
+  let q: Clause[] = [];
 
   if (from) {
     if (!to) {
-      q = Q.where(Columns.task.reminder, Q.gte(from));
+      q[0] = Q.where(Columns.task.reminder, Q.gte(from));
     } else {
-      q = Q.where(Columns.task.reminder, Q.between(from, to));
+      q[0] = Q.where(Columns.task.reminder, Q.between(from, to));
     }
   }
   if (to && !from) {
-    q = Q.where(Columns.task.reminder, Q.lte(to));
+    q[0] = Q.where(Columns.task.reminder, Q.lte(to));
   }
   if (withNull) {
-    q = Q.or(q, Q.where(Columns.task.reminder, Q.eq(null)));
+    if (q[0] && q[0].type === "where") {
+      q[0] = Q.or(q[0], Q.where(Columns.task.reminder, Q.eq(null)));
+    } else {
+      q[0] = Q.where(Columns.task.reminder, Q.eq(null));
+    }
   }
   return database
     .get<Task>(Tables.Task)
-    .query(q)
+    .query(...q)
     .extend(...extend);
 }
 

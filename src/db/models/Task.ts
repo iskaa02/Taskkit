@@ -113,5 +113,5 @@ type editTaskType = {
   name?: string;
   description?: string;
   reminder?: Date | null;
-  repeat: repeatType;
+  repeat?: repeatType;
 };
