@@ -42,9 +42,9 @@ export default function Overview({
   const { t } = useTranslation();
   const greetings = React.useMemo(() => {
     let hrs = dayjs().hour();
-    if (hrs > 4) return t("good-morning"); // After 6am
-    if (hrs > 12) return t("good-afternoon"); // After 12pm
-    if (hrs > 17) return t("good-evening"); // After 5pm
+    if (hrs <= 4) return t("good-morning"); // After 6am
+    if (hrs <= 12) return t("good-afternoon"); // After 12pm
+    if (hrs <= 17) return t("good-evening"); // After 5pm
     return t("good-night");
   }, [t]);
   if (isLoading) return <ModalView />;
@@ -63,7 +63,7 @@ export default function Overview({
             {t("task-left-count", {
               count: tasks.length,
               postProcess: "interval",
-            }) + ","}
+            })}
           </Heading>
         </Fade>
         <MotiView

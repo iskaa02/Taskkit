@@ -1,5 +1,6 @@
+import Switch from "@/components/Switch";
 import { Feather } from "@expo/vector-icons";
-import { Box, Icon, Text } from "native-base";
+import { Box, Divider, Icon, Text } from "native-base";
 import * as React from "react";
 import { I18nManager, Pressable } from "react-native";
 type SettingsContainerProps = {
@@ -52,9 +53,19 @@ export const SettingsContainer = ({
   }
   return component;
 };
+
 export const SettingsLabel = ({ children }: React.PropsWithChildren<{}>) => {
   return (
-    <Text isTruncated textAlign="justify" color="em.2" mb="1" fontSize="lg">
+    <Text color="em.2" mb="1" fontSize="lg">
+      {children}
+    </Text>
+  );
+};
+export const SettingsDescription = ({
+  children,
+}: React.PropsWithChildren<{}>) => {
+  return (
+    <Text color="em.3" fontSize="md">
       {children}
     </Text>
   );
@@ -98,5 +109,44 @@ export const SettingsIcon = ({
       name={iconName}
       as={<Feather />}
     />
+  );
+};
+
+type SettingsWithSwitchProps = {
+  onValueChange?: (value: boolean) => void;
+  value?: boolean;
+  description?: string;
+  label?: string;
+};
+export const SettingsWithSwitch = ({
+  value,
+  onValueChange,
+  label,
+  description,
+}: SettingsWithSwitchProps) => {
+  return (
+    <SettingsContainer
+      onPress={() => {
+        onValueChange && onValueChange(!value);
+      }}
+    >
+      <Box flex={5}>
+        {!label ? null : <SettingsLabel>{label}</SettingsLabel>}
+        {!description ? null : (
+          <SettingsDescription>{description}</SettingsDescription>
+        )}
+      </Box>
+      {!description ? null : (
+        <Divider
+          h={10}
+          style={{ marginHorizontal: 10 }}
+          _light={{ bg: "em.1:alpha.10" }}
+          orientation="vertical"
+        />
+      )}
+      <Box flex={1}>
+        <Switch {...{ value, onValueChange }} />
+      </Box>
+    </SettingsContainer>
   );
 };

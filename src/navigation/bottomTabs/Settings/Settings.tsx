@@ -1,6 +1,5 @@
 import SelectSheet from "@/components/Select";
 import StatusBar from "@/components/StatusBar";
-import Switch from "@/components/Switch";
 import { storage } from "@/db/storage";
 import useColorMode from "@/hooks/useColorScheme";
 import i18n, { changeLanguage } from "@/i18n/i18n";
@@ -14,6 +13,7 @@ import {
   SettingsContainer,
   SettingsHeading,
   SettingsLabel,
+  SettingsWithSwitch,
 } from "./SettingsComponents";
 export default function Profile() {
   const { t } = useTranslation();
@@ -133,27 +133,19 @@ const TaskSettings = () => {
 
   return (
     <Box>
-      <SettingsContainer onPress={() => setWarnBeforeDelete(i => !i)}>
-        <SettingsLabel>{t("warn-before-delete")}</SettingsLabel>
-        <Switch
-          value={warnBeforeDelete}
-          onValueChange={i => {
-            setWarnBeforeDelete(i);
-          }}
-        />
-      </SettingsContainer>
-
-      <SettingsContainer onPress={() => setSendNotification(i => !i)}>
-        <SettingsLabel>
-          {t("send-notification-even-when-completed")}
-        </SettingsLabel>
-        <Switch
-          value={sendNotification}
-          onValueChange={i => {
-            setSendNotification(i);
-          }}
-        />
-      </SettingsContainer>
+      <SettingsWithSwitch
+        label={t("warn-before-delete")}
+        value={warnBeforeDelete}
+        onValueChange={i => {
+          setWarnBeforeDelete(i);
+        }}
+      />
+      <SettingsWithSwitch
+        label={t("always-notify")}
+        description={t("always-notify-description")}
+        onValueChange={value => setSendNotification(value)}
+        value={sendNotification}
+      />
     </Box>
   );
 };

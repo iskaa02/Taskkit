@@ -12,7 +12,7 @@ import {
 type SwitchProps = {
   value?: boolean;
   onValueChange?: (value: boolean) => void;
-  style: ViewStyle;
+  style?: ViewStyle;
 };
 export default function Switch({ value, onValueChange, style }: SwitchProps) {
   const { em, blue } = useTheme().colors;
