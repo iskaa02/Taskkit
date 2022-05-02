@@ -14,7 +14,7 @@ const CheckBox = ({
   value,
   onToggle: toggle,
   color,
-  size = 20,
+  size = 22,
   iconColor = "em.10",
 }: CheckBoxProps) => {
   return (
@@ -22,7 +22,7 @@ const CheckBox = ({
       hitSlop={15}
       borderRadius={size}
       borderWidth={value ? 0 : 2}
-      style={{ marginEnd: 18, width: size, height: size }}
+      style={{ marginEnd: 18, marginStart: 1, width: size, height: size }}
       borderColor={color}
       justifyContent="center"
       alignItems="center"
@@ -33,8 +33,8 @@ const CheckBox = ({
       <MotiView
         style={{
           backgroundColor: color,
-          width: "105%",
-          height: "105%",
+          width: "100%",
+          height: "100%",
           justifyContent: "center",
           alignItems: "center",
           borderRadius: size,
