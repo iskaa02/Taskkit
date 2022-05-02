@@ -1,5 +1,8 @@
 import SelectSheet from "@/components/Select";
 import StatusBar from "@/components/StatusBar";
+import { database } from "@/db/db";
+import List from "@/db/models/List";
+import { Tables } from "@/db/models/schema";
 import { storage } from "@/db/storage";
 import useColorMode from "@/hooks/useColorScheme";
 import i18n, { changeLanguage } from "@/i18n/i18n";
@@ -8,7 +11,8 @@ import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { Box, ScrollView, Text } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { useMMKVBoolean } from "react-native-mmkv";
+import { useMMKVBoolean, useMMKVString } from "react-native-mmkv";
+import { useObservable } from "rxjs-hooks";
 import {
   SettingsContainer,
   SettingsHeading,
@@ -130,7 +134,12 @@ const TaskSettings = () => {
     "send-notification-even-when-completed",
     storage
   );
-
+  const [defaultList, setDefaultList] = useMMKVString("default-list", storage);
+  const lists = useObservable(
+    () => database.get<List>(Tables.List).query().observe(),
+    []
+  );
+  const sheetRef = React.useRef<BottomSheetModal>(null);
   return (
     <Box>
       <SettingsWithSwitch
@@ -146,6 +155,25 @@ const TaskSettings = () => {
         onValueChange={value => setSendNotification(value)}
         value={sendNotification}
       />
+      <SettingsContainer
+        withEndArrow
+        onPress={() => {
+          sheetRef.current?.present();
+        }}
+      >
+        <SettingsLabel>Default list</SettingsLabel>
+        <Text fontSize="md" color="em.3">
+          {lists.find(i => i.id === defaultList)?.name}
+        </Text>
+        <SelectSheet
+          ref={sheetRef}
+          items={lists.map(i => ({ label: i.name, value: i.id }))}
+          value={defaultList ?? ""}
+          onChange={i => {
+            setDefaultList(i);
+          }}
+        />
+      </SettingsContainer>
     </Box>
   );
 };

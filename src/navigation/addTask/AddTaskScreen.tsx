@@ -5,6 +5,7 @@ import { database } from "@/db/db";
 import List from "@/db/models/List";
 import { repeatType } from "@/db/models/scheduleNotification";
 import { Tables } from "@/db/models/schema";
+import { storage } from "@/db/storage";
 import useKeyboardStatus from "@/hooks/useKeyboardStatus";
 import { RootStackScreenProps } from "@/navigation/navPropsType";
 import { useFocusEffect } from "@react-navigation/native";
@@ -57,7 +58,9 @@ export default function AddTaskScreen({
           <Input value={name} onChangeText={i => setName(i)} fontSize="lg" />
           <Label l={t("list", { count: 2, postProcess: "interval" })} mt="5" />
           <ListChips
-            initialListID={route.params?.defaultList}
+            initialListID={
+              route.params?.defaultList ?? storage.getString("default-list")
+            }
             {...{ database, activeListID, setActiveListID }}
           />
           <Box mb={2} mt="5" flexDirection="row" alignItems="center">

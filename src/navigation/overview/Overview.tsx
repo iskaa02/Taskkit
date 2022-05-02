@@ -59,12 +59,12 @@ export default function Overview({
         </Fade>
 
         <Fade position={27} delay={200}>
-          <Heading fontSize="2xl" mb="20">
+          <Text fontSize="xl" color="em.3" mb="20">
             {t("task-left-count", {
               count: tasks.length,
               postProcess: "interval",
             })}
-          </Heading>
+          </Text>
         </Fade>
         <MotiView
           animate={{ marginStart: 0 }}

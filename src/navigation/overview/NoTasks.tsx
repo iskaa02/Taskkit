@@ -1,4 +1,4 @@
-import { Box, Heading } from "native-base";
+import { Box, Heading, Text } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { Fade } from "./Fade";
@@ -14,9 +14,7 @@ export default function NoTasks() {
           </Heading>
         </Fade>
         <Fade delay={70}>
-          <Heading fontSize="2xl" mt="4">
-            {t("enjoy-your-day")}
-          </Heading>
+          <Text fontSize="2xl">{t("enjoy-your-day")}</Text>
         </Fade>
         <Box
           mt="auto"
