@@ -148,7 +148,6 @@ const TaskSettings = () => {
           {t("send-notification-even-when-completed")}
         </SettingsLabel>
         <Switch
-          style={{}}
           value={sendNotification}
           onValueChange={i => {
             setSendNotification(i);
