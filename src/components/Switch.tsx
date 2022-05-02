@@ -38,6 +38,7 @@ export default function Switch({ value, onValueChange, style }: SwitchProps) {
         onValueChange && onValueChange(!value);
       }}
       style={style}
+      p="1"
     >
       <MotiView
         style={[

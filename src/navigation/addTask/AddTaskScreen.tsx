@@ -1,13 +1,21 @@
 import StatusBar from "@/components/StatusBar";
 import { AddSubtask, SubtaskCard } from "@/components/Subtasks";
+import Switch from "@/components/Switch";
 import { database } from "@/db/db";
 import List from "@/db/models/List";
 import { repeatType } from "@/db/models/scheduleNotification";
 import { Tables } from "@/db/models/schema";
 import useKeyboardStatus from "@/hooks/useKeyboardStatus";
 import { RootStackScreenProps } from "@/navigation/navPropsType";
-import { Box, Input, KeyboardAvoidingView, ScrollView } from "native-base";
-import Switch from "@/components/Switch";
+import { useFocusEffect } from "@react-navigation/native";
+import { setBackgroundColorAsync } from "expo-navigation-bar";
+import {
+  Box,
+  Input,
+  KeyboardAvoidingView,
+  ScrollView,
+  useTheme,
+} from "native-base";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import Footer from "../../components/Footer";
@@ -30,6 +38,10 @@ export default function AddTaskScreen({
   const [reminderRepeat, setReminderRepeat] = React.useState<repeatType>(null);
   const [withReminder, setWithReminder] = React.useState(true);
   const { t } = useTranslation();
+  const { surface } = useTheme().colors;
+  useFocusEffect(() => {
+    setBackgroundColorAsync(surface);
+  });
   return (
     <KeyboardAvoidingView bg="surface" flex={1}>
       <ScrollView
