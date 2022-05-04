@@ -69,7 +69,8 @@ const AddListSheet = React.forwardRef<BottomSheetModalMethods>((_, ref) => {
         </Box>
       </BottomSheetScrollView>
       <Footer
-        onPress={async () => {
+        onPress={() => {
+          if (!name) return;
           database.write(async () => {
             database.get<List>(Tables.List).create(list => {
               list.name = name;
