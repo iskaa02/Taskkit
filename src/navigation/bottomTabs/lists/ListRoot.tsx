@@ -10,7 +10,7 @@ import { Feather } from "@expo/vector-icons";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import { Database } from "@nozbe/watermelondb";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Box, Icon, ScrollView, Text } from "native-base";
+import { Heading, Icon, ScrollView, Text } from "native-base";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -31,25 +31,8 @@ export default function Lists() {
     >
       <Stack.Screen
         name="Root"
+        options={{ headerShown: false }}
         component={ListRoot}
-        options={{
-          header: i => {
-            return (
-              <Box
-                safeAreaTop
-                h="86px"
-                px="20px"
-                justifyContent="center"
-                borderBottomColor="surface"
-                borderBottomWidth={1}
-              >
-                <Text fontSize="2xl">
-                  {t("list", { count: 10, postProcess: "interval" })}
-                </Text>
-              </Box>
-            );
-          },
-        }}
       />
       <Stack.Screen name="Task" component={TaskScreen} />
       <Stack.Screen name="List" component={ListScreen} />
@@ -63,6 +46,9 @@ function ListRoot(p: ListStackScreenProps<"Root">) {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <StatusBar />
+      <Heading mx="20px" mt="20px" mb="10px">
+        {t("list", { count: 10, postProcess: "interval" })}
+      </Heading>
       <ScrollView px="10px">
         <ListView {...p} database={database} />
       </ScrollView>

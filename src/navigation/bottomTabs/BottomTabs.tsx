@@ -2,7 +2,7 @@ import {
   CalendarIcon,
   HomeIcon,
   ListIcon,
-  ProfileIcon as SettingsIcon,
+  SettingsIcon as SettingsIcon,
 } from "@/assets/TabBarIcons";
 import { RootTabParamList } from "@/navigation/navPropsType";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";

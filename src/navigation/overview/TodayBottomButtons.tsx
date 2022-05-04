@@ -23,7 +23,7 @@ export function TodayBottomButtons({ removeTask, task }: ButtonPageProps) {
       if (AmPm === "PM") {
         hour = hour + 12;
       }
-      task.editTask({ reminder: dayjs().hour(hour).toDate() });
+      task.editTask({ reminder: dayjs().hour(hour).minute(0).toDate() });
       removeTask();
     },
     [task]

@@ -19,7 +19,7 @@ import {
   SettingsLabel,
   SettingsWithSwitch,
 } from "./SettingsComponents";
-export default function Profile() {
+export default function Settings() {
   const { t } = useTranslation();
   return (
     <ScrollView pt="10px" _dark={{ bg: "background" }} bg="surface">
@@ -161,7 +161,7 @@ const TaskSettings = () => {
           sheetRef.current?.present();
         }}
       >
-        <SettingsLabel>Default list</SettingsLabel>
+        <SettingsLabel>{t("default-list")}</SettingsLabel>
         <Text fontSize="md" color="em.3">
           {lists.find(i => i.id === defaultList)?.name}
         </Text>

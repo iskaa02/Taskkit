@@ -1,18 +1,18 @@
 import BottomSheetModal from "@/components/BottomSheetModal";
 import Footer from "@/components/Footer";
+import Switch from "@/components/Switch";
+import { repeatType } from "@/db/models/scheduleNotification";
 import Task from "@/db/models/Task";
 import useKeyboardStatus from "@/hooks/useKeyboardStatus";
+import Label from "@/navigation/addTask/Label";
+import { Reminders } from "@/navigation/addTask/Reminders";
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import dayjs from "dayjs";
-import Switch from "@/components/Switch";
 import { Box, Input, KeyboardAvoidingView, useTheme } from "native-base";
 import React from "react";
-import Label from "@/navigation/addTask/Label";
-import { Reminders } from "@/navigation/addTask/Reminders";
 import { useTranslation } from "react-i18next";
 import { I18nManager } from "react-native";
-import { repeatType } from "@/db/models/scheduleNotification";
 
 type EditTaskSheetProps = {
   task: Task;
@@ -77,10 +77,9 @@ export const EditTaskSheet = React.forwardRef<
             <Box mb={2} mt="5" flexDirection="row" alignItems="center">
               <Label l={t("reminders")} />
               <Switch
-                defaultIsChecked={!!task.reminder}
                 style={{ marginStart: "auto" }}
                 value={withReminder}
-                onChange={() => {
+                onValueChange={() => {
                   setWithReminder(i => !i);
                   setReminder(reminder ?? dayjs().toDate());
                 }}

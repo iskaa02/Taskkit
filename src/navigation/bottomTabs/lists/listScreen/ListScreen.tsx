@@ -18,6 +18,7 @@ import { Box, Icon, Text, useColorModeValue } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { ScrollView } from "react-native";
+import { useObservable } from "rxjs-hooks";
 import EditHeaderButton from "../EditHeaderButton";
 import { EditListSheet } from "./EditListSheet";
 
@@ -56,6 +57,7 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
     });
   }, [list.theme]);
   const delay = useAnimationDelay(tasks.length);
+  const count = useObservable(() => list.tasks.observeCount(), 0);
   return (
     <>
       <ScrollView
@@ -68,6 +70,11 @@ const RawListScreen = ({ list, navigation, tasks }: ListScreenProps) => {
             <Text bold textAlign="justify" color="em.10" fontSize="3xl">
               {list.name}
             </Text>
+            {!count ? null : (
+              <Text fontSize="lg" color="em.5">
+                {t("task-left-count", { count, postProcess: "interval" })}
+              </Text>
+            )}
           </Box>
 
           <Box mt={4} px="20px">

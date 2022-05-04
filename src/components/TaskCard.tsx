@@ -24,7 +24,6 @@ function TaskCard({
   ...options
 }: TaskCardProps) {
   const accent = useAccent(theme);
-  const ref = React.useRef<View>(null);
   return (
     <Pressable onPress={onPress}>
       <MotiView
@@ -47,15 +46,18 @@ function TaskCard({
           paddingVertical: 0,
         }}
       >
-        <View style={styles.container} ref={ref}>
-          <CheckBox
-            value={task.isCompleted}
-            onToggle={i => task.setIsCompleted(i)}
-            color={accent}
-          />
+        <View style={styles.container}>
+          <Box alignSelf="flex-start" pt="1">
+            <CheckBox
+              value={task.isCompleted}
+              onToggle={i => task.setIsCompleted(i)}
+              color={accent}
+            />
+          </Box>
           <Box flexWrap="wrap" alignItems="center" flex={1} flexDir="row">
             <Text
               textAlign={I18nManager.isRTL ? "right" : "left"}
+              noOfLines={3}
               fontSize="xl"
               color={accent}
               textDecorationLine={task.isCompleted ? "line-through" : undefined}

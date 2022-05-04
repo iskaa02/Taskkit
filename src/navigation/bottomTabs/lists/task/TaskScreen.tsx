@@ -85,17 +85,19 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
           pb={3}
         >
           <Box flexDirection="row" alignItems="center">
-            <CheckBox
-              size={25}
-              iconColor={accent}
-              color={topCheckboxColor}
-              value={task.isCompleted}
-              onToggle={() => {}}
-            />
+            <Box alignSelf="flex-start" pt="1">
+              <CheckBox
+                size={25}
+                iconColor={accent}
+                color={topCheckboxColor}
+                value={task.isCompleted}
+                onToggle={() => {}}
+              />
+            </Box>
+
             <Heading
               color={"em.10"}
               strikeThrough={task.isCompleted}
-              textAlign="justify"
               textBreakStrategy="balanced"
             >
               {task.name}

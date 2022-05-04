@@ -48,16 +48,10 @@ export const EditListSheet = React.forwardRef<
           {t("list-name")}
         </Text>
         <Input
-          value={name}
-          onChangeText={v => setName(v)}
-          borderWidth={1}
-          selectionColor={"#000"}
-          borderColor="em.3"
-          color="em.1"
-          borderRadius={5}
           textAlign={I18nManager.isRTL ? "right" : "left"}
-          px="5px"
-          py="5px"
+          h="40px"
+          defaultValue={name}
+          onChangeText={i => setName(i)}
           fontSize="lg"
         />
 

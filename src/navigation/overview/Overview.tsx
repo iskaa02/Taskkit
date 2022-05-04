@@ -42,10 +42,12 @@ export default function Overview({
   const { t } = useTranslation();
   const greetings = React.useMemo(() => {
     let hrs = dayjs().hour();
-    if (hrs <= 4) return t("good-morning"); // After 6am
-    if (hrs <= 12) return t("good-afternoon"); // After 12pm
-    if (hrs <= 17) return t("good-evening"); // After 5pm
-    return t("good-night");
+    let msg = "good-night";
+    if (hrs >= 5) msg = "good-morning"; // After or 5am
+    if (hrs >= 12) msg = "good-afternoon"; // After or 12pm
+    if (hrs >= 17) msg = "good-evening"; // After or 5pm
+    if (hrs >= 22 || (hrs >= 0 && hrs <= 3)) msg = "good-night"; // After or 10pm and before 3am
+    return t(msg);
   }, [t]);
   if (isLoading) return <ModalView />;
   if (tasks.length === 0) {
@@ -147,12 +149,14 @@ const ActiveTask = withDB(
           transition={{ type: "timing", duration: 300, delay: 600 }}
           style={{ height: 35 }}
         >
-          <Text fontSize="2xl" mx="4" color="em.1" bold>
-            {task.name}
-          </Text>
-          <Text fontSize="sm" mx="4" color="em.2">
-            {list.name}
-          </Text>
+          <Box h={40}>
+            <Text numberOfLines={2} fontSize="2xl" mx="4" color="em.1" bold>
+              {task.name}
+            </Text>
+            <Text fontSize="sm" mx="4" color="em.2">
+              {list.name}
+            </Text>
+          </Box>
         </MotiView>
       </MotiView>
     );

@@ -69,6 +69,7 @@ function RawScreen({ tasks, database }: ScreenProps) {
           markingType={"multi-dot"}
         />
       </Box>
+
       <AgendaSheet selectedDate={selectedDate} />
     </SafeAreaView>
   );

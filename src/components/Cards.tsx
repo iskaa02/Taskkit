@@ -2,16 +2,19 @@ import { listThemeType } from "@/theme/listThemes";
 import chroma from "chroma-js";
 import { Box, useColorModeValue, useTheme } from "native-base";
 import * as React from "react";
+import { ViewStyle } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 type ListCardProps = {
   theme: listThemeType;
   children: React.ReactNode;
   onPress: () => void;
+  style?: ViewStyle;
 };
 export default function LeftAccentCard({
   theme,
   children,
   onPress,
+  style,
 }: ListCardProps) {
   const surface = useTheme().colors.surface;
 
@@ -31,6 +34,7 @@ export default function LeftAccentCard({
         paddingBottom: 4,
         marginBottom: 10,
         flexDirection: "row",
+        ...style,
       }}
       onPress={onPress}
     >
