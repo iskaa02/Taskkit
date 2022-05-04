@@ -7,7 +7,7 @@ import { MotiView } from "moti";
 import { Box, Text } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet } from "react-native";
 import CheckBox from "./CheckBox";
 import Chip from "./Chip";
 type TaskCardProps = {
@@ -30,43 +30,40 @@ function TaskCard({
         animate={{
           top: 0,
           opacity: task.isCompleted ? 0.6 : 1,
-          height: undefined,
-          marginBottom: 10,
         }}
         transition={{
           delay: options.animationDelay,
-          type: "spring",
-          damping: 28,
+          damping: 20,
+          stiffness: 200,
         }}
-        from={{ top: 18, opacity: 0.4, marginBottom: 0 }}
+        from={{ top: 18, opacity: 0.2 }}
         exit={{
           height: 0,
           opacity: 0,
           marginBottom: -1,
           paddingVertical: 0,
         }}
+        style={styles.container}
       >
-        <View style={styles.container}>
-          <Box alignSelf="flex-start" pt="1">
-            <CheckBox
-              value={task.isCompleted}
-              onToggle={i => task.setIsCompleted(i)}
-              color={accent}
-            />
-          </Box>
-          <Box flexWrap="wrap" alignItems="center" flex={1} flexDir="row">
-            <Text
-              textAlign="left"
-              noOfLines={3}
-              fontSize="xl"
-              color={accent}
-              textDecorationLine={task.isCompleted ? "line-through" : undefined}
-            >
-              {task.name}
-            </Text>
-            {!task.reminder ? null : <DateChip date={task.reminder} />}
-          </Box>
-        </View>
+        <Box alignSelf="flex-start" pt="1">
+          <CheckBox
+            value={task.isCompleted}
+            onToggle={i => task.setIsCompleted(i)}
+            color={accent}
+          />
+        </Box>
+        <Box flexWrap="wrap" alignItems="center" flex={1} flexDir="row">
+          <Text
+            textAlign="left"
+            noOfLines={3}
+            fontSize="xl"
+            color={accent}
+            textDecorationLine={task.isCompleted ? "line-through" : undefined}
+          >
+            {task.name}
+          </Text>
+          {!task.reminder ? null : <DateChip date={task.reminder} />}
+        </Box>
       </MotiView>
     </Pressable>
   );
@@ -99,5 +96,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: 10,
   },
 });

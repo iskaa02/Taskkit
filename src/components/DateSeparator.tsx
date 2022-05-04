@@ -25,3 +25,9 @@ export default function ({ date, previous, l }: SeparatorProps) {
     </Box>
   );
 }
+export function shouldRenderDateSeparator(date: Date, previous: Date | null) {
+  if (dayjs(date).isSame(previous, "day")) {
+    return false;
+  }
+  return true;
+}

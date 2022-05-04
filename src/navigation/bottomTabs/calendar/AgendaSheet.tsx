@@ -7,7 +7,7 @@ import Task from "@/db/models/Task";
 import withDB from "@/db/models/withDB";
 import { queryTasks } from "@/db/queries";
 import { useNavigationProps } from "@/navigation/navPropsType";
-import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { Q } from "@nozbe/watermelondb";
 import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
@@ -41,17 +41,23 @@ const RawAgendaSheet = ({ tasks, selectedDate }: AgendaProps) => {
       backgroundStyle={{ backgroundColor: colors.background }}
       snapPoints={snapPoints}
     >
-      <BottomSheetScrollView
+      <BottomSheetFlatList
+        data={tasks}
         contentContainerStyle={{ paddingBottom: 40, paddingHorizontal: 10 }}
-      >
-        {!selectedDate ? (
-          tasks.length !== 0 ? null : (
-            <DateSeparator l={selectedDate ?? dayjs().toString()} />
-          )
-        ) : (
-          <DateSeparator l={selectedDate ?? dayjs().toString()} />
-        )}
-        {tasks.map((v, i) => {
+        ListHeaderComponent={() => {
+          return (
+            <>
+              {!selectedDate ? (
+                tasks.length !== 0 ? null : (
+                  <DateSeparator l={selectedDate ?? dayjs().toString()} />
+                )
+              ) : (
+                <DateSeparator l={selectedDate ?? dayjs().toString()} />
+              )}
+            </>
+          );
+        }}
+        renderItem={({ item: v, index: i }) => {
           const previous = i === 0 ? null : tasks[i - 1].reminder;
           return (
             <Box key={v.id}>
@@ -61,8 +67,8 @@ const RawAgendaSheet = ({ tasks, selectedDate }: AgendaProps) => {
               <AgendaCard navigation={navigation} key={v.id} task={v} />
             </Box>
           );
-        })}
-      </BottomSheetScrollView>
+        }}
+      />
     </BottomSheet>
   );
 };
@@ -78,6 +84,7 @@ export const AgendaSheet = withDB<AgendaProps, { tasks: Task[] }>(
           ? dayjs(selectedDate).endOf("day").valueOf()
           : undefined,
       },
+      Q.where(Columns.task.isCompleted, Q.eq(false)),
       Q.sortBy(Columns.task.reminder, Q.asc)
     ),
   })
