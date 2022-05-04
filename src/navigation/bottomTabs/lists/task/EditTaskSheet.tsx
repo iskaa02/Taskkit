@@ -12,7 +12,6 @@ import dayjs from "dayjs";
 import { Box, Input, KeyboardAvoidingView, useTheme } from "native-base";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { I18nManager } from "react-native";
 
 type EditTaskSheetProps = {
   task: Task;
@@ -56,7 +55,6 @@ export const EditTaskSheet = React.forwardRef<
           <Box bg="surface" px="5" pt="2">
             <Label l={t("task-title")} mb={2} />
             <Input
-              textAlign={I18nManager.isRTL ? "right" : "left"}
               h="40px"
               defaultValue={name}
               onChangeText={i => setName(i)}
@@ -66,7 +64,6 @@ export const EditTaskSheet = React.forwardRef<
             <Label mb={2} l={t("description")} mt="5" />
 
             <Input
-              textAlign={I18nManager.isRTL ? "right" : "left"}
               defaultValue={description}
               onChangeText={i => setDescription(i)}
               fontSize="lg"

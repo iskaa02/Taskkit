@@ -7,7 +7,7 @@ import { MotiView } from "moti";
 import { Box, Text } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { I18nManager, Pressable, StyleSheet, View } from "react-native";
+import { Pressable, StyleSheet, View } from "react-native";
 import CheckBox from "./CheckBox";
 import Chip from "./Chip";
 type TaskCardProps = {
@@ -56,7 +56,7 @@ function TaskCard({
           </Box>
           <Box flexWrap="wrap" alignItems="center" flex={1} flexDir="row">
             <Text
-              textAlign={I18nManager.isRTL ? "right" : "left"}
+              textAlign="left"
               noOfLines={3}
               fontSize="xl"
               color={accent}

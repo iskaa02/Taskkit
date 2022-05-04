@@ -5,7 +5,6 @@ import { Icon, Input, Text } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import {
-  I18nManager,
   NativeSyntheticEvent,
   Pressable,
   TextInput,
@@ -63,7 +62,7 @@ export const SubtaskCard = React.forwardRef<TextInput, SubtaskCardProps>(
           ref={ref}
           fontSize="lg"
           variant="unstyled"
-          textAlign={I18nManager.isRTL ? "right" : "left"}
+          textAlign="left"
           flex={1}
           color={color}
           multiline={blurOnSubmit}

@@ -15,7 +15,6 @@ import isToday from "dayjs/plugin/isToday";
 import isTomorrow from "dayjs/plugin/isTomorrow";
 import { Box, Text, useTheme } from "native-base";
 import React, { useMemo } from "react";
-import { I18nManager } from "react-native";
 dayjs.extend(isToday);
 dayjs.extend(isTomorrow);
 
@@ -101,12 +100,7 @@ const RawAgendaCard = ({ list, task, navigation }: AgendaCardProps) => {
     >
       <Box alignItems="flex-start" flexDir="row">
         <Box w="73%">
-          <Text
-            textAlign={I18nManager.isRTL ? "right" : "left"}
-            fontSize="xl"
-            bold
-            noOfLines={3}
-          >
+          <Text textAlign="left" fontSize="xl" bold noOfLines={3}>
             {task.name}
           </Text>
           <Text fontSize="md" textAlign="justify">

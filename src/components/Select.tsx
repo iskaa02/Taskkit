@@ -85,7 +85,7 @@ const SelectSheet = React.forwardRef<BottomSheetModalMethods, SelectProps>(
                     size={20}
                   />
                 </Box>
-                <Text textAlign="justify" fontSize="lg" flex={1} color="em.2">
+                <Text textAlign="left" fontSize="lg" flex={1} color="em.2">
                   {typeof item == "string" ? item : item.label}
                 </Text>
               </Pressable>

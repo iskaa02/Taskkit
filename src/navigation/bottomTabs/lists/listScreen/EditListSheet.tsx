@@ -7,7 +7,6 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import { Box, Input, Text, useTheme } from "native-base";
 import React from "react";
 import { useTranslation } from "react-i18next";
-import { I18nManager } from "react-native";
 import { ThemeButton } from "./AddListSheet";
 
 type EditListSheetProps = {
@@ -48,7 +47,7 @@ export const EditListSheet = React.forwardRef<
           {t("list-name")}
         </Text>
         <Input
-          textAlign={I18nManager.isRTL ? "right" : "left"}
+          textAlign="left"
           h="40px"
           defaultValue={name}
           onChangeText={i => setName(i)}
