@@ -1,7 +1,7 @@
 import Fab from "@/components/Fab";
 import StatusBar from "@/components/StatusBar";
 import TaskCard from "@/components/TaskCard";
-import { Columns, Tables } from "@/db/models/schema";
+import { Columns } from "@/db/models/schema";
 import Task from "@/db/models/Task";
 import withDB from "@/db/models/withDB";
 import { getIntervalDate as getDateHelper, queryTasks } from "@/db/queries";
@@ -11,7 +11,6 @@ import {
 } from "@/navigation/navPropsType";
 import { Feather } from "@expo/vector-icons";
 import { Q } from "@nozbe/watermelondb";
-import { column } from "@nozbe/watermelondb/QueryDescription";
 import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
 import { Box, Icon, Text } from "native-base";
