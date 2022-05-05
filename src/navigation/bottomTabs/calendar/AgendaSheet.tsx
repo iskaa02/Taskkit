@@ -15,21 +15,32 @@ import isToday from "dayjs/plugin/isToday";
 import isTomorrow from "dayjs/plugin/isTomorrow";
 import { Box, Text, useTheme } from "native-base";
 import React, { useMemo } from "react";
+import { useWindowDimensions } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 dayjs.extend(isToday);
 dayjs.extend(isTomorrow);
 
 type AgendaProps = {
   tasks: Task[];
   selectedDate: string | undefined;
+  calendarHeight: number;
 };
 
-const RawAgendaSheet = ({ tasks, selectedDate }: AgendaProps) => {
+const RawAgendaSheet = ({
+  tasks,
+  selectedDate,
+  calendarHeight,
+}: AgendaProps) => {
   const navigation = useNavigation<useNavigationProps>();
-  const snapPoints = useMemo(() => ["45%", "90%"], []);
+  const { height: deviceHeight } = useWindowDimensions();
+  const { top } = useSafeAreaInsets();
+  const snapPoints = useMemo(
+    () => [deviceHeight - calendarHeight - top - 20, "90%"],
+    [calendarHeight]
+  );
   const colors = useTheme().colors;
   return (
     <BottomSheet
-      animateOnMount={false}
       backdropComponent={p => (
         <Backdrop pointerEvents="none" {...p} from={[0, 1]} />
       )}

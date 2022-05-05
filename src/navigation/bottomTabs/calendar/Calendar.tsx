@@ -8,7 +8,7 @@ import { Feather } from "@expo/vector-icons";
 import { Q } from "@nozbe/watermelondb";
 import Database from "@nozbe/watermelondb/Database";
 import { Box, Icon } from "native-base";
-import React from "react";
+import React, { useState } from "react";
 import { I18nManager } from "react-native";
 import { Calendar } from "react-native-calendars";
 import { useMMKVString } from "react-native-mmkv";
@@ -24,17 +24,23 @@ function RawScreen({ tasks, database }: ScreenProps) {
   const [selectedDate, setSelectedDate] = React.useState<string>();
   // Rerender when language change
   useMMKVString("lang", storage);
+  const [height, setHeight] = useState(0);
   const { onChange, markedDates } = useDateMarks(
     selectedDate,
     i => setSelectedDate(i),
     tasks
   );
-
   return (
     <SafeAreaView style={{ backgroundColor: "#323232", flex: 1 }}>
       <StatusBar barStyle="light-content" />
-
-      <Box bg="#323232" h="60%" pt="4" px="2">
+      <Box
+        onLayout={({ nativeEvent }) => {
+          setHeight(nativeEvent.layout.height);
+        }}
+        bg="#323232"
+        pt="4"
+        px="2"
+      >
         <Calendar
           theme={{
             backgroundColor: "#323232",
@@ -69,8 +75,7 @@ function RawScreen({ tasks, database }: ScreenProps) {
           markingType={"multi-dot"}
         />
       </Box>
-
-      <AgendaSheet selectedDate={selectedDate} />
+      <AgendaSheet calendarHeight={height} selectedDate={selectedDate} />
     </SafeAreaView>
   );
 }
