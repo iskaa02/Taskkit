@@ -60,13 +60,13 @@
 
 ## Screenshots
 
-<div style="display:flex;height:500px;justify-content:space-between">
-<img  src="./screenshots/Screenshot1.png"  />
-<img src="./screenshots/Screenshot2.png"  />
-<img src="./screenshots/Screenshot3.png"  />
-<img src="./screenshots/Screenshot4.png"  />
+<div style="display:flex;justify-content:space-between">
+<img  src="./screenshots/Screenshot1.png"height="450px"  />
+<img src="./screenshots/Screenshot2.png"height="450px"  />
+<img src="./screenshots/Screenshot3.png" height="450px" />
+<img src="./screenshots/Screenshot4.png" height="450px />
 </div>
-
+                                            
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ### Built With
@@ -93,7 +93,7 @@
    yarn
    ```
 
-4. Build project with EAS
+4. Build project with expo EAS
 
    for development change the --profile argument to development
 
