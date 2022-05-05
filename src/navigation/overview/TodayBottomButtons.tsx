@@ -6,7 +6,11 @@ import { showPicker } from "../../hooks/DatePicker";
 import { BottomButton } from "./bottomButtons/Button";
 import { ButtonPageProps } from "./bottomButtons/MainBottomButtons";
 
-export function TodayBottomButtons({ removeTask, task }: ButtonPageProps) {
+export function TodayBottomButtons({
+  removeTask,
+  task,
+  setPage,
+}: ButtonPageProps) {
   const todayData = [
     { hour: "9", am: "AM" },
     { hour: "12", am: "PM" },
@@ -25,6 +29,7 @@ export function TodayBottomButtons({ removeTask, task }: ButtonPageProps) {
       }
       task.editTask({ reminder: dayjs().hour(hour).minute(0).toDate() });
       removeTask();
+      setPage("main");
     },
     [task]
   );

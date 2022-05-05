@@ -12,15 +12,19 @@ export default function ModalView({ children }: ModalViewProps) {
   return (
     <SafeAreaView style={{ backgroundColor: background, flex: 1 }}>
       <Box flex={1}>
-        <Pressable
-          alignSelf="flex-end"
-          onPress={() => navigation.goBack()}
-          position="absolute"
-          mt="5"
-          p="4"
-        >
-          <Icon as={<Feather name="x" />} size={23} color="em.1" />
-        </Pressable>
+        <Box w="100%" position="absolute">
+          <Pressable
+            h="64px"
+            alignSelf="flex-end"
+            m="3"
+            w="64px"
+            justifyContent="center"
+            alignItems="center"
+            onPress={() => navigation.goBack()}
+          >
+            <Icon as={<Feather name="x" />} size={23} color="em.1" />
+          </Pressable>
+        </Box>
         <Box mb="20" />
         {children}
       </Box>

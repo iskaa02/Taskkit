@@ -6,7 +6,11 @@ import { BottomButton } from "./Button";
 import { ButtonPageProps } from "./MainBottomButtons";
 import { useTranslation } from "react-i18next";
 
-export function LaterBottomButtons({ task, removeTask }: ButtonPageProps) {
+export function LaterBottomButtons({
+  task,
+  removeTask,
+  setPage,
+}: ButtonPageProps) {
   const direction = I18nManager.isRTL ? "left" : "right";
   const laterData = [
     { icon: `chevron-${direction}`, label: "tomorrow" },
@@ -28,6 +32,7 @@ export function LaterBottomButtons({ task, removeTask }: ButtonPageProps) {
 
       task.editTask({ reminder: date.toDate() });
       removeTask();
+      setPage("main");
     },
     [task]
   );

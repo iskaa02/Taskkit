@@ -16,12 +16,6 @@ export default function NoTasks() {
         <Fade delay={70}>
           <Text fontSize="2xl">{t("enjoy-your-day")}</Text>
         </Fade>
-        <Box
-          mt="auto"
-          mb="40"
-          justifyContent="center"
-          alignItems="center"
-        ></Box>
       </Box>
     </ModalView>
   );

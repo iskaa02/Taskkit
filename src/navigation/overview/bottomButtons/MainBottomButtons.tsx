@@ -7,15 +7,14 @@ import { BottomButton } from "./Button";
 
 export type ButtonPageProps = {
   removeTask: () => void;
+  setPage: React.Dispatch<React.SetStateAction<"main" | "today" | "later">>;
   task: Task;
 };
 export function MainButtons({
   task,
   removeTask,
   setPage,
-}: ButtonPageProps & {
-  setPage: React.Dispatch<React.SetStateAction<"main" | "today" | "later">>;
-}) {
+}: ButtonPageProps & {}) {
   const { t } = useTranslation();
   const mainButtonData = [
     {

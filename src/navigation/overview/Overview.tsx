@@ -17,14 +17,11 @@ import {
   useSharedValue,
   withTiming,
 } from "react-native-reanimated";
-import { RootStackScreenProps } from "../navPropsType";
 import BottomButtons from "./bottomButtons/BottomButtons";
 import { Fade } from "./Fade";
 import ModalView from "./ModalView";
 import NoTasks from "./NoTasks";
-export default function Overview({
-  navigation,
-}: RootStackScreenProps<"Overview">) {
+export default function Overview() {
   const { background } = useTheme().colors;
   React.useLayoutEffect(() => {
     NavigationBar.setBackgroundColorAsync(background);
@@ -129,6 +126,7 @@ const ActiveTask = withDB(
         key={task.id}
         from={{ bottom: 70 }}
         animate={{ bottom: 0 }}
+        exit={{ left: 14, opacity: 0 }}
         transition={{
           type: "timing",
           duration: 800,
@@ -149,13 +147,15 @@ const ActiveTask = withDB(
           transition={{ type: "timing", duration: 300, delay: 600 }}
           style={{ height: 35 }}
         >
-          <Box h={40}>
-            <Text numberOfLines={2} fontSize="2xl" mx="4" color="em.1" bold>
-              {task.name}
-            </Text>
-            <Text fontSize="sm" mx="4" color="em.2">
-              {list.name}
-            </Text>
+          <Box>
+            <Box>
+              <Text numberOfLines={2} fontSize="2xl" mx="4" color="em.1" bold>
+                {task.name}
+              </Text>
+              <Text fontSize="sm" mx="4" color="em.2">
+                {list.name}
+              </Text>
+            </Box>
           </Box>
         </MotiView>
       </MotiView>

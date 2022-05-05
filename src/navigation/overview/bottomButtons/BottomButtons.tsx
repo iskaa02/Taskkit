@@ -32,6 +32,7 @@ export default function BottomButtons({ tasks, setTasks }: BottomButtonsProps) {
     setTasks(tasks => tasks.slice(1));
   }, []);
   const { t } = useTranslation();
+  const pageProps = { task: tasks[0], removeTask, setPage };
   return (
     <>
       <Pressable
@@ -56,7 +57,10 @@ export default function BottomButtons({ tasks, setTasks }: BottomButtonsProps) {
         _dark={{
           _pressed: { backgroundColor: "blue.700:alpha.40" },
         }}
-        onPress={removeTask}
+        onPress={() => {
+          removeTask();
+          setPage("main");
+        }}
       >
         <Text
           fontSize="lg"
@@ -72,19 +76,9 @@ export default function BottomButtons({ tasks, setTasks }: BottomButtonsProps) {
         borderColor="em.4:alpha.50"
         borderTopWidth={1}
       >
-        {page !== "main" ? null : (
-          <MainButtons
-            task={tasks[0]}
-            removeTask={removeTask}
-            setPage={setPage}
-          />
-        )}
-        {page !== "today" ? null : (
-          <TodayBottomButtons task={tasks[0]} removeTask={removeTask} />
-        )}
-        {page !== "later" ? null : (
-          <LaterBottomButtons task={tasks[0]} removeTask={removeTask} />
-        )}
+        {page !== "main" ? null : <MainButtons {...pageProps} />}
+        {page !== "today" ? null : <TodayBottomButtons {...pageProps} />}
+        {page !== "later" ? null : <LaterBottomButtons {...pageProps} />}
       </Box>
     </>
   );
