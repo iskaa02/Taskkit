@@ -99,10 +99,10 @@ const ListChips = ({
         <Text
           style={{ marginEnd: 10 }}
           mt="10px"
-          px="3"
+          px="10px"
           alignItems="center"
           textAlign="center"
-          py="1"
+          py="2px"
           fontSize="md"
           color="em.3"
           borderWidth={1}
