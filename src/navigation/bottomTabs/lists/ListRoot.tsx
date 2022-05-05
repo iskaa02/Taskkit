@@ -49,7 +49,7 @@ function ListRoot(p: ListStackScreenProps<"Root">) {
       <Heading mx="20px" mt="20px" mb="10px">
         {t("list", { count: 10, postProcess: "interval" })}
       </Heading>
-      <ScrollView px="10px">
+      <ScrollView>
         <ListView {...p} database={database} />
       </ScrollView>
       <Fab
@@ -106,6 +106,7 @@ const RawCard = ({
   const { t } = useTranslation();
   return (
     <LeftAccentCard
+      style={{ marginHorizontal: 10 }}
       onPress={() => {
         navigation.push("List", {
           listID: list.id,

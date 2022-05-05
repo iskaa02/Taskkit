@@ -57,10 +57,11 @@ const ListChips = ({
   initialListID,
 }: ListChipsProps) => {
   React.useEffect(() => {
+    if (activeListID) return;
     if (initialListID) {
       setActiveListID(initialListID);
     } else if (lists[0]) setActiveListID(lists[0].id);
-  }, []);
+  }, [initialListID, lists, activeListID]);
   const sheetRef = useRef<BottomSheetModal>(null);
   const { t } = useTranslation();
   return (

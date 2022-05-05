@@ -5,19 +5,15 @@ export type listThemeType = {
 export const listThemes: { [x: string]: listThemeType } = {
   mint: {
     main: "#BAE2A7",
-    secondary: "#2B6735",
+    secondary: "#3C904A",
   },
   lightBlue: {
     main: "#A7DEE2",
-    secondary: "#2B6367",
+    secondary: "#3C8B90",
   },
   pink: {
     main: "#E2A7A7",
-    secondary: "#672B2B",
-  },
-  purple: {
-    main: "#AFA7E2",
-    secondary: "#332B67",
+    secondary: "#903C3C",
   },
   givry: {
     main: "#F7D2BF",
@@ -29,6 +25,10 @@ export const listThemes: { [x: string]: listThemeType } = {
   },
   ocean: {
     main: "#4293FF",
+  },
+  purple: {
+    main: "#AFA7E2",
+    secondary: "#483C90",
   },
 };
 export type listThemesEnum =
