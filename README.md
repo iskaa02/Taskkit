@@ -81,7 +81,15 @@
 <!-- GETTING STARTED -->
 
 ### Installation
-
+                                
+For Android you can download prebuilt binary APK file from [releases page](https://github.com/iskaa02/Taskkit/releases/tag/v1.0.0).
+                                
+For iOS you have to build the project on your own.
+                                
+### Building
+                                
+#### Using Expo Eas build
+                                
 1. Make an [expo account](https://expo.dev/)
 2. Clone the repo
    ```sh
@@ -102,6 +110,14 @@
    ```sh
    eas build -p android --profile production
    ```
+#### Building using Android studio Or Xcode
+
+1. Install expo cli
+
+2. Run 
+    `expo prebuild`
+
+3. expo should generate android/ and ios/ folders
 
    <p align="right">(<a href="#top">back to top</a>)</p>
 
