@@ -48,6 +48,7 @@
     "react-dom": "17.0.1",
     "react-i18next": "^11.16.6",
     "react-native": "0.64.3",
+    "react-native-autolink": "^4.0.0",
     "react-native-calendars": "^1.1279.0",
     "react-native-flipper": "^0.144.0",
     "react-native-gesture-handler": "~2.1.0",

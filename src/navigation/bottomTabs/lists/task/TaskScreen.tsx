@@ -16,11 +16,11 @@ import {
   Heading,
   KeyboardAvoidingView,
   ScrollView,
-  Text,
   useColorModeValue,
 } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
+import Autolink from "react-native-autolink";
 import EditHeaderButton from "../EditHeaderButton";
 import { EditTaskSheet } from "./EditTaskSheet";
 import { DateInfo, SubtaskSection } from "./TaskInfo";
@@ -104,11 +104,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
             </Heading>
           </Box>
         </Box>
-        {task.description ? (
-          <Text py={3} bg={accent} px="20px" color={"em.10"} fontSize="md">
-            {task.description}
-          </Text>
-        ) : null}
+        <Description accent={accent} text={task.description} />
         <Box px="20px">
           <Box mt="4">
             {!!task.reminder?.valueOf() ? (
@@ -167,3 +163,24 @@ const Screen = withDB<TaskScreenProps, { task: Task }>(
     };
   }
 );
+
+type DescriptionProps = {
+  text: string;
+  accent: string;
+};
+const Description = ({ text, accent }: DescriptionProps) => {
+  const defaultTextColor = useColorModeValue("#fff", "#000");
+  if (!text) return null;
+  return (
+    <Box px="20px" py="3" bg={accent}>
+      <Autolink
+        textProps={{ style: { fontSize: 18, color: defaultTextColor } }}
+        linkStyle={{
+          fontSize: 18,
+          textDecorationLine: "underline",
+        }}
+        text={text}
+      />
+    </Box>
+  );
+};
