@@ -95,7 +95,7 @@ export default class Task extends Model {
   }: editTaskType) {
     this.update(r => {
       if (name) r.name = name;
-      if (description) r.description = description;
+      if (typeof description !== "undefined") r.description = description;
       if (typeof repeat !== "undefined") {
         r.repeat = repeat;
       }
