@@ -262,6 +262,7 @@ const Description = ({ text, accent, onChange }: DescriptionProps) => {
             linkStyle={{
               fontSize: 18,
               textDecorationLine: "underline",
+              color: defaultTextColor,
             }}
             text={text}
           />
