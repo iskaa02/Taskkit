@@ -13,7 +13,6 @@ import Database from "@nozbe/watermelondb/Database";
 import dayjs from "dayjs";
 import {
   Box,
-  Heading,
   Input,
   KeyboardAvoidingView,
   Pressable,
@@ -99,13 +98,22 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
               />
             </Box>
 
-            <Heading
-              color={"em.10"}
-              strikeThrough={task.isCompleted}
+            <Input
+              fontSize="3xl"
+              fontWeight="bold"
+              variant="unstyled"
+              textAlign="left"
+              color="em.10"
+              textDecorationLine={task.isCompleted ? "line-through" : undefined}
+              defaultValue={task.name}
               textBreakStrategy="balanced"
-            >
-              {task.name}
-            </Heading>
+              multiline
+              blurOnSubmit
+              onEndEditing={e => {
+                task.editTask({ name: e.nativeEvent.text });
+              }}
+              p="0"
+            />
           </Box>
         </Box>
         <Description
