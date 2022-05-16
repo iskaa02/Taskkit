@@ -1,39 +1,88 @@
 import { AddSubtask, SubtaskCard } from "@/components/Subtasks";
+import { repeatType } from "@/db/models/scheduleNotification";
 import Task from "@/db/models/Task";
 import { Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { AnimatePresence, MotiView } from "moti";
-import { Box, Icon, Text } from "native-base";
+import dayjs from "dayjs";
+import { AnimatePresence } from "moti";
+import { Box, Icon, Text, useColorModeValue, useTheme } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
+import { TouchableOpacity } from "react-native";
 import useSubtaskReducer from "./SubtasksReducer";
 
 type ExtraInfoProps = {
   iconName: string;
   label: string;
-  index: number;
+  isDisabled?: boolean;
 };
-export const DateInfo = ({ iconName, label, index }: ExtraInfoProps) => {
-  if (label == "") return null;
+type TaskDateSectionProps = {
+  reminder: Date | null;
+  repeat: repeatType;
+};
+export default function TaskDateSection({
+  reminder,
+  repeat,
+}: TaskDateSectionProps) {
+  const { t } = useTranslation();
   return (
-    <MotiView
-      animate={{ bottom: 0, opacity: 1 }}
-      from={{ opacity: 0.5, bottom: 18 }}
-      transition={{ damping: 25, delay: index * 90 }}
-    >
-      <Box mb="3" py="1" flexDir="row" alignItems="center">
-        <Icon
-          style={{ marginEnd: 20 }}
-          as={<Feather />}
-          name={iconName}
-          color="em.2"
-          size="22px"
+    <>
+      <Box flexDir="row" justifyContent="space-between" flexWrap="wrap">
+        <ReminderButton
+          isDisabled={!reminder}
+          iconName="calendar"
+          label={dayjs(reminder ?? undefined).format(
+            dayjs(reminder ?? undefined).isSame(Date.now(), "year")
+              ? "ddd, MMM D"
+              : "ddd, MMM D, YYYY"
+          )}
         />
-        <Text fontSize="md" color="em.2">
-          {label}
-        </Text>
+        <ReminderButton
+          isDisabled={!reminder}
+          iconName="clock"
+          label={dayjs(reminder ?? undefined).format("h:mm A")}
+        />
+        <ReminderButton
+          isDisabled={!reminder}
+          iconName="repeat"
+          label={t(repeat ? `r-${repeat}` : "none")}
+        />
       </Box>
-    </MotiView>
+    </>
+  );
+}
+const ReminderButton = ({ iconName, label, isDisabled }: ExtraInfoProps) => {
+  const { surface } = useTheme().colors;
+  const borderColor = useColorModeValue("#eaeaea", "#787878");
+  return (
+    <TouchableOpacity
+      style={{
+        marginBottom: 10,
+        backgroundColor: surface,
+        alignItems: "center",
+        paddingHorizontal: 10,
+        width: "49%",
+        height: 50,
+        borderRadius: 10,
+        flexDirection: "row",
+        opacity: isDisabled ? 0.7 : 1,
+        borderWidth: 1,
+        borderColor,
+      }}
+      disabled={isDisabled}
+      activeOpacity={0.7}
+    >
+      <Icon
+        as={Feather}
+        style={{ marginEnd: 8 }}
+        name={iconName}
+        color="em.2"
+        size="20px"
+      />
+      <Text flex={1} isTruncated fontSize="md" color="em.2">
+        {label}
+      </Text>
+    </TouchableOpacity>
   );
 };
 type SubtaskSectionProps = {

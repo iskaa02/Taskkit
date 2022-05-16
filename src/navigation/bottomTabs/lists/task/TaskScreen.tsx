@@ -1,6 +1,7 @@
 import CheckBox from "@/components/CheckBox";
 import Footer from "@/components/Footer";
 import StatusBar from "@/components/StatusBar";
+import Switch from "@/components/Switch";
 import { database } from "@/db/db";
 import { Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
@@ -10,23 +11,20 @@ import useKeyboardStatus from "@/hooks/useKeyboardStatus";
 import { ListStackScreenProps } from "@/navigation/navPropsType";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import Database from "@nozbe/watermelondb/Database";
-import dayjs from "dayjs";
 import {
   Box,
   Input,
   KeyboardAvoidingView,
-  Pressable,
   ScrollView,
   Text,
   useColorModeValue,
 } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { TextInput } from "react-native";
-import Autolink from "react-native-autolink";
 import EditHeaderButton from "../EditHeaderButton";
+import Description from "./Description";
 import { EditTaskSheet } from "./EditTaskSheet";
-import { DateInfo, SubtaskSection } from "./TaskInfo";
+import TaskDateSection, { SubtaskSection } from "./TaskInfo";
 
 export default function TaskScreen(p: ListStackScreenProps<"Task">) {
   return <Screen database={database} taskID={p.route.params.taskID} {...p} />;
@@ -125,31 +123,22 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
         />
         <Box px="20px">
           <Box mt="4">
-            {!!task.reminder?.valueOf() ? (
-              <>
-                <DateInfo
-                  index={0}
-                  iconName="calendar"
-                  label={dayjs(task.reminder).format(
-                    dayjs(task.reminder).isSame(Date.now(), "year")
-                      ? "ddd, MMM D"
-                      : "ddd, MMM D, YYYY"
-                  )}
-                />
-                <DateInfo
-                  index={1}
-                  iconName="clock"
-                  label={dayjs(task.reminder).format("h:mm A")}
-                />
-                {!task.repeat ? null : (
-                  <DateInfo
-                    index={2}
-                    iconName="repeat"
-                    label={t("r-" + task.repeat)}
-                  />
-                )}
-              </>
-            ) : null}
+            <Box mb={2} flexDir="row" justifyContent="space-between">
+              <Text bold color="em.1" fontSize="2xl">
+                {t("reminders")}
+              </Text>
+              <Switch
+                value={!!task.reminder}
+                onValueChange={i => {
+                  if (i) {
+                    task.editTask({ reminder: new Date(Date.now()) });
+                  } else {
+                    task.editTask({ reminder: null, repeat: null });
+                  }
+                }}
+              />
+            </Box>
+            <TaskDateSection reminder={task.reminder} repeat={task.repeat} />
           </Box>
           <SubtaskSection {...{ accent, task }} />
         </Box>
@@ -181,93 +170,3 @@ const Screen = withDB<TaskScreenProps, { task: Task }>(
     };
   }
 );
-
-type DescriptionProps = {
-  text: string;
-  onChange: (n: string) => void;
-  accent: string;
-};
-const Description = ({ text, accent, onChange }: DescriptionProps) => {
-  const defaultTextColor = useColorModeValue("#fff", "#000");
-  const [editable, setEditable] = React.useState(false);
-  const inputRef = React.useRef<TextInput>(null);
-  const { t } = useTranslation();
-  React.useEffect(() => {
-    if (editable) inputRef.current?.focus();
-  }, [editable]);
-  if (!text && !editable)
-    return (
-      <Box px="20px" py="15px">
-        <Pressable
-          onPress={() => {
-            setEditable(true);
-          }}
-          _pressed={{ opacity: 0.7 }}
-          w="100%"
-          py="2"
-          rounded="lg"
-          borderStyle="dashed"
-          borderWidth={2}
-          justifyContent="center"
-          alignItems="center"
-          borderColor="em.1:alpha.70"
-          bg="em.1:alpha.10"
-        >
-          <Text fontSize="lg">{t("add") + " " + t("description")}</Text>
-        </Pressable>
-      </Box>
-    );
-
-  return (
-    <Pressable
-      px="15px"
-      py="10px"
-      bg={accent}
-      onLongPress={() => {
-        setEditable(true);
-      }}
-    >
-      <Box
-        px="5px"
-        borderColor={editable ? "em.10:alpha.30" : "transparent"}
-        rounded="md"
-        borderWidth={1}
-      >
-        {editable ? (
-          <Input
-            fontSize={18}
-            ref={inputRef}
-            variant="unstyled"
-            textAlign="left"
-            selectionColor="em.10"
-            color={defaultTextColor}
-            multiline
-            defaultValue={text}
-            onEndEditing={i => {
-              setEditable(false);
-              onChange(i.nativeEvent.text);
-            }}
-            p="0"
-            m="0"
-          />
-        ) : null}
-        {editable ? null : (
-          <Autolink
-            textProps={{
-              style: {
-                fontSize: 18,
-                color: defaultTextColor,
-              },
-            }}
-            linkStyle={{
-              fontSize: 18,
-              textDecorationLine: "underline",
-              color: defaultTextColor,
-            }}
-            text={text}
-          />
-        )}
-      </Box>
-    </Pressable>
-  );
-};
