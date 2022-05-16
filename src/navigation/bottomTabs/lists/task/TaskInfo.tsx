@@ -28,9 +28,9 @@ export default function TaskDateSection({
   const sheetRef = React.useRef<BottomSheetModal>(null);
   if (!reminder) {
     return (
-      <>
+      <Box mb="10px">
         <Text fontSize="md">{t("no-reminder-set")}</Text>
-      </>
+      </Box>
     );
   }
   return (
@@ -164,7 +164,7 @@ export const SubtaskSection = ({ accent, task }: SubtaskSectionProps) => {
     };
   }, []);
   return (
-    <>
+    <Box mb="10">
       <Text mt={4} bold color="em.1" fontSize="2xl">
         {t("subtask", { count: 1 })}
       </Text>
@@ -198,6 +198,6 @@ export const SubtaskSection = ({ accent, task }: SubtaskSectionProps) => {
         }}
         color={accent}
       />
-    </>
+    </Box>
   );
 };

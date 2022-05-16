@@ -6,13 +6,14 @@ import { database } from "@/db/db";
 import { Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
 import withDB from "@/db/models/withDB";
+import { storage } from "@/db/storage";
 import useAccent from "@/hooks/useAccent";
 import useKeyboardStatus from "@/hooks/useKeyboardStatus";
 import { ListStackScreenProps } from "@/navigation/navPropsType";
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
 import Database from "@nozbe/watermelondb/Database";
 import {
   Box,
+  Button,
   Input,
   KeyboardAvoidingView,
   ScrollView,
@@ -21,9 +22,9 @@ import {
 } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import EditHeaderButton from "../EditHeaderButton";
+import { Alert } from "react-native";
+import ChangeList from "./ChangeList";
 import Description from "./Description";
-import { EditTaskSheet } from "./EditTaskSheet";
 import TaskDateSection, { SubtaskSection } from "./TaskInfo";
 
 export default function TaskScreen(p: ListStackScreenProps<"Task">) {
@@ -37,38 +38,23 @@ type TaskScreenProps = ListStackScreenProps<"Task"> & {
 };
 const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
   const tintColor = useColorModeValue("#fff", "#000");
-  const accent = useAccent(route.params.theme);
-  const secondary = useAccent(route.params.theme, { flip: true });
-  const sheetRef = React.useRef<BottomSheetModalMethods>(null);
+  const [theme, setTheme] = React.useState(route.params.theme);
+  const accent = useAccent(theme);
+  const secondary = useAccent(theme, { flip: true });
+  const keyboardVisible = useKeyboardStatus();
+  const { t } = useTranslation();
+
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerStyle: {
         backgroundColor: accent,
       },
       headerTintColor: tintColor,
-      headerRight: () => (
-        <EditHeaderButton
-          onEditPress={() => {
-            sheetRef.current?.present();
-          }}
-          onDeletePress={() => {
-            database.write(async () => {
-              await task.markAsDeleted();
-            });
-            navigation.goBack();
-          }}
-          name={task.name}
-          tintColor={tintColor}
-        />
-      ),
     });
-  }, [route.params, navigation]);
-  const keyboardVisible = useKeyboardStatus();
-  const topCheckboxColor = useColorModeValue("#fff", "#000");
-  const { t } = useTranslation();
+  }, [theme, navigation]);
+
   return (
     <KeyboardAvoidingView bg="background" flex={1}>
-      <EditTaskSheet ref={sheetRef} task={task} />
       <StatusBar _dark={"dark-content"} _light={"light-content"} />
       <ScrollView
         _contentContainerStyle={{
@@ -78,42 +64,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
         }}
         stickyHeaderIndices={[0]}
       >
-        <Box
-          borderBottomWidth="1"
-          borderBottomColor={"em.10"}
-          bg={accent}
-          px="20px"
-          pb={3}
-        >
-          <Box flexDirection="row" alignItems="center">
-            <Box alignSelf="flex-start" pt="1">
-              <CheckBox
-                size={25}
-                iconColor={accent}
-                color={topCheckboxColor}
-                value={task.isCompleted}
-                onToggle={() => {}}
-              />
-            </Box>
-
-            <Input
-              fontSize="3xl"
-              fontWeight="bold"
-              variant="unstyled"
-              textAlign="left"
-              color="em.10"
-              textDecorationLine={task.isCompleted ? "line-through" : undefined}
-              defaultValue={task.name}
-              textBreakStrategy="balanced"
-              multiline
-              blurOnSubmit
-              onEndEditing={e => {
-                task.editTask({ name: e.nativeEvent.text });
-              }}
-              p="0"
-            />
-          </Box>
-        </Box>
+        <ScreenHeader task={task} accentColor={accent} />
         <Description
           onChange={description => {
             task.editTask({ description });
@@ -121,37 +72,75 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
           accent={accent}
           text={task.description}
         />
-        <Box px="20px">
-          <Box mt="4">
-            <Box mb={2} flexDir="row" justifyContent="space-between">
-              <Text bold color="em.1" fontSize="2xl">
-                {t("reminders")}
-              </Text>
-              <Switch
-                value={!!task.reminder}
-                onValueChange={i => {
-                  if (i) {
-                    task.editTask({ reminder: new Date(Date.now()) });
-                  } else {
-                    task.editTask({ reminder: null, repeat: null });
-                  }
-                }}
-              />
-            </Box>
-            <TaskDateSection
-              task={task}
-              reminder={task.reminder}
-              repeat={task.repeat}
+        <Box px="20px" mt="4">
+          <Box mb={2} flexDir="row" justifyContent="space-between">
+            <Text bold color="em.1" fontSize="2xl">
+              {t("reminder")}
+            </Text>
+            <Switch
+              value={!!task.reminder}
+              onValueChange={i => {
+                if (i) {
+                  task.editTask({ reminder: new Date(Date.now()) });
+                } else {
+                  task.editTask({ reminder: null, repeat: null });
+                }
+              }}
             />
           </Box>
+          <TaskDateSection
+            task={task}
+            reminder={task.reminder}
+            repeat={task.repeat}
+          />
+          <ChangeList
+            afterChange={async () => {
+              const list = await task.list.fetch();
+              if (list) setTheme(list.theme);
+            }}
+            task={task}
+          />
           <SubtaskSection {...{ accent, task }} />
         </Box>
+        <Button
+          mt="auto"
+          rounded="xl"
+          h="54px"
+          colorScheme="red"
+          _pressed={{ bg: "transparent" }}
+          variant="outline"
+          mx="20px"
+          size="lg"
+          onPress={() => {
+            const shouldWarn = storage.getBoolean("warn-before-delete");
+            if (shouldWarn) {
+              Alert.alert(
+                `${t("delete")} "${task.name}" ${t("?")}`,
+                t("delete-confirmation"),
+                [
+                  { text: t("cancel") },
+                  {
+                    text: t("delete"),
+                    onPress: () => {
+                      task.markAsDeleted();
+                    },
+                  },
+                ],
+                { cancelable: true }
+              );
+            } else {
+              task.markAsDeleted();
+            }
+          }}
+        >
+          {t("delete")}
+        </Button>
       </ScrollView>
       <Footer
         keyboardVisible={keyboardVisible}
         style={{ backgroundColor: secondary, elevation: 0 }}
         textStyle={{
-          color: route.params.theme.secondary ? "em.1" : "em.10",
+          color: theme ? "em.1" : "em.10",
           fontSize: 18,
           bold: true,
         }}
@@ -174,3 +163,48 @@ const Screen = withDB<TaskScreenProps, { task: Task }>(
     };
   }
 );
+type ScreenHeaderProps = {
+  accentColor: string;
+  task: Task;
+};
+const ScreenHeader = ({ task, accentColor: accent }: ScreenHeaderProps) => {
+  const tintColor = useColorModeValue("#fff", "#000");
+  return (
+    <Box
+      borderBottomWidth="1"
+      borderBottomColor={"em.10"}
+      bg={accent}
+      px="20px"
+      pb={3}
+    >
+      <Box flexDirection="row" alignItems="center">
+        <Box alignSelf="flex-start" pt="1">
+          <CheckBox
+            size={25}
+            iconColor={accent}
+            color={tintColor}
+            value={task.isCompleted}
+            onToggle={() => {}}
+          />
+        </Box>
+
+        <Input
+          fontSize="3xl"
+          fontWeight="bold"
+          variant="unstyled"
+          textAlign="left"
+          color="em.10"
+          textDecorationLine={task.isCompleted ? "line-through" : undefined}
+          defaultValue={task.name}
+          textBreakStrategy="balanced"
+          multiline
+          blurOnSubmit
+          onEndEditing={e => {
+            task.editTask({ name: e.nativeEvent.text });
+          }}
+          p="0"
+        />
+      </Box>
+    </Box>
+  );
+};

@@ -1,8 +1,8 @@
 import { Model, Relation, TableName } from "@nozbe/watermelondb";
 import {
   field,
-  immutableRelation,
   json,
+  relation,
   text,
   writer,
 } from "@nozbe/watermelondb/decorators";
@@ -45,7 +45,7 @@ export default class Task extends Model {
   @json(Column.subtasks, sanitize) subtasks!: subtaskObject;
   @date(Column.reminder) reminder!: Date | null;
   @text(Column.repeat) repeat!: repeatType;
-  @immutableRelation(Tables.List, Column.listID) list!: Relation<List>;
+  @relation(Tables.List, Column.listID) list!: Relation<List>;
 
   async markAsDeleted() {
     // to update the list number
@@ -62,6 +62,12 @@ export default class Task extends Model {
   @writer async updateSubtasks(newSubtasks: subtaskObject) {
     await this.update(r => {
       r.subtasks = newSubtasks;
+    });
+  }
+  @writer async changeList(listID: string) {
+    const list = await this.database.get<List>(Tables.List).find(listID);
+    this.update(() => {
+      this.list.set(list);
     });
   }
 
