@@ -73,6 +73,7 @@ export default function AddTaskScreen({
           </Box>
           <Reminders
             setRepeat={setReminderRepeat}
+            initialRepeat={reminderRepeat}
             active={withReminder}
             date={reminder}
             setDate={setReminder}

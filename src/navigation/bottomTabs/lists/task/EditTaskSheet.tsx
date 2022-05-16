@@ -84,7 +84,7 @@ export const EditTaskSheet = React.forwardRef<
             </Box>
             <Reminders
               active={withReminder}
-              initialRepeat={task.repeat}
+              initialRepeat={reminderRepeat}
               date={reminder ?? dayjs().toDate()}
               setRepeat={setReminderRepeat}
               //@ts-ignore
