@@ -58,7 +58,7 @@ const RawListScreen = ({ navigation, list }: ListScreenProps) => {
         />
       ),
     });
-  }, [list.theme]);
+  }, [list.theme, tintColor]);
   return (
     <>
       <TasksFlatList

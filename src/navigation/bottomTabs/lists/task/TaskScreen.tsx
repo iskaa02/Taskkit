@@ -51,7 +51,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
       },
       headerTintColor: tintColor,
     });
-  }, [theme, navigation]);
+  }, [theme, navigation, tintColor]);
 
   return (
     <KeyboardAvoidingView bg="background" flex={1}>
@@ -64,7 +64,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
         }}
         stickyHeaderIndices={[0]}
       >
-        <ScreenHeader task={task} accentColor={accent} />
+        <ScreenHeader {...{ task, accent }} />
         <Description
           onChange={description => {
             task.editTask({ description });
@@ -164,10 +164,10 @@ const Screen = withDB<TaskScreenProps, { task: Task }>(
   }
 );
 type ScreenHeaderProps = {
-  accentColor: string;
+  accent: string;
   task: Task;
 };
-const ScreenHeader = ({ task, accentColor: accent }: ScreenHeaderProps) => {
+const ScreenHeader = ({ task, accent }: ScreenHeaderProps) => {
   const tintColor = useColorModeValue("#fff", "#000");
   return (
     <Box
