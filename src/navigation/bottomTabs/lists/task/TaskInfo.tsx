@@ -1,7 +1,10 @@
+import SelectRepeatSheet from "@/components/SelectRepeatSheet";
 import { AddSubtask, SubtaskCard } from "@/components/Subtasks";
 import { repeatType } from "@/db/models/scheduleNotification";
 import Task from "@/db/models/Task";
 import { Feather } from "@expo/vector-icons";
+import { BottomSheetModal } from "@gorhom/bottom-sheet";
+import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
 import { AnimatePresence } from "moti";
@@ -11,51 +14,107 @@ import { useTranslation } from "react-i18next";
 import { TouchableOpacity } from "react-native";
 import useSubtaskReducer from "./SubtasksReducer";
 
-type ExtraInfoProps = {
-  iconName: string;
-  label: string;
-  isDisabled?: boolean;
-};
 type TaskDateSectionProps = {
   reminder: Date | null;
   repeat: repeatType;
+  task: Task;
 };
 export default function TaskDateSection({
   reminder,
   repeat,
+  task,
 }: TaskDateSectionProps) {
   const { t } = useTranslation();
+  const sheetRef = React.useRef<BottomSheetModal>(null);
+  if (!reminder) {
+    return (
+      <>
+        <Text fontSize="md">{t("no-reminder-set")}</Text>
+      </>
+    );
+  }
   return (
     <>
       <Box flexDir="row" justifyContent="space-between" flexWrap="wrap">
         <ReminderButton
           isDisabled={!reminder}
           iconName="calendar"
-          label={dayjs(reminder ?? undefined).format(
-            dayjs(reminder ?? undefined).isSame(Date.now(), "year")
+          onPress={() => {
+            DateTimePickerAndroid.open({
+              mode: "date",
+              value: reminder,
+              minimumDate: new Date(Date.now()),
+              onChange: (e, d) => {
+                if (e.type == "set") {
+                  task.editTask({
+                    reminder: d,
+                  });
+                }
+              },
+            });
+          }}
+          label={dayjs(reminder).format(
+            dayjs(reminder).isSame(Date.now(), "year")
               ? "ddd, MMM D"
               : "ddd, MMM D, YYYY"
           )}
         />
         <ReminderButton
+          onPress={() => {
+            DateTimePickerAndroid.open({
+              mode: "time",
+              value: reminder,
+              minimumDate: new Date(Date.now()),
+              onChange: (e, d) => {
+                if (e.type == "set") {
+                  task.editTask({
+                    reminder: d,
+                  });
+                }
+              },
+            });
+          }}
           isDisabled={!reminder}
           iconName="clock"
-          label={dayjs(reminder ?? undefined).format("h:mm A")}
+          label={dayjs(reminder).format("h:mm A")}
         />
         <ReminderButton
+          onPress={() => {
+            sheetRef.current?.present();
+          }}
           isDisabled={!reminder}
           iconName="repeat"
           label={t(repeat ? `r-${repeat}` : "none")}
+        />
+        <SelectRepeatSheet
+          onChange={repeat => {
+            task.editTask({ repeat });
+          }}
+          date={reminder}
+          initialRepeat={repeat}
+          ref={sheetRef}
         />
       </Box>
     </>
   );
 }
-const ReminderButton = ({ iconName, label, isDisabled }: ExtraInfoProps) => {
+type ReminderButtonProps = {
+  iconName: string;
+  label: string;
+  isDisabled?: boolean;
+  onPress: () => void;
+};
+const ReminderButton = ({
+  iconName,
+  label,
+  isDisabled,
+  onPress,
+}: ReminderButtonProps) => {
   const { surface } = useTheme().colors;
   const borderColor = useColorModeValue("#eaeaea", "#787878");
   return (
     <TouchableOpacity
+      onPress={onPress}
       style={{
         marginBottom: 10,
         backgroundColor: surface,

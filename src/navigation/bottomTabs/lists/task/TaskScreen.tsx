@@ -138,7 +138,11 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
                 }}
               />
             </Box>
-            <TaskDateSection reminder={task.reminder} repeat={task.repeat} />
+            <TaskDateSection
+              task={task}
+              reminder={task.reminder}
+              repeat={task.repeat}
+            />
           </Box>
           <SubtaskSection {...{ accent, task }} />
         </Box>
