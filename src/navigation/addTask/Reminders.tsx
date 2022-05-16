@@ -1,4 +1,4 @@
-import SelectSheet from "@/components/Select";
+import SelectRepeatSheet from "@/components/SelectRepeatSheet";
 import { repeatType } from "@/db/models/scheduleNotification";
 import { Feather } from "@expo/vector-icons";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
@@ -27,22 +27,6 @@ export const Reminders = ({
   const showDatePicker = DatePicker(date, setDate);
   const sheetRef = React.useRef<BottomSheetModalMethods>(null);
   const { t } = useTranslation();
-  const repeatItems: { label: string; type: repeatType }[] =
-    React.useMemo(() => {
-      return [
-        { label: t("none"), type: null },
-        { label: t("every") + " " + t("day"), type: "daily" },
-        { label: t("every") + " " + dayjs(date).format("ddd"), type: "weekly" },
-        { label: t("every") + " " + t("month"), type: "monthly" },
-      ];
-    }, [date]);
-  const [innerRepeat, setInnerRepeat] = React.useState(() => {
-    if (initialRepeat) {
-      const d = repeatItems.find(i => i.type === initialRepeat);
-      if (d) return d;
-    }
-    return repeatItems[0];
-  });
   return (
     <Box
       opacity={active ? 1 : 0.5}
@@ -63,22 +47,18 @@ export const Reminders = ({
         onPress={() => {
           sheetRef.current?.present();
         }}
-        label={innerRepeat.label}
+        label={t(initialRepeat ? `r-${initialRepeat}` : "none")}
         color="black"
         bg={`red.${colorIntensity}`}
         icon={<Feather name="repeat" />}
       />
-      <SelectSheet
-        onChange={i => {
-          const repeat = repeatItems.find(item => i === item.label);
-          if (repeat) {
-            setInnerRepeat(repeat);
-            setRepeatType(repeat.type);
-          }
-        }}
-        value={innerRepeat.label}
-        items={repeatItems.map(i => i.label)}
+      <SelectRepeatSheet
         ref={sheetRef}
+        date={date}
+        initialRepeat={initialRepeat}
+        onChange={r => {
+          setRepeatType(r);
+        }}
       />
     </Box>
   );
