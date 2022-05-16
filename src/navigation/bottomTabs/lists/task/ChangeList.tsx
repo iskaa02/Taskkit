@@ -56,8 +56,9 @@ export default function ChangeList({ task, afterChange }: ChangeListProps) {
         value={task.list.id ?? ""}
         items={lists.map(i => ({ label: i.name, value: i.id }))}
         onChange={newListID => {
-          task.changeList(newListID);
-          afterChange && afterChange();
+          task.changeList(newListID).then(() => {
+            afterChange && afterChange();
+          });
         }}
         ref={ref}
       />
