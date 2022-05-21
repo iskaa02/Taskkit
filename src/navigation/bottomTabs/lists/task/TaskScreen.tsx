@@ -22,7 +22,7 @@ import {
 } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { Alert } from "react-native";
+import { Alert, I18nManager } from "react-native";
 import ChangeList from "./ChangeList";
 import Description from "./Description";
 import TaskDateSection, { SubtaskSection } from "./TaskInfo";
@@ -141,6 +141,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
         </Button>
       </ScrollView>
       <Footer
+        containerBg="background"
         keyboardVisible={keyboardVisible}
         style={{ backgroundColor: secondary, elevation: 0 }}
         textStyle={{
@@ -196,7 +197,7 @@ const ScreenHeader = ({ task, accent }: ScreenHeaderProps) => {
           fontSize="3xl"
           fontWeight="bold"
           variant="unstyled"
-          textAlign="left"
+          textAlign={I18nManager.isRTL ? "right" : "left"}
           color="em.10"
           textDecorationLine={task.isCompleted ? "line-through" : undefined}
           defaultValue={task.name}

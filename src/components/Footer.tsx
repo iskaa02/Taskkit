@@ -8,6 +8,7 @@ type FooterProps = {
   onPress?: () => void;
   style?: ViewStyle;
   textStyle?: ITextProps;
+  containerBg?: string;
 };
 const Footer = ({
   keyboardVisible,
@@ -15,6 +16,7 @@ const Footer = ({
   onPress,
   style,
   textStyle,
+  containerBg,
 }: FooterProps) => {
   return (
     <Box
@@ -26,6 +28,7 @@ const Footer = ({
       bottom="0"
       justifyContent="center"
       alignItems="center"
+      bg={containerBg}
     >
       {keyboardVisible ? null : (
         <TouchableOpacity

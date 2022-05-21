@@ -95,6 +95,7 @@ export default function AddTaskScreen({
         </Box>
       </ScrollView>
       <Footer
+        containerBg="surface"
         onPress={() => {
           if (!(activeListID && name)) return;
           database
