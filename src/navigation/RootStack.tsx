@@ -31,6 +31,7 @@ export function RootNavigator() {
           headerStyle: {
             backgroundColor: surface,
           },
+          headerShadowVisible: false,
         }}
         name="AddTask"
         component={AddTaskScreen}

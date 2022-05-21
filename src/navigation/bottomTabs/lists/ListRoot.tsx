@@ -20,7 +20,6 @@ import TaskScreen from "./task/TaskScreen";
 
 const Stack = createNativeStackNavigator<ListStackType>();
 export default function Lists() {
-  const { t } = useTranslation();
   return (
     <Stack.Navigator
       screenOptions={{
