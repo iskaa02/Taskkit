@@ -8,12 +8,12 @@ export default function NoTasks() {
   return (
     <ModalView>
       <Box pb="70px" px="20px" flex={1}>
-        <Fade delay={0}>
+        <Fade position={50} delay={0}>
           <Heading fontSize="3xl">
             {t("task-left-count", { count: 0, postProcess: "interval" })}
           </Heading>
         </Fade>
-        <Fade delay={70}>
+        <Fade position={50} delay={70}>
           <Text fontSize="2xl">{t("enjoy-your-day")}</Text>
         </Fade>
       </Box>
