@@ -111,7 +111,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
           variant="outline"
           mx="20px"
           size="lg"
-          onPress={() => {
+          onPress={async () => {
             const shouldWarn = storage.getBoolean("warn-before-delete");
             if (shouldWarn) {
               Alert.alert(
@@ -121,15 +121,19 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
                   { text: t("cancel") },
                   {
                     text: t("delete"),
-                    onPress: () => {
-                      task.markAsDeleted();
+                    onPress: async () => {
+                      await task.markAsDeleted().then(() => {
+                        navigation.pop();
+                      });
                     },
                   },
                 ],
                 { cancelable: true }
               );
             } else {
-              task.markAsDeleted();
+              await task.markAsDeleted().then(() => {
+                navigation.pop();
+              });
             }
           }}
         >

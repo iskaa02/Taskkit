@@ -47,7 +47,7 @@ export default class Task extends Model {
   @text(Column.repeat) repeat!: repeatType;
   @relation(Tables.List, Column.listID) list!: Relation<List>;
 
-  async markAsDeleted() {
+  @writer async markAsDeleted() {
     // to update the list number
     this.list.fetch().then(list => {
       list?.update(() => {});
