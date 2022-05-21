@@ -57,7 +57,7 @@ function TaskCard({
             textAlign="left"
             noOfLines={3}
             fontSize="xl"
-            color={accent}
+            color="em.1:alpha.80"
             textDecorationLine={task.isCompleted ? "line-through" : undefined}
           >
             {task.name}

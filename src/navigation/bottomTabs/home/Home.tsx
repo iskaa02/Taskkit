@@ -19,7 +19,7 @@ import { useTranslation } from "react-i18next";
 import { SectionList, TouchableOpacity } from "react-native";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
-export default function RawScreen({}: RootTabScreenProps<"Home">) {
+export default function HomeScreen({}: RootTabScreenProps<"Home">) {
   const navigation = useNavigation<useNavigationProps>();
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -96,7 +96,13 @@ const RawSection = ({
             justifyContent="space-between"
             bg="background"
           >
-            <Text textAlign="justify" fontSize="xl" bold>
+            <Text
+              color="blue.400"
+              _light={{ color: "blue.500" }}
+              textAlign="justify"
+              fontSize="xl"
+              bold
+            >
               {t(section.key)}
             </Text>
             {section.key !== "other" && section.key !== "upcoming" && (
@@ -111,7 +117,12 @@ const RawSection = ({
                   })
                 }
               >
-                <Icon size={19} color="em.1" as={<Feather name="plus" />} />
+                <Icon
+                  _light={{ color: "blue.500" }}
+                  size={19}
+                  color="blue.400"
+                  as={<Feather name="plus" />}
+                />
               </TouchableOpacity>
             )}
           </Box>
