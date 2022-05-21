@@ -18,6 +18,7 @@ const FeatherHeader = (props: any) => (
 type EditHeaderButtonProps = {
   onEditPress: () => void;
   onDeletePress: () => void;
+  onClearFinishTasks: () => void;
   tintColor: string;
   name: string;
 };
@@ -31,6 +32,10 @@ export default function EditHeaderButton(p: EditHeaderButtonProps) {
         )}
       >
         <HiddenItem title={t("edit")} onPress={p.onEditPress} />
+        <HiddenItem
+          title={t("clear-finished-tasks")}
+          onPress={p.onClearFinishTasks}
+        />
         <HiddenItem
           title={t("delete")}
           onPress={() => {

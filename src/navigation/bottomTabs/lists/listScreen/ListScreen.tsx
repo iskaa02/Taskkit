@@ -3,7 +3,7 @@ import StatusBar from "@/components/StatusBar";
 import TaskCard from "@/components/TaskCard";
 import { database } from "@/db/db";
 import List from "@/db/models/List";
-import { Tables } from "@/db/models/schema";
+import { Columns, Tables } from "@/db/models/schema";
 import Task from "@/db/models/Task";
 import withDB from "@/db/models/withDB";
 import useAccent from "@/hooks/useAccent";
@@ -14,6 +14,7 @@ import {
 import { listThemeType } from "@/theme/listThemes";
 import { Feather } from "@expo/vector-icons";
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types";
+import { Q } from "@nozbe/watermelondb";
 import Database from "@nozbe/watermelondb/Database";
 import { useNavigation } from "@react-navigation/native";
 import { Box, Icon, Text, useColorModeValue } from "native-base";
@@ -21,7 +22,7 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList } from "react-native";
 import { useObservable } from "rxjs-hooks";
-import EditHeaderButton from "../EditHeaderButton";
+import EditHeaderButton from "./EditHeaderButton";
 import { EditListSheet } from "./EditListSheet";
 
 type ListScreenProps = ListStackScreenProps<"List"> & {
@@ -46,6 +47,11 @@ const RawListScreen = ({ navigation, list }: ListScreenProps) => {
       headerTintColor: tintColor,
       headerRight: () => (
         <EditHeaderButton
+          onClearFinishTasks={() => {
+            list.tasks
+              .extend(Q.where(Columns.task.isCompleted, Q.eq(true)))
+              .markAllAsDeleted();
+          }}
           onEditPress={() => {
             sheetRef.current?.present();
           }}
