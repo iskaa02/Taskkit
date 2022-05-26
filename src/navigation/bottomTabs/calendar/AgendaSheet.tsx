@@ -43,8 +43,9 @@ const RawAgendaSheet = ({
     const backAction = () => {
       if (index === 1) {
         setIndex(0);
+        return true;
       }
-      return true;
+      return false;
     };
     const backHandler = BackHandler.addEventListener(
       "hardwareBackPress",
