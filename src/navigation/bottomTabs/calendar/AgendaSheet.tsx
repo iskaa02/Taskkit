@@ -14,8 +14,8 @@ import dayjs from "dayjs";
 import isToday from "dayjs/plugin/isToday";
 import isTomorrow from "dayjs/plugin/isTomorrow";
 import { Box, Text, useTheme } from "native-base";
-import React, { useMemo, useState } from "react";
-import { BackHandler, useWindowDimensions } from "react-native";
+import React, { useMemo } from "react";
+import { useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 dayjs.extend(isToday);
 dayjs.extend(isTomorrow);
@@ -32,33 +32,15 @@ const RawAgendaSheet = ({
   calendarHeight,
 }: AgendaProps) => {
   const navigation = useNavigation<useNavigationProps>();
-  const [index, setIndex] = useState(0);
   const { height: deviceHeight } = useWindowDimensions();
   const { top } = useSafeAreaInsets();
   const snapPoints = useMemo(
     () => [deviceHeight - calendarHeight - top - 20, "90%"],
     [calendarHeight]
   );
-  React.useEffect(() => {
-    const backAction = () => {
-      if (index === 1) {
-        setIndex(0);
-        return true;
-      }
-      return false;
-    };
-    const backHandler = BackHandler.addEventListener(
-      "hardwareBackPress",
-      backAction
-    );
-
-    return () => backHandler.remove();
-  }, [index]);
   const colors = useTheme().colors;
   return (
     <BottomSheet
-      index={index}
-      onChange={i => setIndex(i)}
       backdropComponent={p => (
         <Backdrop pointerEvents="none" {...p} from={[0, 1]} />
       )}
