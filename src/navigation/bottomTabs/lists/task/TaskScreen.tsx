@@ -62,7 +62,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
           pb: "90px",
           flexGrow: 1,
         }}
-        stickyHeaderIndices={[0]}
+        // stickyHeaderIndices={[0]}
       >
         <ScreenHeader {...{ task, accent }} />
         <Description
