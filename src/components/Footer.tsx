@@ -28,7 +28,7 @@ const Footer = ({
       bottom="0"
       justifyContent="center"
       alignItems="center"
-      bg={containerBg}
+      bg={keyboardVisible ? containerBg : undefined}
     >
       {keyboardVisible ? null : (
         <TouchableOpacity
