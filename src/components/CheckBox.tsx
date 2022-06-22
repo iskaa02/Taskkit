@@ -9,6 +9,7 @@ type CheckBoxProps = {
   color: string;
   iconColor?: string;
   size?: number;
+  withTint?: boolean;
 };
 const CheckBox = ({
   value,
@@ -16,6 +17,7 @@ const CheckBox = ({
   color,
   size = 22,
   iconColor = "em.10",
+  withTint,
 }: CheckBoxProps) => {
   return (
     <Pressable
@@ -24,6 +26,7 @@ const CheckBox = ({
       borderWidth={value ? 0 : 2}
       style={{ marginEnd: 18, marginStart: 1, width: size, height: size }}
       borderColor={color}
+      bg={withTint ? `${color}:alpha.20` : "transparent"}
       justifyContent="center"
       alignItems="center"
       onPress={() => {

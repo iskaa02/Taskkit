@@ -49,6 +49,7 @@ function TaskCard({
           <CheckBox
             value={task.isCompleted}
             onToggle={i => task.setIsCompleted(i)}
+            withTint
             color={accent}
           />
         </Box>
