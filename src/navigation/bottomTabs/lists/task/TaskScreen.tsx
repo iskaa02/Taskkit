@@ -38,12 +38,7 @@ type TaskScreenProps = ListStackScreenProps<"Task"> & {
 };
 const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
   const tintColor = useColorModeValue("#fff", "#000");
-  const [theme, setTheme] = React.useState(route.params.theme);
-  React.useEffect(() => {
-    task.list.fetch().then(list => {
-      setTheme(list!.theme);
-    });
-  }, [task.list.id]);
+  const theme = route.params.theme;
   const accent = useAccent(theme);
   const secondary = useAccent(theme, { flip: true });
   const keyboardVisible = useKeyboardStatus();
@@ -101,7 +96,12 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
           <ChangeList
             afterChange={async () => {
               const list = await task.list.fetch();
-              if (list) setTheme(list.theme);
+              if (list)
+                //@ts-ignore
+                navigation.setParams({
+                  theme: list.theme,
+                  taskID: task.id,
+                });
             }}
             task={task}
           />

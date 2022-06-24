@@ -2,17 +2,17 @@ import SelectRepeatSheet from "@/components/SelectRepeatSheet";
 import { AddSubtask, SubtaskCard } from "@/components/Subtasks";
 import { repeatType } from "@/db/models/scheduleNotification";
 import Task from "@/db/models/Task";
+import { uid } from "@/db/models/uid";
 import { Feather } from "@expo/vector-icons";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
-import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
+import produce from "immer";
 import { AnimatePresence } from "moti";
 import { Box, Icon, Text, useColorModeValue, useTheme } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { TouchableOpacity } from "react-native";
-import useSubtaskReducer from "./SubtasksReducer";
 
 type TaskDateSectionProps = {
   reminder: Date | null;
@@ -151,27 +151,15 @@ type SubtaskSectionProps = {
 
 export const SubtaskSection = ({ accent, task }: SubtaskSectionProps) => {
   const { t } = useTranslation();
-  const { subtasks, actions, setSubtasks } = useSubtaskReducer(task.subtasks);
-  const nav = useNavigation();
-  React.useEffect(() => {
-    return () => {
-      nav.addListener("blur", () => {
-        setSubtasks(s => {
-          if (!(s === subtasks)) task.updateSubtasks(s);
-          return s;
-        });
-      });
-    };
-  }, []);
   return (
     <Box mb="10">
       <Text mt={4} bold color="em.1" fontSize="2xl">
         {t("subtask", { count: 1 })}
       </Text>
       <Box mt={3}>
-        <AnimatePresence>
-          {Object.keys(subtasks).map((key, i) => {
-            const v = subtasks[key];
+        <AnimatePresence key={task.id}>
+          {Object.keys(task.subtasks).map((key, i) => {
+            const v = task.subtasks[key];
             return (
               <SubtaskCard
                 {...v}
@@ -179,13 +167,29 @@ export const SubtaskSection = ({ accent, task }: SubtaskSectionProps) => {
                 color={accent}
                 key={key}
                 onEndEditing={name => {
-                  actions.renameSubtask(key, name);
+                  task.updateSubtasks(
+                    produce(task.subtasks, s => {
+                      if (name) {
+                        s[key].name = name;
+                      } else {
+                        delete s[key];
+                      }
+                    })
+                  );
                 }}
                 onToggle={() => {
-                  actions.toggleSubtask(key);
+                  task.updateSubtasks(
+                    produce(task.subtasks, s => {
+                      s[key].isCompleted = !s[key].isCompleted;
+                    })
+                  );
                 }}
                 onDelete={() => {
-                  actions.deleteSubtask(key);
+                  task.updateSubtasks(
+                    produce(task.subtasks, s => {
+                      delete s[key];
+                    })
+                  );
                 }}
               />
             );
@@ -194,7 +198,12 @@ export const SubtaskSection = ({ accent, task }: SubtaskSectionProps) => {
       </Box>
       <AddSubtask
         onAdd={name => {
-          if (name.replaceAll(" ", "") !== "") actions.addSubtask(name);
+          if (name.replaceAll(" ", "") !== "")
+            task.updateSubtasks(
+              produce(task.subtasks, s => {
+                s[uid(10)] = { name, isCompleted: false };
+              })
+            );
         }}
         color={accent}
       />
