@@ -162,7 +162,7 @@ const TaskSettings = () => {
         }}
       >
         <SettingsLabel>{t("default-list")}</SettingsLabel>
-        <Text fontSize="md" color="em.3">
+        <Text fontSize="md" color="em.3" isTruncated maxW="40%">
           {lists.find(i => i.id === defaultList)?.name}
         </Text>
         <SelectSheet

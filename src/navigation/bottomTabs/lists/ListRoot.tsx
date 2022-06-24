@@ -113,7 +113,13 @@ const RawCard = ({
       }}
       theme={list.theme}
     >
-      <Text textAlign="justify" fontSize="xl" bold>
+      <Text
+        textAlign="left"
+        isTruncated
+        style={{ paddingEnd: 10 }}
+        fontSize="xl"
+        bold
+      >
         {list.name}
       </Text>
       <Text fontSize="md">

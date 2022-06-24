@@ -76,7 +76,7 @@ const RawListScreen = ({ navigation, list }: ListScreenProps) => {
               <Box bg="background" flex={1}>
                 <StatusBar _dark={"dark-content"} _light={"light-content"} />
                 <Box bg={accent} px="20px" pb="20px">
-                  <Text bold textAlign="justify" color="em.10" fontSize="3xl">
+                  <Text bold textAlign="left" color="em.10" fontSize="3xl">
                     {list.name}
                   </Text>
                   {!count ? null : (

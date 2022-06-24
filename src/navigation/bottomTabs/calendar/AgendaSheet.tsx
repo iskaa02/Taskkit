@@ -118,10 +118,10 @@ const RawAgendaCard = ({ list, task, navigation }: AgendaCardProps) => {
     >
       <Box alignItems="flex-start" flexDir="row">
         <Box w="73%">
-          <Text textAlign="left" fontSize="xl" bold noOfLines={3}>
+          <Text textAlign="left" fontSize="xl" bold noOfLines={2}>
             {task.name}
           </Text>
-          <Text fontSize="md" textAlign="justify">
+          <Text fontSize="md" textAlign="left" noOfLines={1}>
             {list.name}
           </Text>
         </Box>
