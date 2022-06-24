@@ -11,7 +11,7 @@ import { associations } from "@nozbe/watermelondb/Model";
 import { cancelScheduledNotificationAsync } from "expo-notifications";
 import { storage } from "../storage";
 import List from "./List";
-import { repeatType } from "./scheduleNotification";
+import { repeatType, scheduleNotification } from "./scheduleNotification";
 import { Columns, Tables } from "./schema";
 
 const Column = Columns.task;
@@ -105,8 +105,16 @@ export default class Task extends Model {
       if (typeof repeat !== "undefined") {
         r.repeat = repeat;
       }
-      if (!(typeof reminder === "undefined")) {
+      if (typeof reminder !== "undefined") {
         if (reminder) {
+          r.cancelNotification();
+          scheduleNotification({
+            name: r.name,
+            id: r.id,
+            date: reminder,
+            description: r.description,
+            repeat: r.repeat,
+          });
           r.reminder = new Date(reminder);
         } else {
           r.reminder = null;
