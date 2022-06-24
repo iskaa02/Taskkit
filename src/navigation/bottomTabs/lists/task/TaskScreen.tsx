@@ -39,6 +39,11 @@ type TaskScreenProps = ListStackScreenProps<"Task"> & {
 const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
   const tintColor = useColorModeValue("#fff", "#000");
   const [theme, setTheme] = React.useState(route.params.theme);
+  React.useEffect(() => {
+    task.list.fetch().then(list => {
+      setTheme(list!.theme);
+    });
+  }, [task.list.id]);
   const accent = useAccent(theme);
   const secondary = useAccent(theme, { flip: true });
   const keyboardVisible = useKeyboardStatus();
