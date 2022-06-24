@@ -17,6 +17,7 @@ import { Box, Icon, Text } from "native-base";
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { SectionList, TouchableOpacity } from "react-native";
+import { useMMKVBoolean } from "react-native-mmkv";
 import { HeaderButtons, Item } from "react-navigation-header-buttons";
 
 export default function HomeScreen({}: RootTabScreenProps<"Home">) {
@@ -38,10 +39,13 @@ export default function HomeScreen({}: RootTabScreenProps<"Home">) {
       ),
     });
   }, [navigation]);
+  const [tasksWithoutDateAsToday] = useMMKVBoolean(
+    "tasks-without-date-as-today"
+  );
   return (
     <Box flex={1}>
       <StatusBar />
-      <Section />
+      <Section options={{ tasksWithoutDateAsToday }} />
       <Fab onPress={() => navigation.push("AddTask")} />
     </Box>
   );
@@ -52,6 +56,10 @@ type TaskSectionListProps = {
   upcoming: Task[];
   tomorrow: Task[];
   other: Task[];
+  options: options;
+};
+type options = {
+  tasksWithoutDateAsToday?: boolean;
 };
 const RawSection = ({
   today,
@@ -144,10 +152,13 @@ const RawSection = ({
 
 const Section = withDB<TaskSectionListProps, TaskSectionListProps>(
   RawSection,
-  [],
-  () => ({
+  ["options"],
+  ({ options }) => ({
     today: queryTasks(
-      getDateHelper({ day: dayjs().valueOf() }),
+      {
+        ...getDateHelper({ day: dayjs().valueOf() }),
+        withNull: options.tasksWithoutDateAsToday,
+      },
       Q.sortBy(Columns.task.reminder, "asc")
     ),
     tomorrow: queryTasks(
@@ -160,7 +171,7 @@ const Section = withDB<TaskSectionListProps, TaskSectionListProps>(
     ),
     other: queryTasks({
       ...getDateHelper({ beforeDays: 1 }),
-      withNull: true,
+      withNull: !options.tasksWithoutDateAsToday,
     }),
   })
 );

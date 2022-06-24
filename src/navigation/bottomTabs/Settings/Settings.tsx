@@ -134,6 +134,10 @@ const TaskSettings = () => {
     "send-notification-even-when-completed",
     storage
   );
+  const [tasksWithoutDateAsToday, setTasksWithoutDateAsToday] = useMMKVBoolean(
+    "tasks-without-date-as-today",
+    storage
+  );
   const [defaultList, setDefaultList] = useMMKVString("default-list", storage);
   const lists = useObservable(
     () => database.get<List>(Tables.List).query().observe(),
@@ -154,6 +158,13 @@ const TaskSettings = () => {
         description={t("always-notify-description")}
         onValueChange={value => setSendNotification(value)}
         value={sendNotification}
+      />
+
+      <SettingsWithSwitch
+        label={t("tasks-without-date-as-today-label")}
+        description={t("tasks-without-date-as-today-description")}
+        onValueChange={value => setTasksWithoutDateAsToday(value)}
+        value={tasksWithoutDateAsToday}
       />
       <SettingsContainer
         withEndArrow

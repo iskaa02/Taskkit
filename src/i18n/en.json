@@ -62,5 +62,7 @@
   "good-afternoon": "Good afternoon",
   "good-evening": "Good evening",
   "good-night": "Good night",
-  "enjoy-your-day": "Enjoy you day."
+  "enjoy-your-day": "Enjoy you day.",
+  "tasks-without-date-as-today-label": "Tasks without Date",
+  "tasks-without-date-as-today-description": "Add tasks without date to 'Today' list"
 }
