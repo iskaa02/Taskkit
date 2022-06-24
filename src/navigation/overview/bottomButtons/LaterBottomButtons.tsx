@@ -24,11 +24,11 @@ export function LaterBottomButtons({
   const { t } = useTranslation();
   const onPress = React.useCallback(
     (key: string) => {
-      const date = dayjs();
-      if (key === "tomorrow") date.add(1, "day");
-      if (key === "2 days") date.add(2, "day");
-      if (key === "next-week") date.add(1, "week");
-      if (key === "next-month") date.add(1, "month");
+      let date = dayjs();
+      if (key === "tomorrow") date = date.add(1, "day");
+      if (key === "2 days") date = date.add(2, "day");
+      if (key === "next-week") date = date.add(1, "week");
+      if (key === "next-month") date = date.add(1, "month");
 
       task.editTask({ reminder: date.toDate() });
       removeTask();
