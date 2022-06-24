@@ -1,4 +1,3 @@
-import { database } from "@/db/db";
 import Task from "@/db/models/Task";
 import React from "react";
 import { useTranslation } from "react-i18next";
@@ -48,9 +47,7 @@ export function MainButtons({
       iconName: "x",
       color: "red",
       onPress: () => {
-        database.write(async () => {
-          await task.markAsDeleted();
-        });
+        task.markAsDeleted();
         removeTask();
       },
     },
