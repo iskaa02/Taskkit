@@ -2,7 +2,7 @@ import {
   CalendarIcon,
   HomeIcon,
   ListIcon,
-  SettingsIcon as SettingsIcon,
+  SettingsIcon,
 } from "@/assets/TabBarIcons";
 import { RootTabParamList } from "@/navigation/navPropsType";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -28,6 +28,7 @@ export default function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="Home"
+      detachInactiveScreens
       screenOptions={{
         tabBarShowLabel: false,
         tabBarHideOnKeyboard: true,
@@ -65,7 +66,6 @@ export default function BottomTabNavigator() {
         component={CalendarScreen}
         options={{
           tabBarIcon: p => <CalendarIcon {...p} />,
-          lazy: false,
         }}
       />
       <BottomTab.Screen

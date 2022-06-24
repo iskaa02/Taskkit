@@ -20,7 +20,7 @@ type ScreenProps = {
   tasks: Task[];
   database: Database;
 };
-function RawScreen({ tasks, database }: ScreenProps) {
+function RawScreen({ tasks }: ScreenProps) {
   const [selectedDate, setSelectedDate] = React.useState<string>();
   // Rerender when language change
   useMMKVString("lang", storage);
@@ -89,7 +89,8 @@ const Screen = withDB<ScreenProps, { tasks: Task[] }>(
         Q.where(Columns.task.isCompleted, Q.eq(false)),
         Q.where(Columns.task.reminder, Q.notEq(null)),
         Q.sortBy(Columns.task.reminder, Q.asc)
-      ),
+      )
+      .observeWithColumns([Columns.task.reminder]),
   })
 );
 
