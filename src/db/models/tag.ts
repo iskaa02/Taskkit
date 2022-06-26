@@ -1,7 +1,7 @@
 import { Model, Q } from "@nozbe/watermelondb";
 import { lazy, text } from "@nozbe/watermelondb/decorators";
 import { Associations } from "@nozbe/watermelondb/Model";
-import { Columns, Tables, tableSchema } from "./schema";
+import { Columns, Tables } from "./schema";
 
 const Column = Columns.tag;
 export default class Tag extends Model {
@@ -17,11 +17,3 @@ export default class Tag extends Model {
     Q.on(Tables.TaskTags, Columns.taskTags.tagID, this.id)
   );
 }
-
-export const tagSchema: tableSchema = {
-  name: Tables.Tag,
-  columns: [
-    { name: Columns.tag.color, type: "string" },
-    { name: Columns.tag.name, type: "string" },
-  ],
-};

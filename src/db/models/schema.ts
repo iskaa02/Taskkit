@@ -7,9 +7,7 @@ import {
   tableSchema,
 } from "@nozbe/watermelondb";
 import List from "./List";
-import { tagSchema } from "./tag";
 import Task from "./Task";
-import { taskTagsSchema } from "./taskTags";
 export const Tables = {
   Task: tableName<Task>("task"),
   List: tableName<List>("list"),
@@ -41,6 +39,21 @@ export const Columns = {
   },
 };
 
+export const taskTagsSchema: tableSchema = {
+  name: Tables.TaskTags,
+  columns: [
+    { name: Columns.taskTags.tagID, type: "string" },
+    { name: Columns.taskTags.taskID, type: "string" },
+  ],
+};
+
+export const tagSchema: tableSchema = {
+  name: Tables.Tag,
+  columns: [
+    { name: Columns.tag.color, type: "string" },
+    { name: Columns.tag.name, type: "string" },
+  ],
+};
 export default appSchema({
   version: 2,
   tables: [

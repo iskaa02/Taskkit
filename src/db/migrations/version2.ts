@@ -1,6 +1,5 @@
 import { createTable, Migration } from "@nozbe/watermelondb/Schema/migrations";
-import { tagSchema } from "../models/tag";
-import { taskTagsSchema } from "../models/taskTags";
+import { tagSchema, taskTagsSchema } from "../models/schema";
 
 const ToVersion2: Migration = {
   toVersion: 2,
