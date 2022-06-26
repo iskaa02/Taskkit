@@ -1,15 +1,22 @@
 import {
   appSchema,
   columnName,
+  ColumnSchema,
+  TableName,
   tableName,
   tableSchema,
 } from "@nozbe/watermelondb";
 import List from "./List";
+import { tagSchema } from "./tag";
 import Task from "./Task";
+import { taskTagsSchema } from "./taskTags";
 export const Tables = {
   Task: tableName<Task>("task"),
   List: tableName<List>("list"),
+  Tag: tableName("tag"),
+  TaskTags: tableName("task_tags"),
 };
+export type tableSchema = { name: TableName<any>; columns: ColumnSchema[] };
 export const Columns = {
   task: {
     name: columnName("name"),
@@ -24,10 +31,18 @@ export const Columns = {
     name: columnName("name"),
     theme: columnName("theme"),
   },
+  tag: {
+    name: columnName("name"),
+    color: columnName("color"),
+  },
+  taskTags: {
+    taskID: columnName("task_id"),
+    tagID: columnName("tag_id"),
+  },
 };
 
 export default appSchema({
-  version: 1,
+  version: 2,
   tables: [
     tableSchema({
       name: Tables.List,
@@ -48,5 +63,7 @@ export default appSchema({
         { name: Columns.task.isCompleted, type: "boolean" },
       ],
     }),
+    tableSchema(tagSchema),
+    tableSchema(taskTagsSchema),
   ],
 });
