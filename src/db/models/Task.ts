@@ -1,7 +1,8 @@
-import { Model, Relation, TableName } from "@nozbe/watermelondb";
+import { Model, Q, Relation, TableName } from "@nozbe/watermelondb";
 import {
   field,
   json,
+  lazy,
   relation,
   text,
   writer,
@@ -13,6 +14,8 @@ import { storage } from "../storage";
 import List from "./List";
 import { repeatType, scheduleNotification } from "./scheduleNotification";
 import { Columns, Tables } from "./schema";
+import Tag from "./tag";
+import TaskTags from "./taskTags";
 
 const Column = Columns.task;
 export type subtaskObject = { [x: string]: subtask };
@@ -122,6 +125,16 @@ export default class Task extends Model {
       }
     });
   }
+  @writer async addTag(tagID: string) {
+    const tag = await this.database.get<Tag>(Tables.Tag).find(tagID);
+    await this.database.get<TaskTags>(Tables.TaskTags).create(tt => {
+      tt.tag.set(tag);
+      tt.task.set(this);
+    });
+  }
+  @lazy tags = this.collection.query(
+    Q.on(Tables.TaskTags, Columns.taskTags.taskID, this.id)
+  );
 }
 type editTaskType = {
   name?: string;

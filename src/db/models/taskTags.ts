@@ -18,6 +18,6 @@ export default class TaskTags extends Model {
       key: Column.tagID,
     },
   };
-  @immutableRelation(Tables.Tag, Column.tagID) tags!: Relation<Tag>;
-  @immutableRelation(Tables.Task, Column.taskID) tasks!: Relation<Task>;
+  @immutableRelation(Tables.Tag, Column.tagID) tag!: Relation<Tag>;
+  @immutableRelation(Tables.Task, Column.taskID) task!: Relation<Task>;
 }
