@@ -1,4 +1,4 @@
-import { Model } from "@nozbe/watermelondb";
+import { Model, TableName } from "@nozbe/watermelondb";
 import { immutableRelation } from "@nozbe/watermelondb/decorators";
 import { Associations } from "@nozbe/watermelondb/Model";
 import Relation from "@nozbe/watermelondb/Relation";
@@ -8,6 +8,7 @@ import Task from "./Task";
 
 const Column = Columns.taskTags;
 export default class TaskTags extends Model {
+  public static table: TableName<TaskTags> = Tables.TaskTags;
   public static associations: Associations = {
     task: {
       type: "belongs_to",

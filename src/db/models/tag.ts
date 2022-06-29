@@ -1,4 +1,4 @@
-import { Model, Q } from "@nozbe/watermelondb";
+import { Model, Q, TableName } from "@nozbe/watermelondb";
 import { lazy, text, writer } from "@nozbe/watermelondb/decorators";
 import { Associations } from "@nozbe/watermelondb/Model";
 import { Columns, Tables } from "./schema";
@@ -9,6 +9,7 @@ type editTag = {
   color?: string;
 };
 export default class Tag extends Model {
+  public static table: TableName<Tag> = Tables.Tag;
   public static associations: Associations = {
     taskTags: {
       type: "has_many",
