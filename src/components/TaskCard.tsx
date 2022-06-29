@@ -63,7 +63,9 @@ function TaskCard({
           >
             {task.name}
           </Text>
-          {!task.reminder ? null : <DateChip date={task.reminder} />}
+          {!task.reminder || task.isCompleted ? null : (
+            <DateChip date={task.reminder} />
+          )}
         </Box>
       </MotiView>
     </Pressable>
