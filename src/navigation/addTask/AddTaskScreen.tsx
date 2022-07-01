@@ -20,6 +20,7 @@ import {
 import React from "react";
 import { useTranslation } from "react-i18next";
 import Footer from "../../components/Footer";
+import AddTag from "./AddTag";
 import Label from "./Label";
 import ListChips from "./ListChips";
 import { Reminders } from "./Reminders";
@@ -38,6 +39,7 @@ export default function AddTaskScreen({
   );
   const [reminderRepeat, setReminderRepeat] = React.useState<repeatType>(null);
   const [withReminder, setWithReminder] = React.useState(true);
+  const [tags, setTagsIDs] = React.useState<string[]>([]);
   const { t } = useTranslation();
   const { surface } = useTheme().colors;
   useFocusEffect(() => {
@@ -90,6 +92,9 @@ export default function AddTaskScreen({
             textAlignVertical="top"
             multiline={true}
           />
+
+          <Label mb={2} l={t("description")} mt="5" />
+          <AddTag tagsIDs={tags} setTagsIDs={setTagsIDs} />
           <Label l={t("subtask", { count: 1 })} mt="5" />
           <AddSubtasks {...{ subtasks, setSubtasks }} />
         </Box>
