@@ -1,11 +1,11 @@
+import Tag from "@/components/Tag";
 import List from "@/db/models/List";
 import { Tables } from "@/db/models/schema";
 import withDB from "@/db/models/withDB";
 import { listThemeType } from "@/theme/listThemes";
 import { BottomSheetModal } from "@gorhom/bottom-sheet";
 import Database from "@nozbe/watermelondb/Database";
-import { MotiPressable } from "moti/interactions";
-import { Box, ITextProps, Text, useColorModeValue } from "native-base";
+import { Box, useColorModeValue } from "native-base";
 import React, { useRef } from "react";
 import { useTranslation } from "react-i18next";
 import AddListSheet from "../bottomTabs/lists/listScreen/AddListSheet";
@@ -15,7 +15,7 @@ const ListChip = ({
   theme,
   isActive,
   ...p
-}: ITextProps & {
+}: {
   name: string;
   theme: listThemeType;
   isActive?: Boolean;
@@ -25,21 +25,9 @@ const ListChip = ({
     ? theme.secondary
     : useColorModeValue("gray.600", "gray.100");
   return (
-    <Text
-      style={{ marginEnd: 10 }}
-      mt="10px"
-      px="3"
-      alignItems="center"
-      textAlign="center"
-      py="1"
-      fontSize="md"
-      color={color}
-      borderRadius={10}
-      bg={bg}
-      {...p}
-    >
+    <Tag bg={bg} color={color}>
       {name}
-    </Text>
+    </Tag>
   );
 };
 
@@ -68,52 +56,21 @@ const ListChips = ({
     <Box flexDirection="row" flexWrap="wrap">
       {lists.map(list => {
         return (
-          <MotiPressable
-            animate={({ pressed }) => {
-              "worklet";
-              return {
-                scale: pressed ? 0.9 : 1,
-              };
-            }}
-            key={list.id}
-            onPress={() => setActiveListID(list.id)}
-          >
-            <ListChip
-              isActive={list.id === activeListID}
-              name={list.name}
-              theme={list.theme}
-            />
-          </MotiPressable>
+          <ListChip
+            isActive={list.id === activeListID}
+            name={list.name}
+            theme={list.theme}
+          />
         );
       })}
-      <MotiPressable
+      <Tag
         onPress={() => {
           sheetRef.current?.present();
         }}
-        animate={({ pressed }) => {
-          "worklet";
-          return {
-            scale: pressed ? 0.9 : 1,
-          };
-        }}
+        variant="dashed"
       >
-        <Text
-          style={{ marginEnd: 10 }}
-          mt="10px"
-          px="10px"
-          alignItems="center"
-          textAlign="center"
-          py="2px"
-          fontSize="md"
-          color="em.3"
-          borderWidth={1}
-          borderColor="em.3"
-          borderStyle="dashed"
-          borderRadius={10}
-        >
-          {t("add") + " " + t("list", { count: 1, postProcess: "interval" })}
-        </Text>
-      </MotiPressable>
+        {t("add") + " " + t("list", { count: 1, postProcess: "interval" })}
+      </Tag>
       <AddListSheet ref={sheetRef} />
     </Box>
   );

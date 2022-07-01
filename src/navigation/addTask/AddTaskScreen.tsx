@@ -58,6 +58,8 @@ export default function AddTaskScreen({
           <StatusBar />
           <Label l={t("task-title")} mb={2} />
           <Input value={name} onChangeText={i => setName(i)} fontSize="lg" />
+          <Label mb={2} l={t("tags")} mt="5" />
+          <AddTag tagsIDs={tags} setTagsIDs={setTagsIDs} />
           <Label l={t("list", { count: 2, postProcess: "interval" })} mt="5" />
           <ListChips
             initialListID={
@@ -93,8 +95,6 @@ export default function AddTaskScreen({
             multiline={true}
           />
 
-          <Label mb={2} l={t("description")} mt="5" />
-          <AddTag tagsIDs={tags} setTagsIDs={setTagsIDs} />
           <Label l={t("subtask", { count: 1 })} mt="5" />
           <AddSubtasks {...{ subtasks, setSubtasks }} />
         </Box>
