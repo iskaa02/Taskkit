@@ -1,5 +1,6 @@
+import { Feather } from "@expo/vector-icons";
 import { MotiPressable } from "moti/interactions";
-import { Text } from "native-base";
+import { Box, Icon, Text } from "native-base";
 import * as React from "react";
 import { Easing } from "react-native-reanimated";
 type TagProps = {
@@ -8,13 +9,15 @@ type TagProps = {
   color?: string;
   children: string;
   variant?: "solid" | "dashed";
+  withCloseIcon?: boolean;
 };
 export default function Tag({
   onPress,
   bg,
-  color = "em.3",
+  color = "em.1",
   children,
   variant = "solid",
+  withCloseIcon: withClose,
 }: TagProps) {
   return (
     <MotiPressable
@@ -31,14 +34,8 @@ export default function Tag({
       }}
       onPress={onPress}
     >
-      <Text
-        style={{ marginEnd: 10 }}
-        mt="10px"
-        px="3"
-        alignItems="center"
-        textAlign="center"
-        py="1"
-        fontSize="md"
+      <Box
+        flexDir="row"
         color={color}
         borderRadius={10}
         bg={bg}
@@ -49,9 +46,25 @@ export default function Tag({
               borderStyle: "dashed",
             }
           : {})}
+        style={{ marginEnd: 10 }}
+        mt="10px"
+        px="3"
+        alignItems="center"
+        textAlign="center"
+        py="1"
       >
-        {children}
-      </Text>
+        <Text color={color} fontSize="md">
+          {children}
+        </Text>
+        {!withClose ? null : (
+          <Icon
+            color={color}
+            size={"14px"}
+            style={{ marginStart: 4 }}
+            as={<Feather name="x" />}
+          />
+        )}
+      </Box>
     </MotiPressable>
   );
 }
