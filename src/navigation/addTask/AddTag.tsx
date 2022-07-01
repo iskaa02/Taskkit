@@ -24,7 +24,17 @@ export default function AddTag({ tagsIDs, setTagsIDs }: AddTagProps) {
     <Box flexDir="row">
       {tags.map(tag => {
         if (!tagsIDs.includes(tag.id)) return null;
-        return <TagComponent bg={tag.color}>{tag.name}</TagComponent>;
+        return (
+          <TagComponent
+            withCloseIcon
+            onPress={() => {
+              setTagsIDs(ids => ids.filter(id => id != tag.id));
+            }}
+            bg={tag.color}
+          >
+            {tag.name}
+          </TagComponent>
+        );
       })}
       <TagComponent
         variant="dashed"
@@ -35,7 +45,14 @@ export default function AddTag({ tagsIDs, setTagsIDs }: AddTagProps) {
         {t("add") + " " + t("tag")}
       </TagComponent>
 
-      <AddTagSheet onPress={() => {}} ref={addTagSheetRef} tags={tags} />
+      <AddTagSheet
+        onTagPress={newID => {
+          setTagsIDs(ids => [...ids, newID]);
+          addTagSheetRef.current?.close();
+        }}
+        ref={addTagSheetRef}
+        tags={tags}
+      />
     </Box>
   );
 }

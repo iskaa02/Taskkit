@@ -10,10 +10,10 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 
 type AddTagSheetProps = {
   tags: Tag[];
-  onPress: (id: string) => void;
+  onTagPress: (id: string) => void;
 };
 const AddTagSheet = React.forwardRef(
-  ({ tags, onPress }: AddTagSheetProps, ref) => {
+  ({ tags, onTagPress }: AddTagSheetProps, ref) => {
     const surface = useTheme().colors.surface;
     const innerRef = React.useRef<BottomSheetModalMethods>(null);
     // @ts-ignore
@@ -31,34 +31,37 @@ const AddTagSheet = React.forwardRef(
         <BottomSheetScrollView style={{ paddingVertical: 10 }}>
           <>
             {tags.map(tag => (
-              <TouchableOpacity
+              <TagView
+                key={tag.id}
                 onPress={() => {
-                  onPress && onPress(tag.id);
+                  onTagPress && onTagPress(tag.id);
                 }}
-              >
-                <TagView name={tag.name} theme={tag.color} />
-              </TouchableOpacity>
+                name={tag.name}
+                theme={tag.color}
+              />
             ))}
-            <TagView
-              name="add New Tag"
-              theme="transparent"
-              textColor="blue.400"
-            />
           </>
         </BottomSheetScrollView>
       </BottomSheetModal>
     );
   }
 );
+type TagViewProps = IBoxProps & {
+  name: string;
+  theme: string;
+  textColor?: string;
+  onPress: () => void;
+};
 const TagView = ({
   name,
   theme,
   textColor: color,
+  onPress,
   ...p
-}: IBoxProps & { name: string; theme: string; textColor?: string }) => {
+}: TagViewProps) => {
   const textColor = useContrastText(theme);
   return (
-    <TouchableOpacity activeOpacity={0.8}>
+    <TouchableOpacity activeOpacity={0.8} onPress={onPress}>
       <Box
         justifyContent="center"
         px="20px"
