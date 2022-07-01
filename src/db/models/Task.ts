@@ -1,4 +1,4 @@
-import { Model, Q, Relation, TableName } from "@nozbe/watermelondb";
+import { Database, Model, Q, Relation, TableName } from "@nozbe/watermelondb";
 import {
   field,
   json,
@@ -16,6 +16,7 @@ import { repeatType, scheduleNotification } from "./scheduleNotification";
 import { Columns, Tables } from "./schema";
 import Tag from "./tag";
 import TaskTags from "./taskTags";
+import { uid } from "./uid";
 
 const Column = Columns.task;
 export type subtaskObject = { [x: string]: subtask };
@@ -29,6 +30,8 @@ export type addTaskType = {
   reminder?: Date;
   reminderRepeat: repeatType;
   subtasks: string[];
+  tagsIDs: string[];
+  listID: string;
 };
 
 const sanitize = (subtasks: any): subtaskObject => {
@@ -142,3 +145,48 @@ type editTaskType = {
   reminder?: Date | null;
   repeat?: repeatType;
 };
+
+export async function createTask(database: Database, t: addTaskType) {
+  const task = database.get<Task>(Tables.Task).prepareCreate(task => {
+    const id = uid();
+    if (t.reminder) {
+      task.reminder = new Date(t.reminder);
+      task.repeat = t.reminderRepeat;
+      scheduleNotification({
+        name: t.name,
+        id,
+        date: t.reminder,
+        description: t.description,
+        repeat: t.reminderRepeat,
+      });
+    } else {
+      task.reminder = null;
+      task.repeat = null;
+    }
+    task.list.id = t.listID;
+    task.description = t.description;
+    task.name = t.name;
+    task.isCompleted = false;
+    const subtasks: subtaskObject = {};
+    t.subtasks.map(i => {
+      const id = uid(10);
+      subtasks[id] = {
+        isCompleted: false,
+        name: i,
+      };
+      task.subtasks = subtasks;
+    });
+    task.id = id;
+    return task;
+  });
+  const taskTags = t.tagsIDs.map(tagID => {
+    return database.get<TaskTags>(Tables.TaskTags).prepareCreate(taskTag => {
+      taskTag.tag.id = tagID;
+      taskTag.task.set(task);
+      return taskTag;
+    });
+  });
+  await database.write(() => {
+    return database.batch(task, ...taskTags);
+  });
+}

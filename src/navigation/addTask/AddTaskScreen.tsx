@@ -2,9 +2,8 @@ import StatusBar from "@/components/StatusBar";
 import { AddSubtask, SubtaskCard } from "@/components/Subtasks";
 import Switch from "@/components/Switch";
 import { database } from "@/db/db";
-import List from "@/db/models/List";
 import { repeatType } from "@/db/models/scheduleNotification";
-import { Tables } from "@/db/models/schema";
+import { createTask } from "@/db/models/Task";
 import { storage } from "@/db/storage";
 import useKeyboardStatus from "@/hooks/useKeyboardStatus";
 import { RootStackScreenProps } from "@/navigation/navPropsType";
@@ -103,21 +102,17 @@ export default function AddTaskScreen({
         containerBg="surface"
         onPress={() => {
           if (!(activeListID && name)) return;
-          database
-            .get<List>(Tables.List)
-            .find(activeListID)
-            .then(l => {
-              l.addTask({
-                name,
-                description,
-                subtasks,
-                reminderRepeat,
-                reminder: withReminder ? reminder : undefined,
-              });
-            })
-            .finally(() => {
-              navigation.pop();
-            });
+          createTask(database, {
+            name,
+            description,
+            subtasks,
+            reminderRepeat,
+            listID: activeListID,
+            reminder: withReminder ? reminder : undefined,
+            tagsIDs: tags,
+          }).then(() => {
+            navigation.pop();
+          });
         }}
         label={t("create-new-task")}
         keyboardVisible={keyboardVisible}

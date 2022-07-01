@@ -3,9 +3,7 @@ import { Model, Query } from "@nozbe/watermelondb";
 import { children, json, text, writer } from "@nozbe/watermelondb/decorators";
 import { Associations } from "@nozbe/watermelondb/Model";
 import { Columns, Tables } from "./schema";
-import Task, { addTaskType, subtaskObject } from "./Task";
-import { uid } from "./uid";
-import { scheduleNotification } from "./scheduleNotification";
+import Task from "./Task";
 
 const Column = Columns.list;
 export default class List extends Model {
@@ -20,39 +18,6 @@ export default class List extends Model {
   @children("task") tasks!: Query<Task>;
   @json(Column.theme, json => json) theme!: listThemeType;
 
-  @writer async addTask(t: addTaskType) {
-    await this.database.get<Task>(Tables.Task).create(task => {
-      const id = uid();
-      if (t.reminder) {
-        task.reminder = new Date(t.reminder);
-        task.repeat = t.reminderRepeat;
-        scheduleNotification({
-          name: t.name,
-          id,
-          date: t.reminder,
-          description: t.description,
-          repeat: t.reminderRepeat,
-        });
-      } else {
-        task.reminder = null;
-        task.repeat = null;
-      }
-      task.list.set(this);
-      task.description = t.description;
-      task.name = t.name;
-      task.isCompleted = false;
-      const subtasks: subtaskObject = {};
-      t.subtasks.map(i => {
-        const id = uid(10);
-        subtasks[id] = {
-          isCompleted: false,
-          name: i,
-        };
-        task.subtasks = subtasks;
-      });
-      task.id = id;
-    });
-  }
   @writer async markAsDeleted() {
     const tasks = await this.tasks.fetch();
     const deleted = tasks.map(task => {
