@@ -35,13 +35,13 @@ export default function Navigation() {
     setBackgroundColorAsync(colorMode === "dark" ? "#131313" : "#fff");
   }, [colorMode]);
   return (
-    <NavigationContainer
-      theme={colorMode === "dark" ? DarkTheme : LightTheme}
-      linking={LinkingConfiguration}
-    >
-      <OverflowMenuProvider>
+    <OverflowMenuProvider>
+      <NavigationContainer
+        theme={colorMode === "dark" ? DarkTheme : LightTheme}
+        linking={LinkingConfiguration}
+      >
         <RootNavigator />
-      </OverflowMenuProvider>
-    </NavigationContainer>
+      </NavigationContainer>
+    </OverflowMenuProvider>
   );
 }

@@ -17,7 +17,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import { Q } from "@nozbe/watermelondb";
 import Database from "@nozbe/watermelondb/Database";
 import { useNavigation } from "@react-navigation/native";
-import { Box, Icon, Text, useColorModeValue } from "native-base";
+import { Box, Icon, Text, useColorModeValue, useTheme } from "native-base";
 import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { FlatList } from "react-native";
@@ -31,8 +31,8 @@ type ListScreenProps = ListStackScreenProps<"List"> & {
   database: Database;
 };
 const RawListScreen = ({ navigation, list }: ListScreenProps) => {
-  const tintColor = useColorModeValue("#fff", "#000");
-
+  const tintColor = useColorModeValue("#000", "#fff");
+  const { background } = useTheme().colors;
   const tasks = useObservable(() => list.tasks.observe(), [], [list]);
   const count = useObservable(() => list.tasks.observeCount(), 0);
   const accent = useAccent(list.theme);
@@ -42,7 +42,7 @@ const RawListScreen = ({ navigation, list }: ListScreenProps) => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerStyle: {
-        backgroundColor: accent,
+        backgroundColor: background,
       },
       headerTintColor: tintColor,
       headerRight: () => (
@@ -64,7 +64,7 @@ const RawListScreen = ({ navigation, list }: ListScreenProps) => {
         />
       ),
     });
-  }, [list.theme, tintColor]);
+  }, [background]);
   return (
     <>
       <TasksFlatList
@@ -74,19 +74,19 @@ const RawListScreen = ({ navigation, list }: ListScreenProps) => {
           return (
             <>
               <Box bg="background" flex={1}>
-                <StatusBar _dark={"dark-content"} _light={"light-content"} />
-                <Box bg={accent} px="20px" pb="20px">
-                  <Text bold textAlign="left" color="em.10" fontSize="3xl">
+                <Box px="20px">
+                  <StatusBar />
+                  <Text color={accent} bold textAlign="left" fontSize="3xl">
                     {list.name}
                   </Text>
                   {!count ? null : (
-                    <Text fontSize="lg" color="em.5">
+                    <Text color="em.3">
                       {t("task-left-count", { count, postProcess: "interval" })}
                     </Text>
                   )}
                 </Box>
 
-                <Box mt={4} px="20px">
+                <Box my={3} px="20px">
                   <Text bold color="em.2" fontSize="2xl">
                     {t("task", { count: 2, postProcess: "interval" })}
                   </Text>
