@@ -64,5 +64,7 @@
   "good-night": "Good night",
   "enjoy-your-day": "Enjoy you day.",
   "tasks-without-date-as-today-label": "Tasks without Date",
-  "tasks-without-date-as-today-description": "Add tasks without date to 'Today' list"
+  "tasks-without-date-as-today-description": "Add tasks without date to 'Today' list",
+  "tags": "Tags",
+  "tag": "Tag"
 }

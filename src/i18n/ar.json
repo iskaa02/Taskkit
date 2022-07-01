@@ -64,5 +64,7 @@
   "good-night": "أحلاما سعيدة",
   "enjoy-your-day": "إستمتع بيومك",
   "tasks-without-date-as-today-label": "المهام دون موعد",
-  "tasks-without-date-as-today-description": "أضف المهام دون موعد إلى المهام التي تظهر في القائمة 'اليوم'"
+  "tasks-without-date-as-today-description": "أضف المهام دون موعد إلى المهام التي تظهر في القائمة 'اليوم'",
+  "tags": "علامات",
+  "tag": "علامة"
 }
