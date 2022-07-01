@@ -1,6 +1,7 @@
 import { MotiPressable } from "moti/interactions";
 import { Text } from "native-base";
 import * as React from "react";
+import { Easing } from "react-native-reanimated";
 type TagProps = {
   onPress?: () => void;
   bg?: string;
@@ -10,7 +11,7 @@ type TagProps = {
 };
 export default function Tag({
   onPress,
-  bg = "transparent",
+  bg,
   color = "em.3",
   children,
   variant = "solid",
@@ -22,6 +23,11 @@ export default function Tag({
         return {
           scale: pressed ? 0.9 : 1,
         };
+      }}
+      transition={{
+        type: "timing",
+        duration: 100,
+        easing: Easing.in(Easing.ease),
       }}
       onPress={onPress}
     >

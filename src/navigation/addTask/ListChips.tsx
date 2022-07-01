@@ -14,18 +14,22 @@ const ListChip = ({
   name,
   theme,
   isActive,
-  ...p
+  onPress,
 }: {
   name: string;
   theme: listThemeType;
   isActive?: Boolean;
+
+  onPress: () => void;
 }) => {
   const bg = isActive ? theme.main : useColorModeValue("gray.200", "gray.600");
+  console.log(isActive);
+
   const color = isActive
     ? theme.secondary
     : useColorModeValue("gray.600", "gray.100");
   return (
-    <Tag bg={bg} color={color}>
+    <Tag onPress={onPress} bg={bg} color={color}>
       {name}
     </Tag>
   );
@@ -57,6 +61,10 @@ const ListChips = ({
       {lists.map(list => {
         return (
           <ListChip
+            onPress={() => {
+              setActiveListID(list.id);
+            }}
+            key={list.id}
             isActive={list.id === activeListID}
             name={list.name}
             theme={list.theme}
