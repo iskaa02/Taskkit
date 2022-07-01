@@ -40,10 +40,10 @@ const sanitize = (subtasks: any): subtaskObject => {
 };
 export default class Task extends Model {
   public static table: TableName<Task> = Tables.Task;
-  public static associations = associations([
-    Tables.List,
-    { type: "belongs_to", key: Column.listID },
-  ]);
+  public static associations = associations(
+    [Tables.List, { type: "belongs_to", key: Column.listID }],
+    [Tables.TaskTags, { type: "has_many", foreignKey: Columns.taskTags.taskID }]
+  );
 
   @text(Column.name) name!: string;
   @field(Column.isCompleted) isCompleted!: boolean;

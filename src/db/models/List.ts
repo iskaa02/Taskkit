@@ -1,19 +1,17 @@
 import { listThemeType } from "@/theme/listThemes";
 import { Model, Query } from "@nozbe/watermelondb";
 import { children, json, text, writer } from "@nozbe/watermelondb/decorators";
-import { Associations } from "@nozbe/watermelondb/Model";
+import { associations } from "@nozbe/watermelondb/Model";
 import { Columns, Tables } from "./schema";
 import Task from "./Task";
 
 const Column = Columns.list;
 export default class List extends Model {
   public static table = Tables.List;
-  public static associations: Associations = {
-    task: {
-      type: "has_many",
-      foreignKey: Columns.task.listID,
-    },
-  };
+  public static associations = associations([
+    Tables.Task,
+    { type: "has_many", foreignKey: Columns.task.listID },
+  ]);
   @text(Column.name) name!: string;
   @children("task") tasks!: Query<Task>;
   @json(Column.theme, json => json) theme!: listThemeType;

@@ -1,6 +1,6 @@
 import { Model, Q, TableName } from "@nozbe/watermelondb";
 import { lazy, text, writer } from "@nozbe/watermelondb/decorators";
-import { Associations } from "@nozbe/watermelondb/Model";
+import { associations } from "@nozbe/watermelondb/Model";
 import { Columns, Tables } from "./schema";
 
 const Column = Columns.tag;
@@ -10,12 +10,11 @@ type editTag = {
 };
 export default class Tag extends Model {
   public static table: TableName<Tag> = Tables.Tag;
-  public static associations: Associations = {
-    taskTags: {
-      type: "has_many",
-      foreignKey: Columns.taskTags.tagID,
-    },
-  };
+  public static associations = associations([
+    Tables.TaskTags,
+    { type: "has_many", foreignKey: Columns.taskTags.tagID },
+  ]);
+
   @text(Column.name) name!: string;
   @text(Column.color) color!: string;
   @lazy tasks = this.collection.query(
