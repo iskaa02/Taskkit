@@ -86,11 +86,7 @@ const RawListScreen = ({ navigation, list }: ListScreenProps) => {
                   )}
                 </Box>
 
-                <Box my={3} px="20px">
-                  <Text bold color="em.2" fontSize="2xl">
-                    {t("task", { count: 2, postProcess: "interval" })}
-                  </Text>
-                </Box>
+                <Box my={3} />
               </Box>
             </>
           );
