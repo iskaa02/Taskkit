@@ -1,5 +1,13 @@
-import { Database, Model, Q, Relation, TableName } from "@nozbe/watermelondb";
 import {
+  Database,
+  Model,
+  Q,
+  Query,
+  Relation,
+  TableName,
+} from "@nozbe/watermelondb";
+import {
+  children,
   field,
   json,
   lazy,
@@ -52,6 +60,7 @@ export default class Task extends Model {
   @date(Column.reminder) reminder!: Date | null;
   @text(Column.repeat) repeat!: repeatType;
   @relation(Tables.List, Column.listID) list!: Relation<List>;
+  @children(Tables.TaskTags) taskTags!: Query<TaskTags>;
 
   @writer async markAsDeleted() {
     // to update the list number
@@ -135,9 +144,9 @@ export default class Task extends Model {
       tt.task.set(this);
     });
   }
-  @lazy tags = this.collection.query(
-    Q.on(Tables.TaskTags, Columns.taskTags.taskID, this.id)
-  );
+  @lazy tags = this.database
+    .get<Tag>(Tables.Tag)
+    .query(Q.on(Tables.TaskTags, Columns.taskTags.taskID, this.id));
 }
 type editTaskType = {
   name?: string;

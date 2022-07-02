@@ -2,6 +2,7 @@ import { Model, Q, TableName } from "@nozbe/watermelondb";
 import { lazy, text, writer } from "@nozbe/watermelondb/decorators";
 import { associations } from "@nozbe/watermelondb/Model";
 import { Columns, Tables } from "./schema";
+import Task from "./Task";
 
 const Column = Columns.tag;
 type editTag = {
@@ -17,9 +18,9 @@ export default class Tag extends Model {
 
   @text(Column.name) name!: string;
   @text(Column.color) color!: string;
-  @lazy tasks = this.collection.query(
-    Q.on(Tables.TaskTags, Columns.taskTags.tagID, this.id)
-  );
+  @lazy tasks = this.database
+    .get<Task>(Tables.Task)
+    .query(Q.on(Tables.TaskTags, Columns.taskTags.tagID, this.id));
 
   @writer async editTag({ name, color }: editTag) {
     this.update(t => {
