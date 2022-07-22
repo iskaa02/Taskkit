@@ -10,15 +10,19 @@
         "buildType": "apk"
       },
       "env": {
-        "PROFILE": "development"
+        "PACKAGE_NAME":"com.iskaa.taskkit.dev"
       }
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "PACKAGE_NAME":"com.iskaa.taskkit"
+      }
     },
-    "production": {}
-  },
-  "submit": {
-    "production": {}
+    "production": {
+      "env": {
+        "PACKAGE_NAME":"com.iskaa.taskkit"
+      }
+    }
   }
 }

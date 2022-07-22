@@ -1,11 +1,9 @@
 let packageName = "com.iskaa.taskkit";
 let name = "Taskkit";
 let plugins = [
-  "@morrowdigital/watermelondb-expo-plugin",
   ["expo-notifications", { icon: "./src/assets/notification-icon.png" }],
 ];
 if (process.env.PROFILE === "development") {
-  plugins.push("expo-community-flipper");
   packageName += ".dev";
   name += " Dev";
 }
@@ -38,6 +36,6 @@ export default {
     },
     icon: "./src/assets/android-icon.png",
     package: packageName,
-    jsEngine: "hermes",
-  },
+    jsEngine: "hermes"
+  }
 };
