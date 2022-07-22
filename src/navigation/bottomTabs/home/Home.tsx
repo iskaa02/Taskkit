@@ -129,7 +129,8 @@ const RawSection = ({
                   _light={{ color: "blue.500" }}
                   size={19}
                   color="blue.400"
-                  as={<Feather name="plus" />}
+                  as={Feather}
+                  name="plus"
                 />
               </TouchableOpacity>
             )}

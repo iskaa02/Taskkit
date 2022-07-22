@@ -54,9 +54,10 @@ function RawScreen({ tasks }: ScreenProps) {
             todayTextColor: "white",
             selectedDayTextColor: "white",
           }}
+          showSixWeeks
           renderArrow={direction => (
             <Icon
-              as={<Feather />}
+              as={Feather}
               size="sm"
               name={
                 direction === "left"

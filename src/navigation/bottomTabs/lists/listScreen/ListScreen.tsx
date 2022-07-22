@@ -99,7 +99,9 @@ const RawListScreen = ({ navigation, list }: ListScreenProps) => {
         }}
       >
         <Icon
-          as={<Feather name="plus" />}
+          name="plus"
+          size="30px"
+          as={Feather}
           color={list.theme.secondary ? "em.1" : "em.10"}
         />
       </Fab>

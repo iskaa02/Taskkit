@@ -81,7 +81,7 @@ export const SubtaskCard = React.forwardRef<TextInput, SubtaskCardProps>(
           hitSlop={5}
           onPress={onDelete}
         >
-          <Icon as={<Feather name="x" />} size={21} color={color} />
+          <Icon as={Feather} name="x" size={21} color={color} />
         </Pressable>
       </MotiView>
     );

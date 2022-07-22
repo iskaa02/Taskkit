@@ -48,11 +48,7 @@ const CheckBox = ({
         }}
         transition={{ damping: 10 }}
       >
-        <Icon
-          as={<Feather name="check" />}
-          color={iconColor}
-          size={0.7 * size}
-        />
+        <Icon as={Feather} name="check" color={iconColor} size={0.7 * size} />
       </MotiView>
     </Pressable>
   );

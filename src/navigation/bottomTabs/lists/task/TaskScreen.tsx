@@ -112,7 +112,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
           rounded="xl"
           h="54px"
           colorScheme="red"
-          _pressed={{ bg: "transparent" }}
+          // _pressed={{ bg: "transparent" }}
           variant="outline"
           mx="20px"
           size="lg"

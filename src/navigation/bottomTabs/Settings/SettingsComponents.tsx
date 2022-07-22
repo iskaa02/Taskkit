@@ -107,7 +107,7 @@ export const SettingsIcon = ({
       color={color}
       style={{ marginEnd: me, marginStart: ms, marginHorizontal: mx }}
       name={iconName}
-      as={<Feather />}
+      as={Feather}
     />
   );
 };

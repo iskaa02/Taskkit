@@ -65,7 +65,8 @@ function ListRoot(p: ListStackScreenProps<"Root">) {
         <Icon
           size={25}
           style={{ marginEnd: 5 }}
-          as={<Feather name="plus" />}
+          name="plus"
+          as={Feather}
           color="em.1"
         />
         <Text color="em.1" fontSize="md" bold>

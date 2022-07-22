@@ -9,7 +9,7 @@ type FabProps = {
   style?: ViewStyle;
 };
 export default function Fab({
-  children = <Icon as={<Feather name="plus" />} color="em.1" />,
+  children = <Icon as={Feather} name="plus" size="30px" color="em.1" />,
   onPress,
   style,
 }: FabProps) {
