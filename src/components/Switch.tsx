@@ -1,5 +1,5 @@
 import { MotiView } from "moti";
-import { Pressable, useTheme } from "native-base";
+import { Pressable } from "native-base";
 import React from "react";
 import { ViewStyle } from "react-native";
 import {
@@ -13,24 +13,28 @@ type SwitchProps = {
   value?: boolean;
   onValueChange?: (value: boolean) => void;
   style?: ViewStyle;
+  color?: string;
 };
-export default function Switch({ value, onValueChange, style }: SwitchProps) {
-  const { em, blue } = useTheme().colors;
-  const progress = useSharedValue(value ? 1 : 0);
+export default function Switch({
+  value,
+  onValueChange,
+  style,
+  color,
+}: SwitchProps) {
+  const progress = useSharedValue(-10);
   React.useEffect(() => {
     progress.value = withTiming(value ? 1 : 0);
   }, [value]);
   const animatedBackground = useAnimatedStyle(() => {
-    // @ts-ignore
-    const backgroundColor: string = interpolateColor(
-      progress.value,
-      [0, 1],
-      [em[4], blue[400]]
-    );
     return {
-      backgroundColor,
+      backgroundColor: interpolateColor(
+        progress.value,
+        [0, 1],
+        ["#ababab", color ?? "#60a5fa"],
+        "RGB"
+      ),
     };
-  }, [value]);
+  }, [progress.value, color]);
 
   return (
     <Pressable
