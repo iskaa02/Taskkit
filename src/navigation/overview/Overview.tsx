@@ -68,7 +68,7 @@ export default function Overview() {
         <MotiView
           animate={{ marginStart: 0 }}
           from={{ marginStart: 45 }}
-          transition={{ damping: 26, delay: 500 }}
+          transition={{ damping: 26, delay: 200 }}
           key={tasks[0] && tasks[0].id}
           style={{
             flexDirection: "row",
@@ -129,12 +129,11 @@ const ActiveTask = withDB(
         exit={{ left: 14, opacity: 0 }}
         transition={{
           type: "timing",
-          duration: 800,
-          delay: 200,
+          duration: 600,
         }}
       >
         <MotiView
-          transition={{ delay: 200 }}
+          transition={{ delay: 100 }}
           from={{ height: 25, width: 25 }}
           key={task.id + "1"}
           style={[{ borderRadius: 20 }, animatedBackground]}
@@ -144,7 +143,7 @@ const ActiveTask = withDB(
           animate={{ opacity: 1 }}
           from={{ opacity: 0 }}
           key={task.id + "2"}
-          transition={{ type: "timing", duration: 300, delay: 600 }}
+          transition={{ type: "timing", duration: 300, delay: 500 }}
           style={{ height: 35 }}
         >
           <Box>

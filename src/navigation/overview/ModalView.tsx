@@ -22,7 +22,7 @@ export default function ModalView({ children }: ModalViewProps) {
             alignItems="center"
             onPress={() => navigation.goBack()}
           >
-            <Icon as={<Feather name="x" />} size={23} color="em.1" />
+            <Icon as={Feather} name="x" size={23} color="em.1" />
           </Pressable>
         </Box>
         <Box mb="20" />
