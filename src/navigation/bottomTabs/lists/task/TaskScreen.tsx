@@ -79,6 +79,7 @@ const RawScreen = ({ navigation, route, task }: TaskScreenProps) => {
             </Text>
             <Switch
               value={!!task.reminder}
+              color={accent}
               onValueChange={i => {
                 if (i) {
                   task.editTask({ reminder: new Date(Date.now()) });
